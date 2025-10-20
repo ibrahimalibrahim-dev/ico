@@ -1,4 +1,4 @@
-Absolutely! I’ve reformatted your Jenkins User Access Review Plan specifically for **Confluence**, using headings, tables, and bullet points so you can copy-paste directly.
+Got it! Confluence uses its own wiki markup or the “rich text” editor. If you want **copy-paste-ready formatting** that works in Confluence’s editor, we should use **headings (`h1.`, `h2.`), bullet points, numbered lists, and tables** correctly with proper spacing. Here’s a fully revised version that should work directly:
 
 ---
 
@@ -28,18 +28,22 @@ This plan covers all users with access to the Jenkins environment, including:
 
 h2. 2. Objectives
 
-* Verify that user access is still required based on current roles.
-* Remove or adjust access for users who no longer need it (transferred, promoted, or left).
-* Enforce principle of least privilege.
-* Document findings and actions in Confluence.
-* Establish a repeatable, semi-automated review process.
+# Verify that user access is still required based on current roles.
+
+# Remove or adjust access for users who no longer need it (transferred, promoted, or left).
+
+# Enforce principle of least privilege.
+
+# Document findings and actions in Confluence.
+
+# Establish a repeatable, semi-automated review process.
 
 ---
 
 h2. 3. Roles and Responsibilities
 
 || Role || Responsibility ||
-| IT CloudOps & Automation Team | Conduct user access review, adjust permissions, document outcomes. |
+| IT CloudOps & Automation Team | Conduct user access review, adjust permissions, and document outcomes. |
 | Department Heads / Managers | Provide guidance for ambiguous roles; validate critical access if needed. |
 | ISD / Security Team | Review plan for compliance; audit documentation. |
 
@@ -49,7 +53,7 @@ h2. 4. Review Methodology
 
 h3. Step 1: Extract Current User List
 
-* Export Jenkins user list including: username, full name, email, last login, current permission level.
+* Export Jenkins user list including: username, full name, email, last login, and current permission level.
 * Identify inactive users (no login in last 90–180 days).
 
 h3. Step 2: Categorize Users
@@ -86,10 +90,10 @@ h3. Step 5: Document in Confluence
 
 h2. 5. Tools & Automation Recommendations
 
-* Use Jenkins API or CLI to export users and roles.
-* Maintain CSV or spreadsheet for review before applying changes.
-* Optional: Scripts to identify inactive users automatically.
-* Use Confluence templates to standardize documentation.
+* Use Jenkins API or CLI to export users and roles
+* Maintain CSV or spreadsheet for review before applying changes
+* Optional: Scripts to automatically identify inactive users
+* Use Confluence templates to standardize documentation
 
 ---
 
@@ -97,29 +101,32 @@ h2. 6. Frequency & Scheduling
 
 * Review Frequency: Semi-annual (every 6 months)
 * Proposed Timeline:
-  ** Month 1 – Extract and categorize user list
-  ** Month 2 – Validate access and remove unnecessary accounts
-  ** Month 3 – Document findings and submit to ISD
 
-*Ad-hoc Review:* Triggered by major changes such as team restructuring or security incidents.
+# Month 1 – Extract and categorize user list
+
+# Month 2 – Validate access and remove unnecessary accounts
+
+# Month 3 – Document findings and submit to ISD
+
+*Ad-hoc Review:* Triggered by major organizational changes, such as team restructuring or security incidents.
 
 ---
 
 h2. 7. Governance & Compliance
 
-* Follow principle of least privilege and role-based access controls (RBAC).
-* Maintain auditability by documenting in Confluence.
-* Retain historical records for at least 1 year.
-* Escalate exceptions to ISD/Security Team if user access cannot be verified.
+* Follow principle of least privilege and role-based access controls (RBAC)
+* Maintain auditability by documenting in Confluence
+* Retain historical records for at least 1 year
+* Escalate exceptions to ISD/Security Team if user access cannot be verified
 
 ---
 
 h2. 8. Key Considerations / Best Practices
 
-* Prioritize admin accounts and critical pipelines.
-* Implement semi-automated workflow to reduce manual work.
-* Avoid contacting every department; rely on HR directory and last login heuristics.
-* Encourage proactive reporting of outdated access.
+* Prioritize admin accounts and critical pipelines
+* Implement semi-automated workflow to reduce manual work
+* Avoid contacting every department; rely on HR directory and last login heuristics
+* Encourage proactive reporting of outdated access
 
 ---
 
@@ -132,6 +139,6 @@ h2. 9. Success Metrics
 
 ---
 
-If you want, I can also **create a ready-to-use Confluence template table** for each review cycle that the team can just fill in, which would make future semi-annual reviews much faster and more standardized.
+If you want, I can also **create a ready-to-use Confluence table template** that you can copy-paste for each semi-annual review, so the team just fills it in and it automatically looks professional.
 
-Do you want me to create that template?
+Do you want me to create that table template next?
