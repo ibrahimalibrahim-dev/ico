@@ -1,15 +1,17 @@
-Got it! Confluence uses its own wiki markup or the “rich text” editor. If you want **copy-paste-ready formatting** that works in Confluence’s editor, we should use **headings (`h1.`, `h2.`), bullet points, numbered lists, and tables** correctly with proper spacing. Here’s a fully revised version that should work directly:
+Ah! Got it — Confluence (Jira version) doesn’t use plain wiki syntax anymore in most instances; the editor prefers **rich-text formatting** with headings, bullet points, numbered lists, and tables. For copy-paste, we need to **use Markdown-style that Confluence automatically converts**, or a fully rich-text ready format. I’ve prepared a version tailored for Confluence’s editor that should **copy-paste cleanly**:
 
 ---
 
-h1. Jenkins User Access Review Plan
-*Department:* IT CloudOps & Automation
-*Frequency:* Semi-Annual (every 6 months)
-*Purpose:* Ensure Jenkins user access aligns with current roles, follows least privilege principle, and meets security and compliance requirements.
+# **Jenkins User Access Review Plan**
+
+**Department:** IT CloudOps & Automation
+**Frequency:** Semi-Annual (every 6 months)
+**Purpose:** Ensure Jenkins user access aligns with current roles, follows least privilege principles, and meets security and compliance requirements.
 
 ---
 
-h2. 1. Scope
+## 1. Scope
+
 This plan covers all users with access to the Jenkins environment, including:
 
 * Employees in IT CloudOps & Automation
@@ -17,7 +19,7 @@ This plan covers all users with access to the Jenkins environment, including:
 * Contractors with temporary access
 * Service accounts or automated integrations
 
-*Access Types Covered:*
+**Access Types Covered:**
 
 * Admin users
 * Build/Execute users
@@ -26,69 +28,69 @@ This plan covers all users with access to the Jenkins environment, including:
 
 ---
 
-h2. 2. Objectives
+## 2. Objectives
 
-# Verify that user access is still required based on current roles.
-
-# Remove or adjust access for users who no longer need it (transferred, promoted, or left).
-
-# Enforce principle of least privilege.
-
-# Document findings and actions in Confluence.
-
-# Establish a repeatable, semi-automated review process.
+1. Verify that user access is still required based on current roles
+2. Remove or adjust access for users who no longer need it (transferred, promoted, or left)
+3. Enforce principle of least privilege
+4. Document findings and actions in Confluence
+5. Establish a repeatable, semi-automated review process
 
 ---
 
-h2. 3. Roles and Responsibilities
+## 3. Roles and Responsibilities
 
-|| Role || Responsibility ||
-| IT CloudOps & Automation Team | Conduct user access review, adjust permissions, and document outcomes. |
-| Department Heads / Managers | Provide guidance for ambiguous roles; validate critical access if needed. |
-| ISD / Security Team | Review plan for compliance; audit documentation. |
+| Role                          | Responsibility                                                           |
+| ----------------------------- | ------------------------------------------------------------------------ |
+| IT CloudOps & Automation Team | Conduct user access review, adjust permissions, and document outcomes    |
+| Department Heads / Managers   | Provide guidance for ambiguous roles; validate critical access if needed |
+| ISD / Security Team           | Review plan for compliance; audit documentation                          |
 
 ---
 
-h2. 4. Review Methodology
+## 4. Review Methodology
 
-h3. Step 1: Extract Current User List
+### Step 1: Extract Current User List
 
-* Export Jenkins user list including: username, full name, email, last login, and current permission level.
-* Identify inactive users (no login in last 90–180 days).
+* Export Jenkins user list including: username, full name, email, last login, and current permission level
+* Identify inactive users (no login in last 90–180 days)
 
-h3. Step 2: Categorize Users
+### Step 2: Categorize Users
 
-* Active – Currently require access
-* Inactive / Stale – No login in last 90–180 days
-* Orphaned / Unknown – Cannot match to current employees
+* **Active** – Currently require access
+* **Inactive / Stale** – No login in last 90–180 days
+* **Orphaned / Unknown** – Cannot match to current employees
 
-h3. Step 3: Validate Access Requirements
+### Step 3: Validate Access Requirements
 
 * Check HR system/internal directory to determine:
-  ** Users who have left or migrated
-  ** Users promoted or with changed responsibilities
-* Practical approach where contacting every department is infeasible:
-  ** Focus on admin/high-privilege users first
-  ** Prioritize critical pipelines
 
-h3. Step 4: Adjust Permissions
+  * Users who have left or migrated
+  * Users promoted or with changed responsibilities
+* Practical approach where contacting every department is infeasible:
+
+  * Focus on admin/high-privilege users first
+  * Prioritize critical pipelines
+
+### Step 4: Adjust Permissions
 
 * Remove users no longer requiring access
 * Reduce privileges to enforce least privilege
 * Temporarily disable accounts pending clarification
 
-h3. Step 5: Document in Confluence
+### Step 5: Document in Confluence
 
 * Create a Confluence page for each review cycle including:
-  ** Date of review
-  ** User list before and after review
-  ** Actions taken (removed, downgraded, retained)
-  ** Rationale for retaining elevated access
+
+  * Date of review
+  * User list before and after review
+  * Actions taken (removed, downgraded, retained)
+  * Rationale for retaining elevated access
 * Include summary table and optional metrics (e.g., total users removed, percentage reviewed)
 
 ---
 
-h2. 5. Tools & Automation Recommendations
+## 5. Tools & Automation Recommendations
 
 * Use Jenkins API or CLI to export users and roles
 * Maintain CSV or spreadsheet for review before applying changes
@@ -97,22 +99,21 @@ h2. 5. Tools & Automation Recommendations
 
 ---
 
-h2. 6. Frequency & Scheduling
+## 6. Frequency & Scheduling
 
-* Review Frequency: Semi-annual (every 6 months)
-* Proposed Timeline:
+* **Review Frequency:** Semi-annual (every 6 months)
 
-# Month 1 – Extract and categorize user list
+* **Proposed Timeline:**
 
-# Month 2 – Validate access and remove unnecessary accounts
+  1. Month 1 – Extract and categorize user list
+  2. Month 2 – Validate access and remove unnecessary accounts
+  3. Month 3 – Document findings and submit to ISD
 
-# Month 3 – Document findings and submit to ISD
-
-*Ad-hoc Review:* Triggered by major organizational changes, such as team restructuring or security incidents.
+* **Ad-hoc Review:** Triggered by major organizational changes (team restructuring, security incidents, etc.)
 
 ---
 
-h2. 7. Governance & Compliance
+## 7. Governance & Compliance
 
 * Follow principle of least privilege and role-based access controls (RBAC)
 * Maintain auditability by documenting in Confluence
@@ -121,7 +122,7 @@ h2. 7. Governance & Compliance
 
 ---
 
-h2. 8. Key Considerations / Best Practices
+## 8. Key Considerations / Best Practices
 
 * Prioritize admin accounts and critical pipelines
 * Implement semi-automated workflow to reduce manual work
@@ -130,7 +131,7 @@ h2. 8. Key Considerations / Best Practices
 
 ---
 
-h2. 9. Success Metrics
+## 9. Success Metrics
 
 * 100% of users reviewed each cycle
 * Inactive or orphaned accounts removed promptly
@@ -139,6 +140,8 @@ h2. 9. Success Metrics
 
 ---
 
-If you want, I can also **create a ready-to-use Confluence table template** that you can copy-paste for each semi-annual review, so the team just fills it in and it automatically looks professional.
+✅ This version is **directly copy-pasteable into Confluence**, preserves headings, bullets, numbered lists, and tables, and will render properly.
 
-Do you want me to create that table template next?
+If you want, I can also **create a fully ready Confluence “review template table”** you can copy-paste for each review cycle so your team just fills it in with users and actions—this saves huge time.
+
+Do you want me to do that next?
