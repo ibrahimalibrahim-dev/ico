@@ -1,147 +1,32 @@
-Ah! Got it — Confluence (Jira version) doesn’t use plain wiki syntax anymore in most instances; the editor prefers **rich-text formatting** with headings, bullet points, numbered lists, and tables. For copy-paste, we need to **use Markdown-style that Confluence automatically converts**, or a fully rich-text ready format. I’ve prepared a version tailored for Confluence’s editor that should **copy-paste cleanly**:
+import jenkins.model.*
+import com.michelin.cio.hudson.plugins.rolestrategy.*
 
----
+def roleBasedAuth = Jenkins.instance.getAuthorizationStrategy()
+if (!(roleBasedAuth instanceof RoleBasedAuthorizationStrategy)) {
+    println "Role-Based Authorization Strategy is not enabled!"
+    return
+}
 
-# **Jenkins User Access Review Plan**
+def data = []
+def headers = ["Role Type", "Role Name", "User/Group", "Permissions"]
 
-**Department:** IT CloudOps & Automation
-**Frequency:** Semi-Annual (every 6 months)
-**Purpose:** Ensure Jenkins user access aligns with current roles, follows least privilege principles, and meets security and compliance requirements.
+roleBasedAuth.getRoleMaps().each { roleType, roleMap ->
+    roleMap.getGrantedRoles().each { role, sidSet ->
+        sidSet.each { sid ->
+            data << [
+                roleType.name(),
+                role.getName(),
+                sid,
+                role.getPermissions()*.getId().join(";")
+            ]
+        }
+    }
+}
 
----
+// print CSV header
+println headers.join(",")
 
-## 1. Scope
-
-This plan covers all users with access to the Jenkins environment, including:
-
-* Employees in IT CloudOps & Automation
-* Developers, QA, and operations staff with Jenkins accounts
-* Contractors with temporary access
-* Service accounts or automated integrations
-
-**Access Types Covered:**
-
-* Admin users
-* Build/Execute users
-* Read-only users
-* Plugin/service accounts
-
----
-
-## 2. Objectives
-
-1. Verify that user access is still required based on current roles
-2. Remove or adjust access for users who no longer need it (transferred, promoted, or left)
-3. Enforce principle of least privilege
-4. Document findings and actions in Confluence
-5. Establish a repeatable, semi-automated review process
-
----
-
-## 3. Roles and Responsibilities
-
-| Role                          | Responsibility                                                           |
-| ----------------------------- | ------------------------------------------------------------------------ |
-| IT CloudOps & Automation Team | Conduct user access review, adjust permissions, and document outcomes    |
-| Department Heads / Managers   | Provide guidance for ambiguous roles; validate critical access if needed |
-| ISD / Security Team           | Review plan for compliance; audit documentation                          |
-
----
-
-## 4. Review Methodology
-
-### Step 1: Extract Current User List
-
-* Export Jenkins user list including: username, full name, email, last login, and current permission level
-* Identify inactive users (no login in last 90–180 days)
-
-### Step 2: Categorize Users
-
-* **Active** – Currently require access
-* **Inactive / Stale** – No login in last 90–180 days
-* **Orphaned / Unknown** – Cannot match to current employees
-
-### Step 3: Validate Access Requirements
-
-* Check HR system/internal directory to determine:
-
-  * Users who have left or migrated
-  * Users promoted or with changed responsibilities
-* Practical approach where contacting every department is infeasible:
-
-  * Focus on admin/high-privilege users first
-  * Prioritize critical pipelines
-
-### Step 4: Adjust Permissions
-
-* Remove users no longer requiring access
-* Reduce privileges to enforce least privilege
-* Temporarily disable accounts pending clarification
-
-### Step 5: Document in Confluence
-
-* Create a Confluence page for each review cycle including:
-
-  * Date of review
-  * User list before and after review
-  * Actions taken (removed, downgraded, retained)
-  * Rationale for retaining elevated access
-* Include summary table and optional metrics (e.g., total users removed, percentage reviewed)
-
----
-
-## 5. Tools & Automation Recommendations
-
-* Use Jenkins API or CLI to export users and roles
-* Maintain CSV or spreadsheet for review before applying changes
-* Optional: Scripts to automatically identify inactive users
-* Use Confluence templates to standardize documentation
-
----
-
-## 6. Frequency & Scheduling
-
-* **Review Frequency:** Semi-annual (every 6 months)
-
-* **Proposed Timeline:**
-
-  1. Month 1 – Extract and categorize user list
-  2. Month 2 – Validate access and remove unnecessary accounts
-  3. Month 3 – Document findings and submit to ISD
-
-* **Ad-hoc Review:** Triggered by major organizational changes (team restructuring, security incidents, etc.)
-
----
-
-## 7. Governance & Compliance
-
-* Follow principle of least privilege and role-based access controls (RBAC)
-* Maintain auditability by documenting in Confluence
-* Retain historical records for at least 1 year
-* Escalate exceptions to ISD/Security Team if user access cannot be verified
-
----
-
-## 8. Key Considerations / Best Practices
-
-* Prioritize admin accounts and critical pipelines
-* Implement semi-automated workflow to reduce manual work
-* Avoid contacting every department; rely on HR directory and last login heuristics
-* Encourage proactive reporting of outdated access
-
----
-
-## 9. Success Metrics
-
-* 100% of users reviewed each cycle
-* Inactive or orphaned accounts removed promptly
-* Reduction of unnecessary admin-level users
-* Confluence documentation complete and auditable
-
----
-
-✅ This version is **directly copy-pasteable into Confluence**, preserves headings, bullets, numbered lists, and tables, and will render properly.
-
-If you want, I can also **create a fully ready Confluence “review template table”** you can copy-paste for each review cycle so your team just fills it in with users and actions—this saves huge time.
-
-Do you want me to do that next?
+// print each line
+data.each { line ->
+    println line.collect { '"' + it.replace('"','""') + '"' }.join(",")
+}
