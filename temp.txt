@@ -1,32 +1,10 @@
-import jenkins.model.*
-import com.michelin.cio.hudson.plugins.rolestrategy.*
-
-def roleBasedAuth = Jenkins.instance.getAuthorizationStrategy()
-if (!(roleBasedAuth instanceof RoleBasedAuthorizationStrategy)) {
-    println "Role-Based Authorization Strategy is not enabled!"
-    return
-}
-
-def data = []
-def headers = ["Role Type", "Role Name", "User/Group", "Permissions"]
-
-roleBasedAuth.getRoleMaps().each { roleType, roleMap ->
-    roleMap.getGrantedRoles().each { role, sidSet ->
-        sidSet.each { sid ->
-            data << [
-                roleType.name(),
-                role.getName(),
-                sid,
-                role.getPermissions()*.getId().join(";")
-            ]
-        }
-    }
-}
-
-// print CSV header
-println headers.join(",")
-
-// print each line
-data.each { line ->
-    println line.collect { '"' + it.replace('"','""') + '"' }.join(",")
-}
+Function IsStrikethrough(rng As Range) As Boolean
+    Dim c As Range
+    For Each c In rng.Characters
+        If c.Font.Strikethrough Then
+            IsStrikethrough = True
+            Exit Function
+        End If
+    Next c
+    IsStrikethrough = False
+End Function
