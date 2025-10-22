@@ -1,10 +1,30 @@
 Function IsStrikethrough(rng As Range) As Boolean
-    Dim c As Range
-    For Each c In rng.Characters
-        If c.Font.Strikethrough Then
+    Dim i As Long
+    
+    On Error GoTo SafeExit
+    
+    If rng.CountLarge > 1 Then
+        IsStrikethrough = CVErr(xlErrValue)
+        Exit Function
+    End If
+    
+    If IsEmpty(rng.Value) Then
+        IsStrikethrough = False
+        Exit Function
+    End If
+    
+    ' Check each character for strikethrough
+    For i = 1 To Len(CStr(rng.Value))
+        If rng.Characters(i, 1).Font.Strikethrough Then
             IsStrikethrough = True
             Exit Function
         End If
-    Next c
+    Next i
+    
+    IsStrikethrough = False
+    Exit Function
+
+SafeExit:
+    ' fallback in case of any unexpected value types
     IsStrikethrough = False
 End Function
