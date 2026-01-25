@@ -1,39 +1,8 @@
-            steps {
-                script {
-                    try {
-                        echo "Starting upload of ${FILE_PATH} to Jira..."
+import jenkins.model.Jenkins
 
-                        // Build curl command
-                        def curlCmd = """
-                            curl -s -w "%{http_code}" -o curl_output.json \
-                            -u ${JIRA_USER}:${JIRA_TOKEN} \
-                            -X POST \
-                            -H "X-Atlassian-Token: no-check" \
-                            -F "file=@${FILE_PATH}" \
-                            ${JIRA_URL}
-                        """
-
-                        echo "Running curl:\n${curlCmd}"
-
-                        // Execute curl
-                        def httpCode = sh(script: curlCmd, returnStdout: true).trim()
-                        echo "HTTP code: ${httpCode}"
-
-                        // Read response body
-                        def response = readFile("curl_output.json")
-                        echo "Jira response:\n${response}"
-
-                        // Validate success
-                        if (httpCode != "200" && httpCode != "201") {
-                            error("❌ Upload failed. HTTP ${httpCode}. Check Jira response above.")
-                        }
-
-                        echo "✅ File uploaded successfully!"
-
-                    } catch (err) {
-                        echo "❗ ERROR OCCURRED ❗"
-                        echo err.toString()
-                        error("Upload to Jira failed. See above for details.")
-                    }
-                }
-            }
+def auth = Jenkins.instance.authorizationStrategy
+auth.grantedPermissions.each { perm, sids ->
+    sids.each { sid ->
+        println("${sid} -> ${perm.id}")
+    }
+}
