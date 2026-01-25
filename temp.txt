@@ -1,46 +1,38 @@
 import jenkins.model.Jenkins
+import hudson.model.Job
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-def strategy = Jenkins.instance.authorizationStrategy
+def jenkins = Jenkins.instance
+def strategy = jenkins.authorizationStrategy
 
-println "Authorization strategy:"
-println strategy.getClass().name
-println ""
+def BUILD_PERMISSION = hudson.model.Item.BUILD
 
-if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
-    println "Not using Role Strategy Plugin"
-    return
-}
+println "Evaluating who can trigger pipelines (Job/Build)\n"
 
-def roleTypes = [
-    "globalRoles",
-    "projectRoles",
-    "slaveRoles"
-]
+// get all jobs once
+def jobs = jenkins.getAllItems(Job)
+
+// legacy-safe role access
+def roleTypes = ["globalRoles", "projectRoles"]
 
 roleTypes.each { type ->
     def roleMap = strategy.getGrantedRoles(type)
-    if (roleMap == null || roleMap.isEmpty()) return
-
-    println "=============================="
-    println "Role type: ${type}"
-    println "=============================="
+    if (!roleMap) return
 
     roleMap.each { role, sids ->
-        println "Role: ${role.name}"
+        if (!role.permissions.contains(BUILD_PERMISSION)) return
 
+        println "ROLE: ${role.name} (${type})"
         if (role.hasProperty("pattern")) {
             println "  Pattern: ${role.pattern}"
         }
 
-        println "  Permissions:"
-        role.permissions.each { p ->
-            println "    - ${p.id}"
-        }
-
-        println "  Assigned to:"
         sids.each { sid ->
-            println "    - ${sid}"
+            jobs.each { job ->
+                if (!role.hasProperty("pattern") || job.fullName ==~ role.pattern) {
+                    println "    ${sid} -> ${job.fullName}"
+                }
+            }
         }
         println ""
     }
