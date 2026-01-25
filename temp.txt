@@ -3,22 +3,31 @@ import com.michelin.cio.hudson.plugins.rolestrategy.*
 
 def strategy = Jenkins.instance.authorizationStrategy
 
-println "Authorization strategy class:"
+println "Authorization strategy:"
 println strategy.getClass().name
 println ""
 
-// HARD fallback: access internal roleMaps directly
-def roleMapsField = strategy.getClass().getDeclaredField("roleMaps")
-roleMapsField.setAccessible(true)
-def roleMaps = roleMapsField.get(strategy)
+if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
+    println "Not using Role Strategy Plugin"
+    return
+}
 
-roleMaps.each { roleType, roleMap ->
+def roleTypes = [
+    "globalRoles",
+    "projectRoles",
+    "slaveRoles"
+]
+
+roleTypes.each { type ->
+    def roleMap = strategy.getGrantedRoles(type)
+    if (roleMap == null || roleMap.isEmpty()) return
+
     println "=============================="
-    println "Role type: ${roleType}"
+    println "Role type: ${type}"
     println "=============================="
 
-    roleMap.getRoles().each { roleName, role ->
-        println "Role: ${roleName}"
+    roleMap.each { role, sids ->
+        println "Role: ${role.name}"
 
         if (role.hasProperty("pattern")) {
             println "  Pattern: ${role.pattern}"
@@ -30,7 +39,7 @@ roleMaps.each { roleType, roleMap ->
         }
 
         println "  Assigned to:"
-        roleMap.getRoleEntries()[role].each { sid ->
+        sids.each { sid ->
             println "    - ${sid}"
         }
         println ""
