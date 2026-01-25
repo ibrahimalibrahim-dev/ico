@@ -1,8 +1,33 @@
 import jenkins.model.Jenkins
+import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-def auth = Jenkins.instance.authorizationStrategy
-auth.grantedPermissions.each { perm, sids ->
-    sids.each { sid ->
-        println("${sid} -> ${perm.id}")
+def strategy = Jenkins.instance.authorizationStrategy
+
+if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
+    println "Not using Role Strategy Plugin"
+    return
+}
+
+def roleMaps = strategy.getRoleMaps()
+
+roleMaps.each { type, roleMap ->
+    println "=============================="
+    println "Role type: ${type}"
+    println "=============================="
+
+    roleMap.getRoles().each { role ->
+        println "Role: ${role.name}"
+        println "  Pattern: ${role.pattern}"
+        println "  Permissions:"
+        role.permissions.each { p ->
+            println "    - ${p.id}"
+        }
+
+        def sids = roleMap.getSidsForRole(role)
+        println "  Assigned to:"
+        sids.each { sid ->
+            println "    - ${sid}"
+        }
+        println ""
     }
 }
