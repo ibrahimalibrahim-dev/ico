@@ -1,14 +1,17 @@
 import jenkins.model.Jenkins
-import com.michelin.cio.hudson.plugins.rolestrategy.*
+import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy
 
 def strategy = Jenkins.instance.authorizationStrategy
 
-println "Authorization strategy class: ${strategy.getClass().name}"
+println "Authorization strategy: ${strategy.getClass().name}"
 
 if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
     println "Not using Role Strategy Plugin"
     return
 }
+
+// RoleType is an INNER enum in older versions
+def RoleType = RoleBasedAuthorizationStrategy.RoleType
 
 def roleMaps = [
     GLOBAL : strategy.getRoleMap(RoleType.Global),
