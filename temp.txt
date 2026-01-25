@@ -1,35 +1,26 @@
 import jenkins.model.Jenkins
-import com.michelin.cio.hudson.plugins.rolestrategy.RoleBasedAuthorizationStrategy
+import com.michelin.cio.hudson.plugins.rolestrategy.*
 
 def strategy = Jenkins.instance.authorizationStrategy
 
-println "Authorization strategy: ${strategy.getClass().name}"
+println "Authorization strategy class:"
+println strategy.getClass().name
+println ""
 
-if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
-    println "Not using Role Strategy Plugin"
-    return
-}
+// HARD fallback: access internal roleMaps directly
+def roleMapsField = strategy.getClass().getDeclaredField("roleMaps")
+roleMapsField.setAccessible(true)
+def roleMaps = roleMapsField.get(strategy)
 
-// RoleType is an INNER enum in older versions
-def RoleType = RoleBasedAuthorizationStrategy.RoleType
-
-def roleMaps = [
-    GLOBAL : strategy.getRoleMap(RoleType.Global),
-    PROJECT: strategy.getRoleMap(RoleType.Project),
-    SLAVE  : strategy.getRoleMap(RoleType.Slave)
-]
-
-roleMaps.each { type, roleMap ->
-    if (roleMap == null) return
-
-    println "\n=============================="
-    println "Role type: ${type}"
+roleMaps.each { roleType, roleMap ->
+    println "=============================="
+    println "Role type: ${roleType}"
     println "=============================="
 
     roleMap.getRoles().each { roleName, role ->
         println "Role: ${roleName}"
 
-        if (role.hasProperty('pattern')) {
+        if (role.hasProperty("pattern")) {
             println "  Pattern: ${role.pattern}"
         }
 
@@ -42,5 +33,6 @@ roleMaps.each { type, roleMap ->
         roleMap.getRoleEntries()[role].each { sid ->
             println "    - ${sid}"
         }
+        println ""
     }
 }
