@@ -1,5 +1,12 @@
-curl -X POST \
+curl -s -X POST \
   -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "X-Atlassian-Token: no-check" \
-  -F "file=@report.pdf" \
-  https://jira.company.com/rest/api/2/issue/PROJ-123/attachments
+  -H "Content-Type: application/json" \
+  https://jira.company.com/rest/api/2/issue \
+  -d '{
+    "fields": {
+      "project": { "key": "PROJ" },
+      "summary": "Automated ticket from script",
+      "description": "Created via curl API",
+      "issuetype": { "name": "Task" }
+    }
+  }'
