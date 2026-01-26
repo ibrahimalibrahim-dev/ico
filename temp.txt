@@ -1,12 +1,11 @@
-curl -s -X POST \
+ISSUE_KEY=$(curl -s -X POST \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   https://jira.company.com/rest/api/2/issue \
-  -d '{
-    "fields": {
-      "project": { "key": "PROJ" },
-      "summary": "Automated ticket from script",
-      "description": "Created via curl API",
-      "issuetype": { "name": "Task" }
-    }
-  }'
+  -d '{"fields":{"project":{"key":"PROJ"},"summary":"Automated ticket","description":"Created via curl","issuetype":{"name":"Task"}}}' \
+  | jq -r '.key') \
+&& curl -X POST \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "X-Atlassian-Token: no-check" \
+  -F "file=@report.pdf" \
+  https://jira.company.com/rest/api/2/issue/$ISSUE_KEY/attachments
