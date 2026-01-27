@@ -1,0 +1,12 @@
+curl -s -X POST \
+  -H "Authorization: Bearer $JIRA_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{
+        \"fields\": {
+          \"project\": {\"key\": \"PROJ\"},
+          \"summary\": \"Acunetix Security Scan Report – Build #${BUILD_NUMBER}\",
+          \"description\": \"$DESCRIPTION\",
+          \"issuetype\": {\"name\": \"Task\"}
+        }
+      }" \
+  https://jira.company.com/rest/api/2/issue
