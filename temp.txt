@@ -1,11 +1,72 @@
-ISSUE_KEY=$(curl -s -X POST \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  https://jira.company.com/rest/api/2/issue \
-  -d '{"fields":{"project":{"key":"PROJ"},"summary":"Automated ticket","description":"Created via curl","issuetype":{"name":"Task"}}}' \
-  | jq -r '.key') \
-&& curl -X POST \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "X-Atlassian-Token: no-check" \
-  -F "file=@report.pdf" \
-  https://jira.company.com/rest/api/2/issue/$ISSUE_KEY/attachments
+stage('Create Jira Ticket & Attach Artifact') {
+    when {
+        expression { params.Create_Jira_Ticket }
+    }
+    environment {
+        JIRA_URL   = 'https://jira.company.com'
+        PROJECT_KEY = 'PROJ'
+        ISSUE_TYPE  = 'Task'
+        ATTACHMENT  = 'report.pdf'
+    }
+    steps {
+        withCredentials([string(credentialsId: 'jira-bearer-token', variable: 'JIRA_TOKEN')]) {
+            sh '''
+                set -euo pipefail
+
+                echo "Creating Jira ticket..."
+
+                RESPONSE=$(curl -s -w "\\n%{http_code}" -X POST \
+                  -H "Authorization: Bearer $JIRA_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  "$JIRA_URL/rest/api/2/issue" \
+                  -d "{
+                    \\"fields\\": {
+                      \\"project\\": { \\"key\\": \\"$PROJECT_KEY\\" },
+                      \\"summary\\": \\"Automated ticket from Jenkins\\",
+                      \\"description\\": \\"Created by Jenkins pipeline\\",
+                      \\"issuetype\\": { \\"name\\": \\"$ISSUE_TYPE\\" }
+                    }
+                  }")
+
+                BODY=$(echo "$RESPONSE" | head -n -1)
+                STATUS=$(echo "$RESPONSE" | tail -n 1)
+
+                if [ "$STATUS" -ne 201 ]; then
+                    echo "❌ Jira issue creation failed (HTTP $STATUS)"
+                    echo "$BODY"
+                    exit 1
+                fi
+
+                ISSUE_KEY=$(echo "$BODY" | jq -r '.key')
+
+                if [ -z "$ISSUE_KEY" ] || [ "$ISSUE_KEY" = "null" ]; then
+                    echo "❌ Failed to extract Jira issue key"
+                    echo "$BODY"
+                    exit 1
+                fi
+
+                echo "✅ Created Jira issue: $ISSUE_KEY"
+
+                if [ ! -f "$ATTACHMENT" ]; then
+                    echo "❌ Attachment file not found: $ATTACHMENT"
+                    exit 1
+                fi
+
+                echo "Uploading attachment..."
+
+                ATTACH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+                  -H "Authorization: Bearer $JIRA_TOKEN" \
+                  -H "X-Atlassian-Token: no-check" \
+                  -F "file=@$ATTACHMENT" \
+                  "$JIRA_URL/rest/api/2/issue/$ISSUE_KEY/attachments")
+
+                if [ "$ATTACH_STATUS" -ne 200 ]; then
+                    echo "❌ Attachment upload failed (HTTP $ATTACH_STATUS)"
+                    exit 1
+                fi
+
+                echo "✅ Attachment uploaded successfully"
+            '''
+        }
+    }
+}
