@@ -1,16 +1,15 @@
-This ticket was automatically created by the CI/CD pipeline to track the results of an Acunetix security scan.
+echo "Files in Checkmarx/Reports:"
+ls -1 Checkmarx/Reports/
 
-Scan Details:
-- Tool: Acunetix
-- Build Number: #${BUILD_NUMBER}
-- Job Name: ${JOB_NAME}
-- Build URL: ${BUILD_URL}
-- Target ID: ${target}
-- Execution Time: ${BUILD_TIMESTAMP}
+# Pick all PDFs matching the glob
+reports=(Checkmarx/Reports/*.pdf)
 
-The attached report contains the full vulnerability findings and evidence generated during this scan.
-
-Please review the findings and take appropriate remediation actions where required.
-
-
-DESCRIPTION="This ticket was automatically created by the CI/CD pipeline to track the results of an Acunetix security scan.\\n\\nScan Details:\\n- Tool: Acunetix\\n- Build Number: #${BUILD_NUMBER}\\n- Job Name: ${JOB_NAME}\\n- Build URL: ${BUILD_URL}\\n- Target ID: ${target}\\n- Execution Time: ${BUILD_TIMESTAMP}\\n\\nThe attached report contains the full vulnerability findings and evidence generated during this scan.\\n\\nPlease review the findings and take appropriate remediation actions where required."
+# Check if any files found
+if [ ${#reports[@]} -eq 0 ]; then
+    echo "No PDF reports found!"
+else
+    echo "Matching PDF reports:"
+    for f in "${reports[@]}"; do
+        echo "$f"
+    done
+fi
