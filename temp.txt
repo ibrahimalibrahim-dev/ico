@@ -1,34 +1,84 @@
-# Create Jira issue and store key
-ISSUE_KEY=$(jq -n \
-  --arg summary "Automated ticket – Build #${BUILD_NUMBER}" \
-  --arg desc "Created by Jenkins pipeline. Build #${BUILD_NUMBER}, Job: ${JOB_NAME}, Target: ${target}" \
-  '{
-      fields: {
-          project: { key: "PROJ" },
-          summary: $summary,
-          description: $desc,
-          issuetype: { name: "Task" }
-      }
-  }' \
-  | curl -s -X POST \
-      -H "Authorization: Bearer YOUR_TOKEN" \
-      -H "Content-Type: application/json" \
-      -d @- \
-      https://jira.company.com/rest/api/2/issue \
-  | jq -r '.key')
+stage('Create Jira Ticket & Attach Artifact') {
+    when {
+        expression { params.Create_Jira_Ticket && params.target?.trim() }
+    }
+    environment {
+        JIRA_URL    = 'https://jira.company.com'
+        PROJECT_KEY = 'PROJ'
+        ISSUE_TYPE  = 'Task'
+        ATTACHMENT  = "report_${BUILD_NUMBER}.html"
+    }
+    steps {
+        withCredentials([string(credentialsId: 'jira-bearer-token', variable: 'JIRA_TOKEN')]) {
+            sh '''
+                set -euo pipefail
 
-# Exit if ISSUE_KEY is empty
-if [ -z "$ISSUE_KEY" ] || [ "$ISSUE_KEY" = "null" ]; then
-    echo "❌ Jira issue creation failed"
-    exit 1
-fi
+                # Ensure BUILD_TIMESTAMP exists
+                BUILD_TIMESTAMP="${BUILD_TIMESTAMP:-$(date '+%Y-%m-%d %H:%M:%S')}"
 
-echo "✅ Created Jira issue: $ISSUE_KEY"
+                # Multi-line description
+                DESCRIPTION="This ticket was automatically created by the CI/CD pipeline.
 
-# Upload attachment
-curl -X POST \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "X-Atlassian-Token: no-check" \
-  -F "file=@report.pdf" \
-  https://jira.company.com/rest/api/2/issue/$ISSUE_KEY/attachments \
-  -w "\nAttachment uploaded for $ISSUE_KEY\n"
+Scan Details:
+- Tool: Acunetix
+- Build Number: #${BUILD_NUMBER}
+- Job Name: ${JOB_NAME}
+- Build URL: ${BUILD_URL}
+- Target ID: ${target}
+- Execution Time: ${BUILD_TIMESTAMP}
+
+The attached report contains the full vulnerability findings and evidence generated during this scan.
+
+Please review the findings and take appropriate remediation actions where required."
+
+                echo "Creating Jira ticket..."
+
+                # Create Jira issue and extract key
+                ISSUE_KEY=$(jq -n \
+                    --arg summary "Acunetix Security Scan Report – Build #${BUILD_NUMBER}" \
+                    --arg desc "$DESCRIPTION" \
+                    '{
+                        fields: {
+                            project: { key: "PROJ" },
+                            summary: $summary,
+                            description: $desc,
+                            issuetype: { name: "Task" }
+                        }
+                    }' \
+                    | curl -s -X POST \
+                        -H "Authorization: Bearer $JIRA_TOKEN" \
+                        -H "Content-Type: application/json" \
+                        -d @- \
+                        "$JIRA_URL/rest/api/2/issue" \
+                    | jq -r '.key')
+
+                if [ -z "$ISSUE_KEY" ] || [ "$ISSUE_KEY" = "null" ]; then
+                    echo "❌ Jira issue creation failed"
+                    exit 1
+                fi
+
+                echo "✅ Created Jira issue: $ISSUE_KEY"
+
+                # Validate attachment
+                if [ ! -f "$ATTACHMENT" ]; then
+                    echo "❌ Attachment not found: $ATTACHMENT"
+                    exit 1
+                fi
+
+                echo "Uploading attachment..."
+                ATTACH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+                    -H "Authorization: Bearer $JIRA_TOKEN" \
+                    -H "X-Atlassian-Token: no-check" \
+                    -F "file=@$ATTACHMENT" \
+                    "$JIRA_URL/rest/api/2/issue/$ISSUE_KEY/attachments")
+
+                if [ "$ATTACH_STATUS" -ne 200 ]; then
+                    echo "❌ Attachment upload failed (HTTP $ATTACH_STATUS)"
+                    exit 1
+                fi
+
+                echo "✅ Attachment uploaded successfully"
+            '''
+        }
+    }
+}
