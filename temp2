@@ -11,3 +11,6 @@ Scan Details:
 The attached report contains the full vulnerability findings and evidence generated during this scan.
 
 Please review the findings and take appropriate remediation actions where required.
+
+
+DESCRIPTION="This ticket was automatically created by the CI/CD pipeline to track the results of an Acunetix security scan.\\n\\nScan Details:\\n- Tool: Acunetix\\n- Build Number: #${BUILD_NUMBER}\\n- Job Name: ${JOB_NAME}\\n- Build URL: ${BUILD_URL}\\n- Target ID: ${target}\\n- Execution Time: ${BUILD_TIMESTAMP}\\n\\nThe attached report contains the full vulnerability findings and evidence generated during this scan.\\n\\nPlease review the findings and take appropriate remediation actions where required."
