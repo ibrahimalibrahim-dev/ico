@@ -1,15 +1,9 @@
-echo "Files in Checkmarx/Reports:"
-ls -1 Checkmarx/Reports/
+latest_report=$(ls -t Checkmarx/Reports/*.pdf 2>/dev/null | head -n 1)
 
-# Pick all PDFs matching the glob
-reports=(Checkmarx/Reports/*.pdf)
-
-# Check if any files found
-if [ ${#reports[@]} -eq 0 ]; then
-    echo "No PDF reports found!"
-else
-    echo "Matching PDF reports:"
-    for f in "${reports[@]}"; do
-        echo "$f"
-    done
+if [ -z "$latest_report" ]; then
+    echo "❌ No PDF reports found in Checkmarx/Reports/"
+    exit 1
 fi
+
+echo "✅ Latest Checkmarx report found:"
+echo "$latest_report"
