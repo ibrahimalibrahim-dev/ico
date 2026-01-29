@@ -1,9 +1,21 @@
-latest_report=$(ls -t Checkmarx/Reports/*.pdf 2>/dev/null | head -n 1)
+Hello [Vendor Team],
 
-if [ -z "$latest_report" ]; then
-    echo "❌ No PDF reports found in Checkmarx/Reports/"
-    exit 1
-fi
+We have performed a verification on the UAT Bitbucket server to align with the NFS requirements you shared. Below is a summary of the current state based on direct checks on the node:
 
-echo "✅ Latest Checkmarx report found:"
-echo "$latest_report"
+* Bitbucket is running under a dedicated service account (`service_account_user`), and the UID/GID are consistent.
+* Bitbucket is operating in Data Center mode and expects shared storage.
+* Shared storage is mounted at:
+  `/var/atlassian/application-data/bitbucket/shared`
+* The shared directory is backed by NFS and is actively mounted:
+  `nfs-server:/bitbucket-shared`
+* The NFS mount is currently using **NFSv4** (confirmed via `mount`, showing `type nfs4`).
+* Ownership and permissions on the shared directory are correctly set to the Bitbucket service account.
+
+At this stage, shared storage is present and in use. The only deviation from your recommendation is the NFS protocol version, as the environment is currently using NFSv4 rather than NFSv3.
+
+Please confirm whether NFSv4 is acceptable for UAT in this setup, or if you explicitly require NFSv3 so we can coordinate accordingly with the infrastructure team.
+
+Looking forward to your guidance.
+
+Best regards,
+Ibrahim Adnan
