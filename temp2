@@ -1,21 +1,11 @@
-Hello [Vendor Team],
+Hello [Vendor/Infra Team],
 
-We have performed a verification on the UAT Bitbucket server to align with the NFS requirements you shared. Below is a summary of the current state based on direct checks on the node:
+During verification of the UAT Bitbucket node, we observed the following:
 
-* Bitbucket is running under a dedicated service account (`service_account_user`), and the UID/GID are consistent.
-* Bitbucket is operating in Data Center mode and expects shared storage.
-* Shared storage is mounted at:
-  `/var/atlassian/application-data/bitbucket/shared`
-* The shared directory is backed by NFS and is actively mounted:
-  `nfs-server:/bitbucket-shared`
-* The NFS mount is currently using **NFSv4** (confirmed via `mount`, showing `type nfs4`).
-* Ownership and permissions on the shared directory are correctly set to the Bitbucket service account.
+Bitbucket is running under the dedicated service account service_account_user (UID/GID confirmed).
 
-At this stage, shared storage is present and in use. The only deviation from your recommendation is the NFS protocol version, as the environment is currently using NFSv4 rather than NFSv3.
+$BITBUCKET_HOME/shared is currently located on local storage (/home, /dev/mapper/rhel-home).
 
-Please confirm whether NFSv4 is acceptable for UAT in this setup, or if you explicitly require NFSv3 so we can coordinate accordingly with the infrastructure team.
+An NFS filesystem exists and is mounted at /bitbucket (server-ip:/bitbucket), but Bitbucket’s shared directory does not point to it.
 
-Looking forward to your guidance.
-
-Best regards,
-Ibrahim Adnan
+Please confirm the intended mapping for Bitbucket Data Center shared storage. Should $BITBUCKET_HOME/shared be moved or bind-mounted to the NFS mount to ensure proper Data Center operation?
