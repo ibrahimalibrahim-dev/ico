@@ -1,1 +1,24 @@
-export BITBUCKET_HOME=$(ps -ef | grep bitbucket | grep -v grep | tr ' ' '\n' | grep '^-Dbitbucket.home=' | cut -d= -f2)
+
+
+**Subject:** Inquiry: NFS Mount Version for Bitbucket Shared Storage
+
+**Body:**
+
+Hi [Infra Team / Name],
+
+We are preparing the Bitbucket UAT instance for Data Center readiness and noticed that the NFS mount intended for shared storage is currently using **NFS version 4**. Bitbucket Data Center requires **NFSv3** for its shared home.
+
+**Current details:**
+
+* Mount point: `/bitbucket`
+* NFS version: 4
+* Bitbucket home (local): `/atlassian/home/stash`
+* Intended use: shared home for repositories, attachments, and cluster coordination
+
+Could you please advise if it would be possible to remount this NFS directory using **NFS version 3**, with appropriate options (locking enabled, read/write permissions) for Bitbucket?
+
+Once the mount is on NFSv3, we will configure Bitbucket to use it as the shared home. Please let me know if you need any additional information or if a discussion would help coordinate this.
+
+Thank you,
+[Your Name]
+[Your Team / Role]
