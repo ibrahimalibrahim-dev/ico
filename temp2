@@ -1,1 +1,1 @@
-ps -ef | grep bitbucket | grep -v grep | tr ' ' '\n' | grep '^-Dbitbucket.home='
+export BITBUCKET_HOME=$(ps -ef | grep bitbucket | grep -v grep | tr ' ' '\n' | grep '^-Dbitbucket.home=' | cut -d= -f2)
