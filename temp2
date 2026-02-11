@@ -1,24 +1,17 @@
+Hi [Name/Team],
 
+Thank you for checking regarding the MSSQL migration to 2022.
 
-**Subject:** Inquiry: NFS Mount Version for Bitbucket Shared Storage
+Before proceeding with the production database migration, we need additional time to complete validation in UAT. We are currently in the process of applying and testing a developer license on the UAT Bitbucket instance to ensure commit/push operations function correctly against the updated database version.
 
-**Body:**
+This testing phase is required to:
 
-Hi [Infra Team / Name],
+Validate application compatibility with SQL Server 2022
 
-We are preparing the Bitbucket UAT instance for Data Center readiness and noticed that the NFS mount intended for shared storage is currently using **NFS version 4**. Bitbucket Data Center requires **NFSv3** for its shared home.
+Confirm repository operations (push/pull) behave as expected
 
-**Current details:**
+Ensure stability before submitting the CAB request for production
 
-* Mount point: `/bitbucket`
-* NFS version: 4
-* Bitbucket home (local): `/atlassian/home/stash`
-* Intended use: shared home for repositories, attachments, and cluster coordination
+Once UAT testing is successfully completed, we will be in a better position to confirm readiness and proceed with the production migration.
 
-Could you please advise if it would be possible to remount this NFS directory using **NFS version 3**, with appropriate options (locking enabled, read/write permissions) for Bitbucket?
-
-Once the mount is on NFSv3, we will configure Bitbucket to use it as the shared home. Please let me know if you need any additional information or if a discussion would help coordinate this.
-
-Thank you,
-[Your Name]
-[Your Team / Role]
+We appreciate your understanding and will keep you informed of progress and expected timelines.
