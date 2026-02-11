@@ -1,17 +1,1 @@
-Hi [Name/Team],
-
-Thank you for checking regarding the MSSQL migration to 2022.
-
-Before proceeding with the production database migration, we need additional time to complete validation in UAT. We are currently in the process of applying and testing a developer license on the UAT Bitbucket instance to ensure commit/push operations function correctly against the updated database version.
-
-This testing phase is required to:
-
-Validate application compatibility with SQL Server 2022
-
-Confirm repository operations (push/pull) behave as expected
-
-Ensure stability before submitting the CAB request for production
-
-Once UAT testing is successfully completed, we will be in a better position to confirm readiness and proceed with the production migration.
-
-We appreciate your understanding and will keep you informed of progress and expected timelines.
+openssl s_client -connect uat-bitbucket:443 -servername uat-bitbucket | openssl x509 -noout -dates
