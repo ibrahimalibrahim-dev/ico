@@ -1,1 +1,103 @@
-openssl s_client -connect uat-bitbucket:443 -servername uat-bitbucket | openssl x509 -noout -dates
+Hi Team,
+
+As discussed, we are planning the migration of the Bitbucket Production database from SQL Server 2016 to SQL Server 2022. UAT testing has been completed successfully using SQL Server 2022 with a developer license, and clone/push operations were validated without issues.
+
+Below is the proposed execution plan for Production.
+
+---
+
+Pre-Change Activities
+
+1. Firewall
+
+* Open connectivity from Bitbucket application server to:
+
+  * New Production SQL 2022 IP
+  * New DR SQL 2022 IP
+* Port: 1433
+* Validate connectivity from application server prior to change window.
+
+2. Database Preparation (DB Team)
+
+* Restore current Production database (SQL 2016) to SQL Server 2022.
+* Set database compatibility level to 160.
+* Confirm database collation remains unchanged.
+* Create/validate Bitbucket DB login with same permissions as current production.
+* Confirm successful test login from SQL side.
+
+3. DNS (if applicable)
+
+* Ensure DNS entry is configured for the new database endpoint to avoid hardcoding IP in configuration.
+
+---
+
+Change Window Activities
+
+1. Stop Bitbucket service on Production server.
+
+2. Take backup of:
+
+* Current bitbucket.properties
+* Bitbucket home directory (if required by policy)
+* Confirm database backup exists prior to migration.
+
+3. Update database connection in:
+
+/atlassian/home/stash/bitbucket.properties
+
+Update:
+
+* jdbc.url
+* jdbc.user
+* jdbc.password
+
+Pointing to the new SQL Server 2022 Production instance.
+
+4. Start Bitbucket service.
+
+5. Monitor logs:
+
+/atlassian/home/stash/log/atlassian-bitbucket.log
+
+Validate:
+
+* Successful DB connection
+* No authentication errors
+* No schema or collation errors
+* No JDBC exceptions
+
+6. Functional validation:
+
+* Login to UI
+* Clone repository
+* Commit and push changes
+* Create and merge a pull request
+
+---
+
+Rollback Plan
+
+If issues occur:
+
+* Stop Bitbucket
+* Restore previous bitbucket.properties
+* Restart Bitbucket to reconnect to SQL Server 2016
+
+Estimated rollback time: 5–10 minutes.
+
+---
+
+Scope of Change
+
+This activity only updates the database backend. No changes to:
+
+* Bitbucket version
+* Shared home
+* NFS
+* Clustering
+* Licensing
+
+Please review and confirm availability for scheduling the change window.
+
+Regards,
+Ibrahim Adnan
