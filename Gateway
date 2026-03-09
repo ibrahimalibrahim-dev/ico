@@ -1,0 +1,31 @@
+Dear All,
+
+Following the approval of the relevant Change Advisory Board (CAB) request, please be advised of the upcoming planned maintenance activity affecting the production instance of **Bitbucket Server**.
+
+**Activity:**
+Migration of the Bitbucket production database from **Microsoft SQL Server 2016** to **Microsoft SQL Server 2022**.
+
+**Maintenance Window:**
+[DATE] from [START TIME] to [END TIME]
+
+**Affected Services:**
+
+* Bitbucket Production Server
+* Jenkins pipelines dependent on Bitbucket repositories
+
+During the maintenance window, the Bitbucket service will be **fully stopped prior to the start of the activity**. As a result, the following operations will be temporarily unavailable:
+
+* Repository access via the Bitbucket web interface
+* Git operations (clone, pull, push)
+* Jenkins pipelines that retrieve source code from Bitbucket
+
+Once the database migration and restoration activities are completed, the Bitbucket service will be restarted and validated. The **estimated restoration and service verification time is approximately one hour**.
+
+A completion notification will be shared once the maintenance activity has concluded and services have been successfully restored.
+
+Should you have any questions or require further clarification, please contact **ITCloudOps** or reach out directly to me.
+
+Thank you for your understanding and cooperation.
+
+Kind regards,
+Ibrahim
