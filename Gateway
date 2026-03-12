@@ -1,31 +1,137 @@
-Dear All,
+pipeline {
 
-Following the approval of the relevant Change Advisory Board (CAB) request, please be advised of the upcoming planned maintenance activity affecting the production instance of **Bitbucket Server**.
+    agent any
 
-**Activity:**
-Migration of the Bitbucket production database from **Microsoft SQL Server 2016** to **Microsoft SQL Server 2022**.
+    environment {
+        MAVEN_HOME = tool 'Maven'
+        JAVA_HOME  = tool 'JDK'
+        PATH = "${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${env.PATH}"
+        MAVEN_SETTINGS = "/path/to/es-run.xml"
+    }
 
-**Maintenance Window:**
-[DATE] from [START TIME] to [END TIME]
+    triggers {
+        // runs on repository change
+        pollSCM('H/2 * * * *')
+    }
 
-**Affected Services:**
+    stages {
 
-* Bitbucket Production Server
-* Jenkins pipelines dependent on Bitbucket repositories
+        stage('Checkout Source') {
+            steps {
+                echo "Checking out source code..."
+                checkout scm
+            }
+        }
 
-During the maintenance window, the Bitbucket service will be **fully stopped prior to the start of the activity**. As a result, the following operations will be temporarily unavailable:
+        stage('Detect Module Type') {
+            steps {
+                script {
 
-* Repository access via the Bitbucket web interface
-* Git operations (clone, pull, push)
-* Jenkins pipelines that retrieve source code from Bitbucket
+                    def packaging = sh(
+                        script: "grep -m1 '<packaging>' pom.xml | sed -e 's/<[^>]*>//g'",
+                        returnStdout: true
+                    ).trim()
 
-Once the database migration and restoration activities are completed, the Bitbucket service will be restarted and validated. The **estimated restoration and service verification time is approximately one hour**.
+                    echo "Detected packaging type: ${packaging}"
 
-A completion notification will be shared once the maintenance activity has concluded and services have been successfully restored.
+                    env.MODULE_TYPE = packaging
+                }
+            }
+        }
 
-Should you have any questions or require further clarification, please contact **ITCloudOps** or reach out directly to me.
+        stage('Build Source Code') {
+            steps {
+                echo "Building Maven project"
 
-Thank you for your understanding and cooperation.
+                sh """
+                mvn -B \
+                -Dmaven.wagon.http.pool=false \
+                -DoracleHome=/path/to/oracle \
+                -f pom.xml \
+                -s ${MAVEN_SETTINGS} \
+                clean install -U
+                """
+            }
+        }
 
-Kind regards,
-Ibrahim
+        stage('SCA Scan (Dependency Check)') {
+            steps {
+                echo "Running SCA scan"
+
+                sh """
+                mvn -s ${MAVEN_SETTINGS} \
+                org.owasp:dependency-check-maven:check
+                """
+            }
+        }
+
+        stage('SAST Scan (SonarQube)') {
+            steps {
+                echo "Running SAST scan"
+
+                withSonarQubeEnv('SonarQube') {
+
+                    sh """
+                    mvn -s ${MAVEN_SETTINGS} \
+                    sonar:sonar
+                    """
+
+                }
+            }
+        }
+
+        stage('Publish to Nexus (Libraries Only)') {
+
+            when {
+                expression {
+                    return env.MODULE_TYPE == "jar" || env.MODULE_TYPE == "pom"
+                }
+            }
+
+            steps {
+
+                echo "Publishing shared library to Nexus"
+
+                sh """
+                mvn -s ${MAVEN_SETTINGS} deploy -DskipTests
+                """
+
+            }
+
+        }
+
+        stage('Build Artifact (WAR Services)') {
+
+            when {
+                expression {
+                    return env.MODULE_TYPE == "war"
+                }
+            }
+
+            steps {
+
+                echo "Deployable service detected"
+
+                sh """
+                mvn -s ${MAVEN_SETTINGS} package -DskipTests
+                """
+
+            }
+
+        }
+
+    }
+
+    post {
+
+        success {
+            echo "PR validation pipeline completed successfully."
+        }
+
+        failure {
+            echo "Pipeline failed. Merge should be blocked."
+        }
+
+    }
+
+}
