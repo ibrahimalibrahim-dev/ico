@@ -1,42 +1,18 @@
-stage('Upload to Nexus') {
+script {
 
-    steps {
+    def moduleConfig = [
+        "es-common":  [groupId: "com.bank.es", extension: "jar"],
+        "cms-common": [groupId: "com.bank.cms", extension: "jar"],
+        "es-parent":  [groupId: "com.bank.es", extension: "pom"]
+    ]
 
-        script {
+    def config = moduleConfig[moduleName]
 
-            echo "Checking artifact before upload..."
-
-            sh """
-            echo "Current directory:"
-            pwd
-
-            echo "Listing target directory:"
-            ls -lh target
-
-            echo "Expected artifact:"
-            ls -lh target/${ARTIFACT_ID}-${VERSION}.jar
-            """
-
-            echo "Uploading artifact to Nexus..."
-
-            sh """
-            curl -k -v --fail \\
-            -X POST -u ${NEXUS_USER}:${NEXUS_PASS} \\
-            "https://nexus-server/service/rest/v1/components?repository=${PROJECT_NAME}" \\
-            -H "accept: application/json" \\
-            -F "maven2.groupId=${GROUP_ID}" \\
-            -F "maven2.artifactId=${ARTIFACT_ID}" \\
-            -F "maven2.version=${VERSION}" \\
-            -F "maven2.packaging=jar" \\
-            -F "maven2.asset1=@target/${ARTIFACT_ID}-${VERSION}.jar" \\
-            -F "maven2.asset1.extension=jar" \\
-            -o nexus-response.json \\
-            -w "\\nHTTP_STATUS:%{http_code}\\n"
-            """
-
-            echo "Nexus response body:"
-            sh "cat nexus-response.json || true"
-
-        }
+    if (!config) {
+        error "Module ${moduleName} not configured for Nexus upload"
     }
+
+    env.GROUP_ID = config.groupId
+    env.EXTENSION = config.extension
+
 }
