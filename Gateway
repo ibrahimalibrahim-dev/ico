@@ -1,18 +1,5 @@
-script {
-
-    def moduleConfig = [
-        "es-common":  [groupId: "com.bank.es", extension: "jar"],
-        "cms-common": [groupId: "com.bank.cms", extension: "jar"],
-        "es-parent":  [groupId: "com.bank.es", extension: "pom"]
-    ]
-
-    def config = moduleConfig[moduleName]
-
-    if (!config) {
-        error "Module ${moduleName} not configured for Nexus upload"
-    }
-
-    env.GROUP_ID = config.groupId
-    env.EXTENSION = config.extension
-
-}
+    sh """
+    mvn deploy \
+    -DskipTests \
+    -DaltDeploymentRepository=nexus::default::https://nexus-server/repository/${PROJECT_NAME}
+    """
