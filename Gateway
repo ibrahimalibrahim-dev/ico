@@ -1,11 +1,11 @@
-if (moduleName == "es-parent") {
-    sh """
-    mvn deploy \
-    -DskipTests \
-    -DpomFile=pom.xml \
-    -DaltDeploymentRepository=nexus::default::https://nexus-server/repository/${PROJECT_NAME} \
-    -Dmaven.wagon.http.ssl.insecure=true \
-    -Dmaven.wagon.http.ssl.allowall=true \
-    -s settings.xml
-    """
-}
+The parent POM (es-parent-1.1.3.pom) did not overwrite the blob in Nexus because release artifacts in Nexus are immutable. This is expected behavior.
+
+The maven-metadata.xml was updated, which is normal — Maven updates metadata even if the artifact itself is unchanged.
+
+Checksums (MD5, SHA1) confirm that the artifact currently in Nexus matches the deployed POM.
+
+No special flags (-DpomFile, SSL flags, etc.) are needed; the deployment command is correct.
+
+To deploy changes to a parent POM, a new version must be incremented (e.g., 1.1.4) — existing release artifacts cannot be overwritten.
+
+✅ In short: pipeline is functioning correctly; the POM artifact is immutable by design, and metadata updates are working as intended.
