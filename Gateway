@@ -1,13 +1,90 @@
-Summary – Parent POM Deployment Behavior
+post {
+    always {
+        script {
+            if (params.Create_Jira_Ticket && params.target?.trim()) {
 
-The parent POM (es-parent-1.1.3.pom) did not overwrite the blob in Nexus because release artifacts in Nexus are immutable. This is expected behavior.
+                withEnv([
+                    'JIRA_URL=https://jira.company.com',
+                    'PROJECT_KEY=PROJ',
+                    'ISSUE_TYPE=Task',
+                    "ATTACHMENT=report_${env.BUILD_NUMBER}.html"
+                ]) {
 
-The maven-metadata.xml was updated, which is normal — Maven updates metadata even if the artifact itself is unchanged.
+                    withCredentials([string(credentialsId: 'jira-bearer-token', variable: 'JIRA_TOKEN')]) {
 
-Checksums (MD5, SHA1) confirm that the artifact currently in Nexus matches the deployed POM.
+                        sh '''
+                            set +e  # IMPORTANT: do not fail pipeline in post
 
-No special flags (-DpomFile, SSL flags, etc.) are needed; the deployment command is correct.
+                            BUILD_TIMESTAMP="${BUILD_TIMESTAMP:-$(date '+%Y-%m-%d %H:%M:%S')}"
 
-To deploy changes to a parent POM, a new version must be incremented (e.g., 1.1.4) — existing release artifacts cannot be overwritten.
+                            DESCRIPTION="This ticket was automatically created by the CI/CD pipeline.
 
-✅ In short: pipeline is functioning correctly; the POM artifact is immutable by design, and metadata updates are working as intended.
+Scan Details:
+- Tool: Acunetix
+- Build Number: #${BUILD_NUMBER}
+- Job Name: ${JOB_NAME}
+- Build URL: ${BUILD_URL}
+- Target ID: ${target}
+- Execution Time: ${BUILD_TIMESTAMP}
+
+The attached report contains the full vulnerability findings and evidence generated during this scan.
+
+Please review the findings and take appropriate remediation actions where required."
+
+                            echo "Creating Jira ticket..."
+
+                            ISSUE_KEY=$(jq -n \
+                                --arg summary "Acunetix Security Scan Report – Build #${BUILD_NUMBER}" \
+                                --arg desc "$DESCRIPTION" \
+                                --arg project "$PROJECT_KEY" \
+                                --arg type "$ISSUE_TYPE" \
+                                '{
+                                    fields: {
+                                        project: { key: $project },
+                                        summary: $summary,
+                                        description: $desc,
+                                        issuetype: { name: $type }
+                                    }
+                                }' \
+                                | curl -s -X POST \
+                                    -H "Authorization: Bearer $JIRA_TOKEN" \
+                                    -H "Content-Type: application/json" \
+                                    -d @- \
+                                    "$JIRA_URL/rest/api/2/issue" \
+                                | jq -r '.key')
+
+                            if [ -z "$ISSUE_KEY" ] || [ "$ISSUE_KEY" = "null" ]; then
+                                echo "❌ Jira issue creation failed"
+                                exit 0   # do NOT fail pipeline
+                            fi
+
+                            echo "✅ Created Jira issue: $ISSUE_KEY"
+
+                            if [ ! -f "$ATTACHMENT" ]; then
+                                echo "⚠️ Attachment not found: $ATTACHMENT (skipping upload)"
+                                exit 0
+                            fi
+
+                            echo "Uploading attachment..."
+
+                            ATTACH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+                                -H "Authorization: Bearer $JIRA_TOKEN" \
+                                -H "X-Atlassian-Token: no-check" \
+                                -F "file=@$ATTACHMENT" \
+                                "$JIRA_URL/rest/api/2/issue/$ISSUE_KEY/attachments")
+
+                            if [ "$ATTACH_STATUS" -ne 200 ]; then
+                                echo "❌ Attachment upload failed (HTTP $ATTACH_STATUS)"
+                                exit 0
+                            fi
+
+                            echo "✅ Attachment uploaded successfully"
+                        '''
+                    }
+                }
+            } else {
+                echo "Skipping Jira ticket creation (conditions not met)"
+            }
+        }
+    }
+}
