@@ -1,44 +1,101 @@
-import jenkins.model.*
-import hudson.model.*
-import hudson.security.*
+// unified_access_matrix.js
+// Node.js script to generate unified access matrix
+// Usage: node unified_access_matrix.js
 
-def usernames = ["alice","bob","charlie"] // <-- populate known usernames
+const fs = require("fs");
+const path = require("path");
 
-def jenkins = Jenkins.instance
-def auth = jenkins.getAuthorizationStrategy()
+// === INPUT FILES ===
+// Nexus JSON exported from API
+const nexusFile = path.join(__dirname, "nexus_users.json");
+// Checkmarx JSON exported from API
+const checkmarxFile = path.join(__dirname, "checkmarx_users.json");
+// Jenkins known LDAP users (CSV: one username per line)
+const jenkinsUsersFile = path.join(__dirname, "jenkins_users.csv");
+// Jenkins pipeline permissions CSV (optional, pre-generated if available)
+const jenkinsPipelinesFile = path.join(__dirname, "jenkins_pipelines.csv");
 
-def globalCsv = new File("/tmp/users_vs_permissions.csv")
-def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
+// === OUTPUT FILE ===
+const outputCsv = path.join(__dirname, "unified_access_matrix.csv");
 
-def globalPerms = ["OverallRead": Permission.fromId("Overall/Read"),
-                   "Administer": Permission.fromId("Overall/Administer")]
+// === LOAD DATA ===
+const nexusData = JSON.parse(fs.readFileSync(nexusFile));
+const checkmarxData = JSON.parse(fs.readFileSync(checkmarxFile));
+const jenkinsUsers = fs.readFileSync(jenkinsUsersFile, "utf-8")
+    .split("\n").map(u => u.trim()).filter(Boolean);
 
-def rows = usernames.collect { userId ->
-    def row = [userId]
-    globalPerms.each { name, perm ->
-        row << (auth.hasPermission(userId, perm) ? "✔" : "")
-    }
-    row
+// Load Jenkins pipelines CSV if exists
+let jenkinsPipelineData = [];
+let pipelineNames = [];
+if (fs.existsSync(jenkinsPipelinesFile)) {
+    const lines = fs.readFileSync(jenkinsPipelinesFile, "utf-8").split("\n").filter(Boolean);
+    pipelineNames = lines[0].split(",").slice(1); // skip header User/Group
+    jenkinsPipelineData = lines.slice(1).map(line => {
+        const cols = line.split(",");
+        return { user: cols[0], perms: cols.slice(1) };
+    });
 }
 
-globalCsv.text = [["User/Group"] + globalPerms.keySet()].join(",") + "\n" +
-                  rows.collect { it.join(",") }.join("\n")
-println "✅ Users vs Global permissions CSV written: ${globalCsv.path}"
-
-// Pipelines
-def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
-def header = ["User/Group"] + pipelines.collect { it.fullName }
-def pipelineRows = usernames.collect { userId ->
-    def row = [userId]
-    pipelines.each { job ->
-        def allowed = auth.hasPermission(userId, Item.READ) ||
-                      auth.hasPermission(userId, Item.BUILD) ||
-                      auth.hasPermission(userId, Item.CONFIGURE) ||
-                      auth.hasPermission(userId, Item.DELETE)
-        row << (allowed ? "✔" : "")
-    }
-    row
+// === HELPER: get user role tick from JSON ===
+function getTick(userId, rolesList) {
+    const user = rolesList.find(u => u.userId === userId);
+    return user ? "✔" : "Disabled";
 }
 
-pipelinesCsv.text = [header.join(","), pipelineRows.collect { it.join(",") }.join("\n")].join("\n")
-println "✅ Users vs Pipelines CSV written: ${pipelinesCsv.path}"
+// === BUILD HEADER ===
+const nexusRoles = ["RO","RW","RWX","Admin"];
+const checkmarxRoles = ["Admin","RO","RW"];
+const jenkinsGlobalRoles = ["OverallRead","Administer"];
+
+const header = ["User/Group"]
+    .concat(nexusRoles.map(r => `Nexus ${r}`))
+    .concat(checkmarxRoles.map(r => `Checkmarx ${r}`))
+    .concat(jenkinsGlobalRoles.map(r => `Jenkins ${r}`))
+    .concat(pipelineNames.map(p => `Jenkins ${p}`));
+
+// === BUILD ROWS ===
+const allUsersSet = new Set([
+    ...nexusData.map(u => u.userId),
+    ...checkmarxData.map(u => u.userName),
+    ...jenkinsUsers
+]);
+
+const allUsers = Array.from(allUsersSet).sort();
+
+const rows = allUsers.map(userId => {
+    const row = [userId];
+
+    // Nexus roles
+    nexusRoles.forEach(r => {
+        row.push(getTick(userId, nexusData.map(u => ({ userId: u.userId, roles: u.roles.includes(r) }))));
+    });
+
+    // Checkmarx roles
+    checkmarxRoles.forEach(r => {
+        row.push(getTick(userId, checkmarxData.map(u => ({ userId: u.userName, roles: u.roles.includes(r) }))));
+    });
+
+    // Jenkins global roles
+    jenkinsGlobalRoles.forEach(r => {
+        // If we have pipelines CSV, check if user exists there for OverallRead/Administer
+        const jUser = jenkinsPipelineData.find(u => u.user === userId);
+        row.push(jUser ? "✔" : "Disabled");
+    });
+
+    // Jenkins pipelines
+    pipelineNames.forEach((p, idx) => {
+        const jUser = jenkinsPipelineData.find(u => u.user === userId);
+        if (jUser) {
+            row.push(jUser.perms[idx] || "Disabled");
+        } else {
+            row.push("Disabled");
+        }
+    });
+
+    return row;
+});
+
+// === WRITE CSV ===
+const csvContent = [header.join(","), ...rows.map(r => r.join(","))].join("\n");
+fs.writeFileSync(outputCsv, csvContent);
+console.log(`✅ Unified access matrix CSV generated: ${outputCsv}`);
