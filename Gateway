@@ -1,140 +1,101 @@
-const fs = require("fs");
+import jenkins.model.*
+import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-// Input files
-const users = JSON.parse(fs.readFileSync("users.json", "utf8"));
-const teams = JSON.parse(fs.readFileSync("teams.json", "utf8"));
-const roles = JSON.parse(fs.readFileSync("roles.json", "utf8"));
+// Output files
+def globalCsv = new File("/tmp/users_vs_roles.csv")
+def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
 
-console.log("[INFO] Data loaded");
+// Get Jenkins instance
+def jenkins = Jenkins.instance
+def strategy = jenkins.getAuthorizationStrategy()
 
-// Build lookup maps
-const roleMap = {};
-roles.forEach(r => roleMap[r.id] = r.name);
-
-const teamMap = {};
-teams.forEach(t => teamMap[t.id] = t.name);
-
-console.log("[INFO] Maps created");
-
-// Unique role names
-const allRoles = Object.values(roleMap).sort();
-
-// Unique team names
-const allTeams = Object.values(teamMap).sort();
-
-console.log(`[INFO] Roles: ${allRoles.length}, Teams: ${allTeams.length}`);
-
-// Helper to write CSV
-function writeCSV(filename, header, rows) {
-  const content = [header, ...rows].map(r => r.join(",")).join("\n");
-  fs.writeFileSync(filename, content);
-  console.log(`[SUCCESS] ${filename} created`);
+if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
+    println "Role-based strategy not enabled!"
+    return
 }
 
-//////////////////////////////////////////////////////
-// 1️⃣ USERS vs ROLES
-//////////////////////////////////////////////////////
+// Map roles to simplified permission columns
+def roleCategory = [
+    "RO": ["Read"],
+    "RW": ["Job/Read", "Job/Build"],
+    "RWX": ["Job/Configure", "Job/Delete"],
+    "Admin": ["Overall/Administer"]
+]
 
-console.log("[INFO] Building Users vs Roles...");
+// ---------------------
+// 1️⃣ Users vs Roles
+// ---------------------
+def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
 
-const usersRolesRows = [];
+def allSIDs = new HashSet()
+strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getRoles().each { role ->
+    allSIDs.addAll(strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getSidsForRole(role))
+}
 
-users.forEach((user, idx) => {
-  console.log(`[Users vs Roles] ${idx + 1}/${users.length}: ${user.userName}`);
+// Convert to list and sort
+def sidsList = allSIDs.toList().sort()
 
-  const userRoleNames = new Set(
-    (user.roleIds || []).map(id => roleMap[id]).filter(Boolean)
-  );
+def header = ["User/Group"] + globalRoles
+def rows = []
 
-  const row = [
-    user.userName,
-    ...allRoles.map(role => userRoleNames.has(role) ? "✔" : "")
-  ];
+sidsList.each { sid ->
+    def row = [sid]
+    def assignedRoles = strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getRoles().findAll { r ->
+        strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getSidsForRole(r).contains(sid)
+    }
 
-  usersRolesRows.push(row);
-});
+    // Map role permissions to categories
+    def ticks = [:].withDefault { "" }
+    ticks["RO"] = ""
+    ticks["RW"] = ""
+    ticks["RWX"] = ""
+    ticks["Admin"] = ""
+    ticks["Disabled"] = "✔" // default disabled
 
-writeCSV(
-  "users_vs_roles.csv",
-  ["userName", ...allRoles],
-  usersRolesRows
-);
+    assignedRoles.each { r ->
+        def perms = r.getPermissions().collect { it.id.toString() }
+        perms.each { p ->
+            roleCategory.each { cat, permList ->
+                if (permList.contains(p)) {
+                    ticks[cat] = "✔"
+                    ticks["Disabled"] = "" // not disabled anymore
+                }
+            }
+        }
+    }
 
-//////////////////////////////////////////////////////
-// 2️⃣ USERS vs TEAMS
-//////////////////////////////////////////////////////
+    row += globalRoles.collect { ticks[it] }
+    rows << row
+}
 
-console.log("[INFO] Building Users vs Teams...");
+// Write CSV
+globalCsv.text = ([header] + rows).collect { it.join(",") }.join("\n")
+println "✅ Users vs Roles CSV generated: ${globalCsv.path}"
 
-const usersTeamsRows = [];
+// ---------------------
+// 2️⃣ Users vs Pipelines
+// ---------------------
 
-users.forEach((user, idx) => {
-  console.log(`[Users vs Teams] ${idx + 1}/${users.length}: ${user.userName}`);
+def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
 
-  const userTeamNames = new Set(
-    (user.teamIds || []).map(id => teamMap[id]).filter(Boolean)
-  );
+def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
+def pipelineRows = []
 
-  const row = [
-    user.userName,
-    ...allTeams.map(team => userTeamNames.has(team) ? "✔" : "")
-  ];
+sidsList.each { sid ->
+    def row = [sid]
 
-  usersTeamsRows.push(row);
-});
+    pipelines.each { job ->
+        def hasItemPerm = strategy.getAllRoles(RoleBasedAuthorizationStrategy.PROJECT).values().any { r ->
+            strategy.getRoleMap(RoleBasedAuthorizationStrategy.PROJECT).getSidsForRole(r).contains(sid) &&
+            r.getPermissions().any { it.id.toString().startsWith("Item") } // Any Job/Item permission
+        }
 
-writeCSV(
-  "users_vs_teams.csv",
-  ["userName", ...allTeams],
-  usersTeamsRows
-);
+        row << (hasItemPerm ? "✔" : "")
+    }
 
-//////////////////////////////////////////////////////
-// 3️⃣ TEAMS vs ROLES (Derived)
-//////////////////////////////////////////////////////
+    pipelineRows << row
+}
 
-console.log("[INFO] Building Teams vs Roles (derived)...");
-
-// Build team → roles mapping
-const teamRoleMap = {};
-
-// Initialize
-allTeams.forEach(team => {
-  teamRoleMap[team] = new Set();
-});
-
-// Populate from users
-users.forEach(user => {
-  const userRoles = (user.roleIds || []).map(id => roleMap[id]).filter(Boolean);
-  const userTeams = (user.teamIds || []).map(id => teamMap[id]).filter(Boolean);
-
-  userTeams.forEach(team => {
-    userRoles.forEach(role => {
-      teamRoleMap[team].add(role);
-    });
-  });
-});
-
-// Build rows
-const teamsRolesRows = [];
-
-allTeams.forEach(team => {
-  console.log(`[Teams vs Roles] Processing team: ${team}`);
-
-  const rolesSet = teamRoleMap[team];
-
-  const row = [
-    team,
-    ...allRoles.map(role => rolesSet.has(role) ? "✔" : "")
-  ];
-
-  teamsRolesRows.push(row);
-});
-
-writeCSV(
-  "teams_vs_roles.csv",
-  ["teamName", ...allRoles],
-  teamsRolesRows
-);
-
-console.log("[DONE] All CSV files generated successfully.");
+// Write CSV
+pipelinesCsv.text = ([pipelineHeader] + pipelineRows).collect { it.join(",") }.join("\n")
+println "✅ Users vs Pipelines CSV generated: ${pipelinesCsv.path}"
