@@ -2,59 +2,43 @@ import jenkins.model.*
 import hudson.model.*
 import hudson.security.*
 
-// Output files
-def usersCsv = new File("/tmp/users_vs_permissions.csv")
-def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
+def usernames = ["alice","bob","charlie"] // <-- populate known usernames
 
 def jenkins = Jenkins.instance
-def authStrategy = jenkins.getAuthorizationStrategy()
+def auth = jenkins.getAuthorizationStrategy()
 
-// ------------------------
-// 1️⃣ Users vs Global permissions
-// ------------------------
-def users = jenkins.getAllUsers().collect { it.getId() }.sort()
-def globalPerms = [
-    "OverallRead": Jenkins.ADMINISTER ? Permission.fromId("Overall/Read") : null,
-    "Administer": Permission.fromId("Overall/Administer")
-]
+def globalCsv = new File("/tmp/users_vs_permissions.csv")
+def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
 
-// Build CSV
-def userRows = users.collect { userId ->
+def globalPerms = ["OverallRead": Permission.fromId("Overall/Read"),
+                   "Administer": Permission.fromId("Overall/Administer")]
+
+def rows = usernames.collect { userId ->
     def row = [userId]
     globalPerms.each { name, perm ->
-        if (perm != null && authStrategy.hasPermission(userId, perm)) {
-            row << "✔"
-        } else {
-            row << ""
-        }
+        row << (auth.hasPermission(userId, perm) ? "✔" : "")
     }
-    return row
+    row
 }
 
-// Write CSV
-usersCsv.text = (["User/Group"] + globalPerms.keySet()).join(",") + "\n" +
-    userRows.collect { it.join(",") }.join("\n")
-println "✅ Users vs Global permissions CSV generated: ${usersCsv.path}"
+globalCsv.text = [["User/Group"] + globalPerms.keySet()].join(",") + "\n" +
+                  rows.collect { it.join(",") }.join("\n")
+println "✅ Users vs Global permissions CSV written: ${globalCsv.path}"
 
-// ------------------------
-// 2️⃣ Users vs Pipelines (Item roles)
-// ------------------------
+// Pipelines
 def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
-def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
-def pipelineRows = []
-
-users.each { userId ->
+def header = ["User/Group"] + pipelines.collect { it.fullName }
+def pipelineRows = usernames.collect { userId ->
     def row = [userId]
     pipelines.each { job ->
-        def allowed = authStrategy.hasPermission(userId, Item.READ) ||
-                      authStrategy.hasPermission(userId, Item.BUILD) ||
-                      authStrategy.hasPermission(userId, Item.CONFIGURE) ||
-                      authStrategy.hasPermission(userId, Item.DELETE)
+        def allowed = auth.hasPermission(userId, Item.READ) ||
+                      auth.hasPermission(userId, Item.BUILD) ||
+                      auth.hasPermission(userId, Item.CONFIGURE) ||
+                      auth.hasPermission(userId, Item.DELETE)
         row << (allowed ? "✔" : "")
     }
-    pipelineRows << row
+    row
 }
 
-// Write CSV
-pipelinesCsv.text = [pipelineHeader.join(","), pipelineRows.collect { it.join(",") }.join("\n")].join("\n")
-println "✅ Users vs Pipelines CSV generated: ${pipelinesCsv.path}"
+pipelinesCsv.text = [header.join(","), pipelineRows.collect { it.join(",") }.join("\n")].join("\n")
+println "✅ Users vs Pipelines CSV written: ${pipelinesCsv.path}"
