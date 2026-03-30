@@ -1,11 +1,6 @@
 import jenkins.model.*
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-// Output files
-def globalCsv = new File("/tmp/users_vs_roles.csv")
-def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
-
-// Get Jenkins instance
 def jenkins = Jenkins.instance
 def strategy = jenkins.getAuthorizationStrategy()
 
@@ -14,43 +9,44 @@ if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
     return
 }
 
-// Map roles to simplified permission columns
+// Output files (change path if needed)
+def globalCsv = new File("/tmp/users_vs_roles.csv")
+def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
+
+// ---------------------
+// 1️⃣ Users vs Roles (Global roles)
+// ---------------------
+
 def roleCategory = [
-    "RO": ["Read"],
+    "RO": ["Overall/Read"],
     "RW": ["Job/Read", "Job/Build"],
     "RWX": ["Job/Configure", "Job/Delete"],
     "Admin": ["Overall/Administer"]
 ]
 
-// ---------------------
-// 1️⃣ Users vs Roles
-// ---------------------
-def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
+def globalRoleMap = strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL)
 
-def allSIDs = new HashSet()
-strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getRoles().each { role ->
-    allSIDs.addAll(strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getSidsForRole(role))
+def allSIDs = new HashSet<String>()
+globalRoleMap.getRoles().each { role ->
+    allSIDs.addAll(globalRoleMap.getSidsForRole(role))
 }
 
-// Convert to list and sort
 def sidsList = allSIDs.toList().sort()
-
-def header = ["User/Group"] + globalRoles
+def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
 def rows = []
 
 sidsList.each { sid ->
     def row = [sid]
-    def assignedRoles = strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getRoles().findAll { r ->
-        strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL).getSidsForRole(r).contains(sid)
+    def assignedRoles = globalRoleMap.getRoles().findAll { r ->
+        globalRoleMap.getSidsForRole(r).contains(sid)
     }
 
-    // Map role permissions to categories
     def ticks = [:].withDefault { "" }
     ticks["RO"] = ""
     ticks["RW"] = ""
     ticks["RWX"] = ""
     ticks["Admin"] = ""
-    ticks["Disabled"] = "✔" // default disabled
+    ticks["Disabled"] = "✔"
 
     assignedRoles.each { r ->
         def perms = r.getPermissions().collect { it.id.toString() }
@@ -58,7 +54,7 @@ sidsList.each { sid ->
             roleCategory.each { cat, permList ->
                 if (permList.contains(p)) {
                     ticks[cat] = "✔"
-                    ticks["Disabled"] = "" // not disabled anymore
+                    ticks["Disabled"] = ""
                 }
             }
         }
@@ -69,25 +65,26 @@ sidsList.each { sid ->
 }
 
 // Write CSV
-globalCsv.text = ([header] + rows).collect { it.join(",") }.join("\n")
+globalCsv.text = ([["User/Group"] + globalRoles] + rows).collect { it.join(",") }.join("\n")
 println "✅ Users vs Roles CSV generated: ${globalCsv.path}"
 
 // ---------------------
-// 2️⃣ Users vs Pipelines
+// 2️⃣ Users vs Pipelines (Project roles)
 // ---------------------
 
 def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
-
 def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
 def pipelineRows = []
+
+def projectRoleMap = strategy.getRoleMap(RoleBasedAuthorizationStrategy.PROJECT)
 
 sidsList.each { sid ->
     def row = [sid]
 
     pipelines.each { job ->
-        def hasItemPerm = strategy.getAllRoles(RoleBasedAuthorizationStrategy.PROJECT).values().any { r ->
-            strategy.getRoleMap(RoleBasedAuthorizationStrategy.PROJECT).getSidsForRole(r).contains(sid) &&
-            r.getPermissions().any { it.id.toString().startsWith("Item") } // Any Job/Item permission
+        def hasItemPerm = projectRoleMap.getRoles().any { r ->
+            projectRoleMap.getSidsForRole(r).contains(sid) &&
+            r.getPermissions().any { it.id.toString().startsWith("Item") }
         }
 
         row << (hasItemPerm ? "✔" : "")
