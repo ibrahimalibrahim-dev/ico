@@ -1,7 +1,67 @@
-Following up on the request to proceed with DAST onboarding (Acunetix targets) for the enterprise services.
+#!/bin/bash
 
-From our side, we are ready to proceed technically. However, before we can configure DAST in the pipeline or create the required targets, we need formal confirmation/approval from the Security team. This is mainly because each application must first be reviewed and approved on their side, after which they provide the corresponding Acunetix target ID. As you know, this step usually takes some time even for a single application, so we want to make sure the process is aligned before we start creating configurations for multiple services.
+INPUT_FILE="users.json"
+OUTPUT_FILE="users_roles_matrix.csv"
 
-Could we please confirm the approval process with Security and whether we should proceed with onboarding all enterprise services, or only a specific set initially? Once the target IDs are provided, we can proceed immediately with the pipeline updates.
+echo "[INFO] Starting processing..."
+echo "[INFO] Input file: $INPUT_FILE"
 
-Please let me know how you would like us to proceed.
+# Check dependencies
+if ! command -v jq &> /dev/null; then
+    echo "[ERROR] jq is required but not installed."
+    exit 1
+fi
+
+# Temp files
+ROLES_FILE=$(mktemp)
+MATRIX_FILE=$(mktemp)
+
+echo "[INFO] Extracting unique roles..."
+
+# Extract all unique roles
+jq -r '.[].roles[]' "$INPUT_FILE" | sort -u > "$ROLES_FILE"
+
+ROLE_COUNT=$(wc -l < "$ROLES_FILE")
+echo "[INFO] Found $ROLE_COUNT unique roles"
+
+echo "[INFO] Building CSV header..."
+
+# Build header
+HEADER="userId"
+while read -r role; do
+    HEADER+=",$role"
+done < "$ROLES_FILE"
+
+echo "$HEADER" > "$OUTPUT_FILE"
+
+echo "[INFO] Processing users..."
+
+USER_COUNT=$(jq length "$INPUT_FILE")
+echo "[INFO] Total users: $USER_COUNT"
+
+# Process users
+jq -c '.[]' "$INPUT_FILE" | nl -w1 -s':' | while IFS=":" read -r idx user; do
+    userId=$(echo "$user" | jq -r '.userId')
+
+    echo "[INFO] Processing user $idx/$USER_COUNT: $userId"
+
+    LINE="$userId"
+
+    while read -r role; do
+        HAS_ROLE=$(echo "$user" | jq --arg role "$role" \
+            '[.roles[] == $role] | any')
+
+        if [ "$HAS_ROLE" = "true" ]; then
+            LINE+=",✔"
+        else
+            LINE+=","
+        fi
+    done < "$ROLES_FILE"
+
+    echo "$LINE" >> "$OUTPUT_FILE"
+done
+
+echo "[INFO] Cleaning up temp files..."
+rm -f "$ROLES_FILE" "$MATRIX_FILE"
+
+echo "[SUCCESS] CSV generated: $OUTPUT_FILE"
