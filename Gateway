@@ -1,67 +1,47 @@
-#!/bin/bash
+const fs = require("fs");
 
-INPUT_FILE="users.json"
-OUTPUT_FILE="users_roles_matrix.csv"
+const INPUT_FILE = "users.json";
+const OUTPUT_FILE = "users_roles_matrix.csv";
 
-echo "[INFO] Starting processing..."
-echo "[INFO] Input file: $INPUT_FILE"
+console.log("[INFO] Reading JSON file...");
 
-# Check dependencies
-if ! command -v jq &> /dev/null; then
-    echo "[ERROR] jq is required but not installed."
-    exit 1
-fi
+const data = JSON.parse(fs.readFileSync(INPUT_FILE, "utf8"));
 
-# Temp files
-ROLES_FILE=$(mktemp)
-MATRIX_FILE=$(mktemp)
+console.log(`[INFO] Total users: ${data.length}`);
 
-echo "[INFO] Extracting unique roles..."
+// Collect unique roles
+const rolesSet = new Set();
 
-# Extract all unique roles
-jq -r '.[].roles[]' "$INPUT_FILE" | sort -u > "$ROLES_FILE"
+data.forEach(user => {
+  (user.roles || []).forEach(role => rolesSet.add(role));
+});
 
-ROLE_COUNT=$(wc -l < "$ROLES_FILE")
-echo "[INFO] Found $ROLE_COUNT unique roles"
+const roles = Array.from(rolesSet).sort();
 
-echo "[INFO] Building CSV header..."
+console.log(`[INFO] Unique roles found: ${roles.length}`);
 
-# Build header
-HEADER="userId"
-while read -r role; do
-    HEADER+=",$role"
-done < "$ROLES_FILE"
+// Build CSV
+console.log("[INFO] Generating CSV...");
 
-echo "$HEADER" > "$OUTPUT_FILE"
+const header = ["userId", ...roles];
+const rows = [header];
 
-echo "[INFO] Processing users..."
+data.forEach((user, index) => {
+  console.log(`[INFO] Processing user ${index + 1}/${data.length}: ${user.userId}`);
 
-USER_COUNT=$(jq length "$INPUT_FILE")
-echo "[INFO] Total users: $USER_COUNT"
+  const userRoles = new Set(user.roles || []);
 
-# Process users
-jq -c '.[]' "$INPUT_FILE" | nl -w1 -s':' | while IFS=":" read -r idx user; do
-    userId=$(echo "$user" | jq -r '.userId')
+  const row = [
+    user.userId,
+    ...roles.map(role => (userRoles.has(role) ? "✔" : ""))
+  ];
 
-    echo "[INFO] Processing user $idx/$USER_COUNT: $userId"
+  rows.push(row);
+});
 
-    LINE="$userId"
+// Write file
+const csvContent = rows.map(r => r.join(",")).join("\n");
 
-    while read -r role; do
-        HAS_ROLE=$(echo "$user" | jq --arg role "$role" \
-            '[.roles[] == $role] | any')
+fs.writeFileSync(OUTPUT_FILE, csvContent);
 
-        if [ "$HAS_ROLE" = "true" ]; then
-            LINE+=",✔"
-        else
-            LINE+=","
-        fi
-    done < "$ROLES_FILE"
-
-    echo "$LINE" >> "$OUTPUT_FILE"
-done
-
-echo "[INFO] Cleaning up temp files..."
-rm -f "$ROLES_FILE" "$MATRIX_FILE"
-
-echo "[SUCCESS] CSV generated: $OUTPUT_FILE"
+console.log(`[SUCCESS] CSV generated: ${OUTPUT_FILE}`);
