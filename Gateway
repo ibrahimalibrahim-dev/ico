@@ -1,7 +1,7 @@
 import jenkins.model.*
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-// Output files
+// Output CSV paths
 def globalCsv = new File("/tmp/users_vs_roles.csv")
 def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
 
@@ -17,6 +17,7 @@ if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
 // 1️⃣ Global Users vs Roles
 // ------------------------
 
+// Categories
 def roleCategory = [
     "RO": ["Overall/Read"],
     "RW": ["Job/Read","Job/Build"],
@@ -24,25 +25,21 @@ def roleCategory = [
     "Admin": ["Overall/Administer"]
 ]
 
-def roleMaps = strategy.getRoleMaps() // returns Map<RoleBasedAuthorizationStrategy.RoleType, RoleMap>
-def globalRoleMap = roleMaps[RoleBasedAuthorizationStrategy.RoleType.GLOBAL] // THIS is the correct way
+def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
 
-// Collect all user/group IDs
+// Collect all users from roles (legacy-safe iteration)
 def allSIDs = new HashSet<String>()
-globalRoleMap.getRoles().each { role ->
-    allSIDs.addAll(globalRoleMap.getSidsForRole(role))
+strategy.getAllRoles(RoleBasedAuthorizationStrategy.GLOBAL).each { role ->
+    allSIDs.addAll(strategy.getSids(RoleBasedAuthorizationStrategy.GLOBAL, role))
 }
 
 def sidsList = allSIDs.toList().sort()
-def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
 def rows = []
 
 sidsList.each { sid ->
     def row = [sid]
-    def assignedRoles = globalRoleMap.getRoles().findAll { r ->
-        globalRoleMap.getSidsForRole(r).contains(sid)
-    }
 
+    // Default ticks
     def ticks = [:].withDefault { "" }
     ticks["RO"] = ""
     ticks["RW"] = ""
@@ -50,13 +47,15 @@ sidsList.each { sid ->
     ticks["Admin"] = ""
     ticks["Disabled"] = "✔"
 
-    assignedRoles.each { r ->
-        def perms = r.getPermissions().collect { it.id.toString() }
-        perms.each { p ->
-            roleCategory.each { cat, permList ->
-                if (permList.contains(p)) {
-                    ticks[cat] = "✔"
-                    ticks["Disabled"] = ""
+    // Iterate over roles assigned to this SID
+    strategy.getAllRoles(RoleBasedAuthorizationStrategy.GLOBAL).each { role ->
+        if (strategy.getSids(RoleBasedAuthorizationStrategy.GLOBAL, role).contains(sid)) {
+            role.getPermissions().each { p ->
+                roleCategory.each { cat, permList ->
+                    if (permList.contains(p.id.toString())) {
+                        ticks[cat] = "✔"
+                        ticks["Disabled"] = ""
+                    }
                 }
             }
         }
@@ -78,17 +77,16 @@ def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
 def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
 def pipelineRows = []
 
-def projectRoleMap = roleMaps[RoleBasedAuthorizationStrategy.RoleType.PROJECT]
+def allProjectRoles = strategy.getAllRoles(RoleBasedAuthorizationStrategy.PROJECT)
 
 sidsList.each { sid ->
     def row = [sid]
 
     pipelines.each { job ->
-        def hasItemPerm = projectRoleMap.getRoles().any { r ->
-            projectRoleMap.getSidsForRole(r).contains(sid) &&
-            r.getPermissions().any { it.id.toString().startsWith("Item") }
+        def hasItemPerm = allProjectRoles.any { role ->
+            strategy.getSids(RoleBasedAuthorizationStrategy.PROJECT, role).contains(sid) &&
+            role.getPermissions().any { it.id.toString().startsWith("Item") }
         }
-
         row << (hasItemPerm ? "✔" : "")
     }
 
