@@ -1,98 +1,97 @@
-import jenkins.model.*
-import com.michelin.cio.hudson.plugins.rolestrategy.*
+// generate_jenkins_csv.js
+// Usage: node generate_jenkins_csv.js
 
-// Output CSV paths
-def globalCsv = new File("/tmp/users_vs_roles.csv")
-def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
+const fs = require("fs");
+const path = require("path");
 
-def jenkins = Jenkins.instance
-def strategy = jenkins.getAuthorizationStrategy()
+// ==== INPUT FILES ====
+const globalRolesFile = path.join(__dirname, "jenkins_global_roles.json");
+const projectRolesFile = path.join(__dirname, "jenkins_project_roles.json");
 
-if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
-    println "Role-based strategy not enabled!"
-    return
-}
+// ==== OUTPUT FILES ====
+const usersVsRolesCsv = path.join(__dirname, "users_vs_roles.csv");
+const usersVsPipelinesCsv = path.join(__dirname, "users_vs_pipelines.csv");
 
-// ------------------------
-// 1️⃣ Global Users vs Roles
-// ------------------------
+// ==== CONFIG: Map Jenkins permissions to RO/RW/RWX/Admin ====
+const roleCategory = {
+  RO: ["Overall/Read"],
+  RW: ["Job/Read", "Job/Build"],
+  RWX: ["Job/Configure", "Job/Delete"],
+  Admin: ["Overall/Administer"],
+};
+const globalRolesHeader = ["RO", "RW", "RWX", "Admin", "Disabled"];
 
-// Categories
-def roleCategory = [
-    "RO": ["Overall/Read"],
-    "RW": ["Job/Read","Job/Build"],
-    "RWX": ["Job/Configure","Job/Delete"],
-    "Admin": ["Overall/Administer"]
-]
+// ==== READ JSON FILES ====
+const globalRolesData = JSON.parse(fs.readFileSync(globalRolesFile));
+const projectRolesData = JSON.parse(fs.readFileSync(projectRolesFile));
 
-def globalRoles = ["RO","RW","RWX","Admin","Disabled"]
+// ==== 1️⃣ USERS vs ROLES ====
+const allUsers = new Set();
 
-// Collect all users from roles (legacy-safe iteration)
-def allSIDs = new HashSet<String>()
-strategy.getAllRoles(RoleBasedAuthorizationStrategy.GLOBAL).each { role ->
-    allSIDs.addAll(strategy.getSids(RoleBasedAuthorizationStrategy.GLOBAL, role))
-}
+// globalRolesData structure: { "roles": [ { "name": ..., "sids": [...], "permissions": [...] } ] }
+globalRolesData.roles.forEach((role) => {
+  role.sids.forEach((sid) => allUsers.add(sid));
+});
 
-def sidsList = allSIDs.toList().sort()
-def rows = []
+const allUsersList = Array.from(allUsers).sort();
 
-sidsList.each { sid ->
-    def row = [sid]
+const usersRolesRows = allUsersList.map((sid) => {
+  // default Disabled
+  const ticks = { RO: "", RW: "", RWX: "", Admin: "", Disabled: "✔" };
 
-    // Default ticks
-    def ticks = [:].withDefault { "" }
-    ticks["RO"] = ""
-    ticks["RW"] = ""
-    ticks["RWX"] = ""
-    ticks["Admin"] = ""
-    ticks["Disabled"] = "✔"
-
-    // Iterate over roles assigned to this SID
-    strategy.getAllRoles(RoleBasedAuthorizationStrategy.GLOBAL).each { role ->
-        if (strategy.getSids(RoleBasedAuthorizationStrategy.GLOBAL, role).contains(sid)) {
-            role.getPermissions().each { p ->
-                roleCategory.each { cat, permList ->
-                    if (permList.contains(p.id.toString())) {
-                        ticks[cat] = "✔"
-                        ticks["Disabled"] = ""
-                    }
-                }
-            }
+  globalRolesData.roles.forEach((role) => {
+    if (role.sids.includes(sid)) {
+      const perms = role.permissions.map((p) => p.id || p); // handle different JSON formats
+      Object.entries(roleCategory).forEach(([cat, permList]) => {
+        if (perms.some((p) => permList.includes(p))) {
+          ticks[cat] = "✔";
+          ticks["Disabled"] = "";
         }
+      });
     }
+  });
 
-    row += globalRoles.collect { ticks[it] }
-    rows << row
-}
+  return [sid, ...globalRolesHeader.map((h) => ticks[h])];
+});
 
-// Write CSV
-globalCsv.text = ([["User/Group"] + globalRoles] + rows).collect { it.join(",") }.join("\n")
-println "✅ Users vs Roles CSV generated: ${globalCsv.path}"
+// Write Users vs Roles CSV
+fs.writeFileSync(
+  usersVsRolesCsv,
+  [["User/Group", ...globalRolesHeader].join(","), ...usersRolesRows.map((r) => r.join(","))].join("\n")
+);
+console.log(`✅ Users vs Roles CSV generated: ${usersVsRolesCsv}`);
 
-// ------------------------
-// 2️⃣ Users vs Pipelines (Project Roles)
-// ------------------------
+// ==== 2️⃣ USERS vs PIPELINES ====
+const pipelines = new Set();
 
-def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
-def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
-def pipelineRows = []
+// projectRolesData structure: { "roles": [ { "name": ..., "sids": [...], "permissions": [...], "pattern": "job regex" } ] }
+projectRolesData.roles.forEach((role) => {
+  role.patterns?.forEach((p) => pipelines.add(p));
+});
 
-def allProjectRoles = strategy.getAllRoles(RoleBasedAuthorizationStrategy.PROJECT)
+const pipelinesList = Array.from(pipelines).sort();
 
-sidsList.each { sid ->
-    def row = [sid]
+const usersPipelinesRows = allUsersList.map((sid) => {
+  return [
+    sid,
+    ...pipelinesList.map((pipelinePattern) => {
+      // check if user has any Item permission for this role
+      const allowed = projectRolesData.roles.some((role) => {
+        if (!role.sids.includes(sid)) return false;
+        const perms = role.permissions.map((p) => p.id || p);
+        const hasItemPerm = perms.some((p) => p.startsWith("Item")); // any job/item permission
+        // optionally match pattern: simple substring
+        const matches = role.patterns?.some((pat) => pipelinePattern.includes(pat)) ?? false;
+        return hasItemPerm && matches;
+      });
+      return allowed ? "✔" : "";
+    }),
+  ];
+});
 
-    pipelines.each { job ->
-        def hasItemPerm = allProjectRoles.any { role ->
-            strategy.getSids(RoleBasedAuthorizationStrategy.PROJECT, role).contains(sid) &&
-            role.getPermissions().any { it.id.toString().startsWith("Item") }
-        }
-        row << (hasItemPerm ? "✔" : "")
-    }
-
-    pipelineRows << row
-}
-
-// Write CSV
-pipelinesCsv.text = ([pipelineHeader] + pipelineRows).collect { it.join(",") }.join("\n")
-println "✅ Users vs Pipelines CSV generated: ${pipelinesCsv.path}"
+// Write Users vs Pipelines CSV
+fs.writeFileSync(
+  usersVsPipelinesCsv,
+  [["User/Group", ...pipelinesList].join(","), ...usersPipelinesRows.map((r) => r.join(","))].join("\n")
+);
+console.log(`✅ Users vs Pipelines CSV generated: ${usersVsPipelinesCsv}`);
