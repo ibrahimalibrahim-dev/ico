@@ -1,6 +1,10 @@
 import jenkins.model.*
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
+// Output files
+def globalCsv = new File("/tmp/users_vs_roles.csv")
+def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
+
 def jenkins = Jenkins.instance
 def strategy = jenkins.getAuthorizationStrategy()
 
@@ -9,23 +13,21 @@ if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
     return
 }
 
-// Output files (change path if needed)
-def globalCsv = new File("/tmp/users_vs_roles.csv")
-def pipelinesCsv = new File("/tmp/users_vs_pipelines.csv")
-
-// ---------------------
-// 1️⃣ Users vs Roles (Global roles)
-// ---------------------
+// ------------------------
+// 1️⃣ Global Users vs Roles
+// ------------------------
 
 def roleCategory = [
     "RO": ["Overall/Read"],
-    "RW": ["Job/Read", "Job/Build"],
-    "RWX": ["Job/Configure", "Job/Delete"],
+    "RW": ["Job/Read","Job/Build"],
+    "RWX": ["Job/Configure","Job/Delete"],
     "Admin": ["Overall/Administer"]
 ]
 
-def globalRoleMap = strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL)
+def roleMaps = strategy.getRoleMaps() // returns Map<RoleBasedAuthorizationStrategy.RoleType, RoleMap>
+def globalRoleMap = roleMaps[RoleBasedAuthorizationStrategy.RoleType.GLOBAL] // THIS is the correct way
 
+// Collect all user/group IDs
 def allSIDs = new HashSet<String>()
 globalRoleMap.getRoles().each { role ->
     allSIDs.addAll(globalRoleMap.getSidsForRole(role))
@@ -68,15 +70,15 @@ sidsList.each { sid ->
 globalCsv.text = ([["User/Group"] + globalRoles] + rows).collect { it.join(",") }.join("\n")
 println "✅ Users vs Roles CSV generated: ${globalCsv.path}"
 
-// ---------------------
-// 2️⃣ Users vs Pipelines (Project roles)
-// ---------------------
+// ------------------------
+// 2️⃣ Users vs Pipelines (Project Roles)
+// ------------------------
 
 def pipelines = jenkins.getAllItems(Job.class).sort { it.fullName }
 def pipelineHeader = ["User/Group"] + pipelines.collect { it.fullName }
 def pipelineRows = []
 
-def projectRoleMap = strategy.getRoleMap(RoleBasedAuthorizationStrategy.PROJECT)
+def projectRoleMap = roleMaps[RoleBasedAuthorizationStrategy.RoleType.PROJECT]
 
 sidsList.each { sid ->
     def row = [sid]
