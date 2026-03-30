@@ -1,47 +1,140 @@
 const fs = require("fs");
 
-const INPUT_FILE = "users.json";
-const OUTPUT_FILE = "users_roles_matrix.csv";
+// Input files
+const users = JSON.parse(fs.readFileSync("users.json", "utf8"));
+const teams = JSON.parse(fs.readFileSync("teams.json", "utf8"));
+const roles = JSON.parse(fs.readFileSync("roles.json", "utf8"));
 
-console.log("[INFO] Reading JSON file...");
+console.log("[INFO] Data loaded");
 
-const data = JSON.parse(fs.readFileSync(INPUT_FILE, "utf8"));
+// Build lookup maps
+const roleMap = {};
+roles.forEach(r => roleMap[r.id] = r.name);
 
-console.log(`[INFO] Total users: ${data.length}`);
+const teamMap = {};
+teams.forEach(t => teamMap[t.id] = t.name);
 
-// Collect unique roles
-const rolesSet = new Set();
+console.log("[INFO] Maps created");
 
-data.forEach(user => {
-  (user.roles || []).forEach(role => rolesSet.add(role));
-});
+// Unique role names
+const allRoles = Object.values(roleMap).sort();
 
-const roles = Array.from(rolesSet).sort();
+// Unique team names
+const allTeams = Object.values(teamMap).sort();
 
-console.log(`[INFO] Unique roles found: ${roles.length}`);
+console.log(`[INFO] Roles: ${allRoles.length}, Teams: ${allTeams.length}`);
 
-// Build CSV
-console.log("[INFO] Generating CSV...");
+// Helper to write CSV
+function writeCSV(filename, header, rows) {
+  const content = [header, ...rows].map(r => r.join(",")).join("\n");
+  fs.writeFileSync(filename, content);
+  console.log(`[SUCCESS] ${filename} created`);
+}
 
-const header = ["userId", ...roles];
-const rows = [header];
+//////////////////////////////////////////////////////
+// 1️⃣ USERS vs ROLES
+//////////////////////////////////////////////////////
 
-data.forEach((user, index) => {
-  console.log(`[INFO] Processing user ${index + 1}/${data.length}: ${user.userId}`);
+console.log("[INFO] Building Users vs Roles...");
 
-  const userRoles = new Set(user.roles || []);
+const usersRolesRows = [];
+
+users.forEach((user, idx) => {
+  console.log(`[Users vs Roles] ${idx + 1}/${users.length}: ${user.userName}`);
+
+  const userRoleNames = new Set(
+    (user.roleIds || []).map(id => roleMap[id]).filter(Boolean)
+  );
 
   const row = [
-    user.userId,
-    ...roles.map(role => (userRoles.has(role) ? "✔" : ""))
+    user.userName,
+    ...allRoles.map(role => userRoleNames.has(role) ? "✔" : "")
   ];
 
-  rows.push(row);
+  usersRolesRows.push(row);
 });
 
-// Write file
-const csvContent = rows.map(r => r.join(",")).join("\n");
+writeCSV(
+  "users_vs_roles.csv",
+  ["userName", ...allRoles],
+  usersRolesRows
+);
 
-fs.writeFileSync(OUTPUT_FILE, csvContent);
+//////////////////////////////////////////////////////
+// 2️⃣ USERS vs TEAMS
+//////////////////////////////////////////////////////
 
-console.log(`[SUCCESS] CSV generated: ${OUTPUT_FILE}`);
+console.log("[INFO] Building Users vs Teams...");
+
+const usersTeamsRows = [];
+
+users.forEach((user, idx) => {
+  console.log(`[Users vs Teams] ${idx + 1}/${users.length}: ${user.userName}`);
+
+  const userTeamNames = new Set(
+    (user.teamIds || []).map(id => teamMap[id]).filter(Boolean)
+  );
+
+  const row = [
+    user.userName,
+    ...allTeams.map(team => userTeamNames.has(team) ? "✔" : "")
+  ];
+
+  usersTeamsRows.push(row);
+});
+
+writeCSV(
+  "users_vs_teams.csv",
+  ["userName", ...allTeams],
+  usersTeamsRows
+);
+
+//////////////////////////////////////////////////////
+// 3️⃣ TEAMS vs ROLES (Derived)
+//////////////////////////////////////////////////////
+
+console.log("[INFO] Building Teams vs Roles (derived)...");
+
+// Build team → roles mapping
+const teamRoleMap = {};
+
+// Initialize
+allTeams.forEach(team => {
+  teamRoleMap[team] = new Set();
+});
+
+// Populate from users
+users.forEach(user => {
+  const userRoles = (user.roleIds || []).map(id => roleMap[id]).filter(Boolean);
+  const userTeams = (user.teamIds || []).map(id => teamMap[id]).filter(Boolean);
+
+  userTeams.forEach(team => {
+    userRoles.forEach(role => {
+      teamRoleMap[team].add(role);
+    });
+  });
+});
+
+// Build rows
+const teamsRolesRows = [];
+
+allTeams.forEach(team => {
+  console.log(`[Teams vs Roles] Processing team: ${team}`);
+
+  const rolesSet = teamRoleMap[team];
+
+  const row = [
+    team,
+    ...allRoles.map(role => rolesSet.has(role) ? "✔" : "")
+  ];
+
+  teamsRolesRows.push(row);
+});
+
+writeCSV(
+  "teams_vs_roles.csv",
+  ["teamName", ...allRoles],
+  teamsRolesRows
+);
+
+console.log("[DONE] All CSV files generated successfully.");
