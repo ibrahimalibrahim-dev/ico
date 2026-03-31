@@ -6,7 +6,7 @@ import groovy.json.JsonOutput
 def userService = ComponentLocator.getComponent(UserService)
 
 // === CONFIG: known username ===
-def username = "alice" // replace with a real username in your system
+def username = "alice" // replace with a real username
 
 // === GET USER ===
 def user = userService.getUserByName(username)
@@ -15,8 +15,8 @@ if (user) {
     def output = [
         name: user.name,
         displayName: user.displayName,
-        email: user.emailAddress,
-        groups: user.groups.collect { it.name } // safe way to see groups
+        email: user.emailAddress
+        // groups not accessible in LDAP environment
     ]
     println JsonOutput.prettyPrint(JsonOutput.toJson(output))
 } else {
