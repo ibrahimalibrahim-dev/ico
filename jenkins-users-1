@@ -1,47 +1,41 @@
+import groovy.json.JsonOutput
 import jenkins.model.Jenkins
+import hudson.model.Job
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-def strategy = Jenkins.instance.authorizationStrategy
+def jenkins = Jenkins.instance
+def strategy = jenkins.authorizationStrategy
 
-println "Authorization strategy:"
-println strategy.getClass().name
-println ""
+def BUILD_PERMISSION = hudson.model.Item.BUILD
 
-if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
-    println "Not using Role Strategy Plugin"
-    return
-}
+def results = []
 
-def roleTypes = [
-    "globalRoles",
-    "projectRoles",
-    "slaveRoles"
-]
+def jobs = jenkins.getAllItems(Job)
+def roleTypes = ["globalRoles", "projectRoles"]
 
 roleTypes.each { type ->
     def roleMap = strategy.getGrantedRoles(type)
-    if (roleMap == null || roleMap.isEmpty()) return
-
-    println "=============================="
-    println "Role type: ${type}"
-    println "=============================="
+    if (!roleMap) return
 
     roleMap.each { role, sids ->
-        println "Role: ${role.name}"
+        if (!role.permissions.contains(BUILD_PERMISSION)) return
 
-        if (role.hasProperty("pattern")) {
-            println "  Pattern: ${role.pattern}"
-        }
-
-        println "  Permissions:"
-        role.permissions.each { p ->
-            println "    - ${p.id}"
-        }
-
-        println "  Assigned to:"
         sids.each { sid ->
-            println "    - ${sid}"
+            def isGroup = sid.contains("CN=") || sid.contains("OU=")
+
+            jobs.each { job ->
+                if (!role.hasProperty("pattern") || job.fullName ==~ role.pattern) {
+                    results << [
+                        sid: sid,
+                        sidType: isGroup ? "group" : "user",
+                        role: role.name,
+                        pipeline: job.fullName,
+                        permission: "BUILD"
+                    ]
+                }
+            }
         }
-        println ""
     }
 }
+
+println JsonOutput.prettyPrint(JsonOutput.toJson(results))
