@@ -1,0 +1,39 @@
+import jenkins.model.Jenkins
+import hudson.model.Job
+import com.michelin.cio.hudson.plugins.rolestrategy.*
+
+def jenkins = Jenkins.instance
+def strategy = jenkins.authorizationStrategy
+
+def BUILD_PERMISSION = hudson.model.Item.BUILD
+
+println "Evaluating who can trigger pipelines (Job/Build)\n"
+
+// get all jobs once
+def jobs = jenkins.getAllItems(Job)
+
+// legacy-safe role access
+def roleTypes = ["globalRoles", "projectRoles"]
+
+roleTypes.each { type ->
+    def roleMap = strategy.getGrantedRoles(type)
+    if (!roleMap) return
+
+    roleMap.each { role, sids ->
+        if (!role.permissions.contains(BUILD_PERMISSION)) return
+
+        println "ROLE: ${role.name} (${type})"
+        if (role.hasProperty("pattern")) {
+            println "  Pattern: ${role.pattern}"
+        }
+
+        sids.each { sid ->
+            jobs.each { job ->
+                if (!role.hasProperty("pattern") || job.fullName ==~ role.pattern) {
+                    println "    ${sid} -> ${job.fullName}"
+                }
+            }
+        }
+        println ""
+    }
+}
