@@ -5,26 +5,16 @@ import com.atlassian.bitbucket.repository.RepositoryService
 import com.atlassian.bitbucket.permission.PermissionService
 import groovy.json.JsonOutput
 
+// === CONFIG: provide external user list here ===
+def userList = ["alice", "bob", "charlie"] // replace with your LDAP/exported usernames
+
 // === GET SERVICES ===
 def userService = ComponentLocator.getComponent(UserService)
 def projectService = ComponentLocator.getComponent(ProjectService)
 def repositoryService = ComponentLocator.getComponent(RepositoryService)
 def permissionService = ComponentLocator.getComponent(PermissionService)
 
-// === USERS ===
-def users = userService.getAllUsers().collect { u ->
-    [
-        name: u.name,
-        displayName: u.displayName,
-        email: u.emailAddress,
-        groups: u.groups.collect { it.name } // safe way to get groups
-    ]
-}
-
-println "=== USERS ==="
-println JsonOutput.prettyPrint(JsonOutput.toJson(users))
-
-// === PROJECTS & REPOSITORIES ===
+// === PROJECTS & REPOS ===
 def repos = []
 projectService.getAllProjects().each { p ->
     repositoryService.findByProject(p).each { r ->
@@ -32,27 +22,24 @@ projectService.getAllProjects().each { p ->
     }
 }
 
-println "\n=== REPOSITORIES ==="
-println JsonOutput.prettyPrint(JsonOutput.toJson(repos.collect { [project: it.project, repo: it.repo, name: it.name] }))
-
-// === PERMISSIONS MATRIX (USER ONLY) ===
+// === PERMISSIONS MATRIX ===
 def matrix = []
+
 repos.each { r ->
-    users.each { uMap ->
-        def u = userService.getUserByName(uMap.name)
-        def perm = permissionService.getRepositoryPermission(u, r.repoObj)
-        if (perm) {
-            matrix << [
-                type: "user",
-                name: u.name,
-                groups: u.groups.collect { it.name },
-                project: r.project,
-                repo: r.name,
-                permission: perm.name()
-            ]
+    userList.each { username ->
+        def u = userService.getUserByName(username)
+        if (u) {
+            def perm = permissionService.getRepositoryPermission(u, r.repoObj)
+            if (perm) {
+                matrix << [
+                    user: username,
+                    project: r.project,
+                    repo: r.name,
+                    permission: perm.name()
+                ]
+            }
         }
     }
 }
 
-println "\n=== PERMISSIONS MATRIX ==="
 println JsonOutput.prettyPrint(JsonOutput.toJson(matrix))
