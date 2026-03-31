@@ -1,32 +1,31 @@
 const fs = require("fs");
-const { parse } = require("json2csv");
+const path = require("path");
+
+// === INPUT FILES ===
+const roleCatalogFile = path.join(__dirname, "role-catalog.json");          // JSON from adjusted Script 1
+const roleIntelligenceFile = path.join(__dirname, "role-intelligence.json"); // JSON from adjusted Script 2
+
+// === OUTPUT FILES ===
+const roleCatalogCsvFile = path.join(__dirname, "jenkins_roles.csv");
+const roleIntelligenceCsvFile = path.join(__dirname, "jenkins_access.csv");
 
 // ------------------------
-// CONFIG: file paths
-// ------------------------
-const roleCatalogJsonFile = "role-catalog.json"; // output from adjusted Script 1
-const roleIntelligenceJsonFile = "role-intelligence.json"; // output from Script 2
-
-const roleCatalogCsvFile = "jenkins_roles.csv";
-const roleIntelligenceCsvFile = "jenkins_access.csv";
-
-// ------------------------
-// UTILITY: Map detailed permissions to simplified ones
+// HELPER: simplify permissions
 // ------------------------
 function simplifyPermission(permission) {
   const p = permission.toLowerCase();
   if (p.includes("read")) return "Read";
   if (p.includes("cancel")) return "Cancel";
   if (p.includes("build")) return "Build";
-  return null; // skip all others
+  return null; // ignore other permissions
 }
 
 // ------------------------
 // 1️⃣ ROLE CATALOG CSV
 // ------------------------
-const roleCatalogRaw = JSON.parse(fs.readFileSync(roleCatalogJsonFile, "utf-8"));
+const roleCatalogRaw = JSON.parse(fs.readFileSync(roleCatalogFile, "utf-8"));
 
-const roleCatalogFlat = roleCatalogRaw.map(role => ({
+const roleCatalogRows = roleCatalogRaw.map(role => ({
   Role: role.role,
   Type: role.type,
   Pattern: role.pattern || "",
@@ -37,16 +36,21 @@ const roleCatalogFlat = roleCatalogRaw.map(role => ({
   AssignedSIDs: role.sids.join(", ")
 }));
 
-const roleCatalogCsv = parse(roleCatalogFlat, { fields: ["Role", "Type", "Pattern", "Permissions", "AssignedSIDs"] });
+const roleCatalogHeader = ["Role", "Type", "Pattern", "Permissions", "AssignedSIDs"];
+const roleCatalogCsv = [
+  roleCatalogHeader.join(","),
+  ...roleCatalogRows.map(r => roleCatalogHeader.map(h => r[h]).join(","))
+].join("\n");
+
 fs.writeFileSync(roleCatalogCsvFile, roleCatalogCsv);
 console.log(`✅ Role catalog CSV generated: ${roleCatalogCsvFile}`);
 
 // ------------------------
 // 2️⃣ ROLE INTELLIGENCE CSV
 // ------------------------
-const roleIntelligenceRaw = JSON.parse(fs.readFileSync(roleIntelligenceJsonFile, "utf-8"));
+const roleIntelligenceRaw = JSON.parse(fs.readFileSync(roleIntelligenceFile, "utf-8"));
 
-// Flatten pipelines into a comma-separated string for each SID + role
+// Aggregate pipelines for each SID + role
 const intelligenceMap = {};
 
 roleIntelligenceRaw.forEach(entry => {
@@ -59,16 +63,26 @@ roleIntelligenceRaw.forEach(entry => {
       Pipelines: new Set()
     };
   }
-  intelligenceMap[key].Pipelines.add(entry.pipelines.join(","));
+
+  if (Array.isArray(entry.pipelines)) {
+    entry.pipelines.forEach(p => intelligenceMap[key].Pipelines.add(p));
+  } else {
+    intelligenceMap[key].Pipelines.add(entry.pipelines);
+  }
 });
 
-const roleIntelligenceFlat = Object.values(intelligenceMap).map(item => ({
+const roleIntelligenceRows = Object.values(intelligenceMap).map(item => ({
   SID: item.SID,
   SIDType: item.SIDType,
   Role: item.Role,
   Pipelines: Array.from(item.Pipelines).join(", ")
 }));
 
-const roleIntelligenceCsv = parse(roleIntelligenceFlat, { fields: ["SID", "SIDType", "Role", "Pipelines"] });
+const roleIntelligenceHeader = ["SID", "SIDType", "Role", "Pipelines"];
+const roleIntelligenceCsv = [
+  roleIntelligenceHeader.join(","),
+  ...roleIntelligenceRows.map(r => roleIntelligenceHeader.map(h => r[h]).join(","))
+].join("\n");
+
 fs.writeFileSync(roleIntelligenceCsvFile, roleIntelligenceCsv);
 console.log(`✅ Role intelligence CSV generated: ${roleIntelligenceCsvFile}`);
