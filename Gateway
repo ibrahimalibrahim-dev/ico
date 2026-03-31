@@ -1,72 +1,41 @@
 import com.atlassian.sal.api.component.ComponentLocator
-import com.atlassian.bitbucket.user.ApplicationUser
 import com.atlassian.bitbucket.user.UserService
-import com.atlassian.bitbucket.user.group.GroupService
 import com.atlassian.bitbucket.project.ProjectService
 import com.atlassian.bitbucket.repository.RepositoryService
 import com.atlassian.bitbucket.permission.PermissionService
 import groovy.json.JsonOutput
 
-// === SETUP SERVICES ===
+// === GET SERVICES ===
 def userService = ComponentLocator.getComponent(UserService)
-def groupService = ComponentLocator.getComponent(GroupService)
 def projectService = ComponentLocator.getComponent(ProjectService)
 def repositoryService = ComponentLocator.getComponent(RepositoryService)
 def permissionService = ComponentLocator.getComponent(PermissionService)
 
-// === STEP 1: USERS ===
+// === USERS ===
 def users = userService.getAllUsers().collect { u ->
     [
         name: u.name,
         displayName: u.displayName,
-        email: u.emailAddress
+        email: u.emailAddress,
+        groups: u.groups.collect { it.name }  // safe way to get groups
     ]
 }
 println "=== USERS ==="
 println JsonOutput.prettyPrint(JsonOutput.toJson(users))
 
-// === STEP 2: GROUPS ===
-def groups = groupService.getAllGroups().collect { g ->
-    def members = groupService.getUsersInGroup(g.name).collect { it.name }
-    [
-        group: g.name,
-        users: members
-    ]
-}
-println "\n=== GROUPS ==="
-println JsonOutput.prettyPrint(JsonOutput.toJson(groups))
-
-// === STEP 3: PROJECTS ===
-def projects = projectService.getAllProjects().collect { p ->
-    [
-        key: p.key,
-        name: p.name,
-        description: p.description
-    ]
-}
-println "\n=== PROJECTS ==="
-println JsonOutput.prettyPrint(JsonOutput.toJson(projects))
-
-// === STEP 4: REPOSITORIES ===
+// === PROJECTS & REPOS ===
 def repos = []
 projectService.getAllProjects().each { p ->
     repositoryService.findByProject(p).each { r ->
-        repos << [
-            project: p.key,
-            repo: r.slug,
-            name: r.name,
-            repoObj: r  // keep repo object for permissions
-        ]
+        repos << [project: p.key, repo: r.slug, name: r.name, repoObj: r]
     }
 }
 println "\n=== REPOSITORIES ==="
 println JsonOutput.prettyPrint(JsonOutput.toJson(repos.collect { [project: it.project, repo: it.repo, name: it.name] }))
 
-// === STEP 5: PERMISSIONS ===
+// === PERMISSIONS MATRIX (USER ONLY) ===
 def matrix = []
-
 repos.each { r ->
-    // USER PERMISSIONS
     users.each { uMap ->
         def u = userService.getUserByName(uMap.name)
         def perm = permissionService.getRepositoryPermission(u, r.repoObj)
@@ -74,21 +43,7 @@ repos.each { r ->
             matrix << [
                 type: "user",
                 name: u.name,
-                project: r.project,
-                repo: r.name,
-                permission: perm.name()
-            ]
-        }
-    }
-
-    // GROUP PERMISSIONS
-    groups.each { gMap ->
-        def gName = gMap.group
-        def perm = permissionService.getRepositoryPermission(gName, r.repoObj)
-        if (perm) {
-            matrix << [
-                type: "group",
-                name: gName,
+                groups: u.groups.collect { it.name },
                 project: r.project,
                 repo: r.name,
                 permission: perm.name()
