@@ -1,45 +1,24 @@
 import com.atlassian.sal.api.component.ComponentLocator
 import com.atlassian.bitbucket.user.UserService
-import com.atlassian.bitbucket.project.ProjectService
-import com.atlassian.bitbucket.repository.RepositoryService
-import com.atlassian.bitbucket.permission.PermissionService
 import groovy.json.JsonOutput
 
-// === CONFIG: provide external user list here ===
-def userList = ["alice", "bob", "charlie"] // replace with your LDAP/exported usernames
-
-// === GET SERVICES ===
+// === GET USER SERVICE ===
 def userService = ComponentLocator.getComponent(UserService)
-def projectService = ComponentLocator.getComponent(ProjectService)
-def repositoryService = ComponentLocator.getComponent(RepositoryService)
-def permissionService = ComponentLocator.getComponent(PermissionService)
 
-// === PROJECTS & REPOS ===
-def repos = []
-projectService.getAllProjects().each { p ->
-    repositoryService.findByProject(p).each { r ->
-        repos << [project: p.key, repo: r.slug, name: r.name, repoObj: r]
-    }
+// === CONFIG: known username ===
+def username = "alice" // replace with a real username in your system
+
+// === GET USER ===
+def user = userService.getUserByName(username)
+
+if (user) {
+    def output = [
+        name: user.name,
+        displayName: user.displayName,
+        email: user.emailAddress,
+        groups: user.groups.collect { it.name } // safe way to see groups
+    ]
+    println JsonOutput.prettyPrint(JsonOutput.toJson(output))
+} else {
+    println "User '${username}' not found!"
 }
-
-// === PERMISSIONS MATRIX ===
-def matrix = []
-
-repos.each { r ->
-    userList.each { username ->
-        def u = userService.getUserByName(username)
-        if (u) {
-            def perm = permissionService.getRepositoryPermission(u, r.repoObj)
-            if (perm) {
-                matrix << [
-                    user: username,
-                    project: r.project,
-                    repo: r.name,
-                    permission: perm.name()
-                ]
-            }
-        }
-    }
-}
-
-println JsonOutput.prettyPrint(JsonOutput.toJson(matrix))
