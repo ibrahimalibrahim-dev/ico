@@ -1,40 +1,33 @@
 import groovy.json.JsonOutput
 import jenkins.model.Jenkins
-import hudson.model.Job
 import com.michelin.cio.hudson.plugins.rolestrategy.*
 
-def jenkins = Jenkins.instance
-def strategy = jenkins.authorizationStrategy
+def strategy = Jenkins.instance.authorizationStrategy
 
-def BUILD_PERMISSION = hudson.model.Item.BUILD
+if (!(strategy instanceof RoleBasedAuthorizationStrategy)) {
+    println JsonOutput.toJson([error: "Not using Role Strategy Plugin"])
+    return
+}
 
 def results = []
 
-def jobs = jenkins.getAllItems(Job)
-def roleTypes = ["globalRoles", "projectRoles"]
+def roleTypes = ["globalRoles", "projectRoles", "slaveRoles"]
 
 roleTypes.each { type ->
     def roleMap = strategy.getGrantedRoles(type)
     if (!roleMap) return
 
     roleMap.each { role, sids ->
-        if (!role.permissions.contains(BUILD_PERMISSION)) return
 
-        sids.each { sid ->
-            def isGroup = sid.contains("CN=") || sid.contains("OU=")
+        def permissions = role.permissions.collect { it.id }
 
-            jobs.each { job ->
-                if (!role.hasProperty("pattern") || job.fullName ==~ role.pattern) {
-                    results << [
-                        sid: sid,
-                        sidType: isGroup ? "group" : "user",
-                        role: role.name,
-                        pipeline: job.fullName,
-                        permission: "BUILD"
-                    ]
-                }
-            }
-        }
+        results << [
+            role: role.name,
+            type: type,
+            pattern: role.hasProperty("pattern") ? role.pattern : null,
+            permissions: permissions,
+            sids: sids as List
+        ]
     }
 }
 
