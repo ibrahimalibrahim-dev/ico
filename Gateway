@@ -1,24 +1,94 @@
-import com.atlassian.sal.api.component.ComponentLocator
-import com.atlassian.bitbucket.user.UserService
-import groovy.json.JsonOutput
+const fs = require("fs");
+const path = require("path");
 
-// === GET USER SERVICE ===
-def userService = ComponentLocator.getComponent(UserService)
+// === INPUT FILE ===
+const inputFile = path.join(__dirname, "bitbucket_raw.csv");
 
-// === CONFIG: known username ===
-def username = "alice" // replace with a real username
+// === OUTPUT FILE ===
+const outputFile = path.join(__dirname, "bitbucket_aggregated.csv");
 
-// === GET USER ===
-def user = userService.getUserByName(username)
-
-if (user) {
-    def output = [
-        name: user.name,
-        displayName: user.displayName,
-        email: user.emailAddress
-        // groups not accessible in LDAP environment
-    ]
-    println JsonOutput.prettyPrint(JsonOutput.toJson(output))
-} else {
-    println "User '${username}' not found!"
+// ------------------------
+// HELPER: CSV-safe formatting
+// ------------------------
+function csvSafe(value) {
+  if (!value) return "";
+  const str = String(value);
+  const escaped = str.replace(/"/g, '""');
+  if (escaped.includes(",") || escaped.includes("\n")) {
+    return `"${escaped}"`;
+  }
+  return escaped;
 }
+
+// ------------------------
+// READ CSV
+// ------------------------
+const lines = fs.readFileSync(inputFile, "utf-8")
+  .split("\n")
+  .filter(Boolean);
+
+// Extract header
+const header = lines[0].split(",");
+
+// Get column indexes
+const idx = {
+  username: header.indexOf("Username"),
+  project: header.indexOf("Project"),
+  repo: header.indexOf("Repository"),
+  permission: header.indexOf("Permission"),
+  viaGroup: header.indexOf("Via group")
+};
+
+// ------------------------
+// AGGREGATION
+// ------------------------
+const map = {};
+
+lines.slice(1).forEach(line => {
+  const cols = line.split(",");
+
+  const username = cols[idx.username];
+  const project = cols[idx.project];
+  const repo = cols[idx.repo];
+  const permission = cols[idx.permission];
+  const viaGroup = cols[idx.viaGroup] || "DIRECT";
+
+  const key = `${username}||${project}||${permission}||${viaGroup}`;
+
+  if (!map[key]) {
+    map[key] = {
+      Username: username,
+      Project: project,
+      Permission: permission,
+      ViaGroup: viaGroup,
+      Repositories: new Set()
+    };
+  }
+
+  map[key].Repositories.add(repo);
+});
+
+// ------------------------
+// BUILD OUTPUT
+// ------------------------
+const outputHeader = ["Username", "Project", "Permission", "ViaGroup", "Repositories"];
+
+const rows = Object.values(map).map(entry => ({
+  Username: entry.Username,
+  Project: entry.Project,
+  Permission: entry.Permission,
+  ViaGroup: entry.ViaGroup,
+  Repositories: Array.from(entry.Repositories).join(", ")
+}));
+
+const csvContent = [
+  outputHeader.join(","),
+  ...rows.map(r => outputHeader.map(h => csvSafe(r[h])).join(","))
+].join("\n");
+
+// ------------------------
+// WRITE FILE
+// ------------------------
+fs.writeFileSync(outputFile, csvContent);
+
+console.log(`✅ Aggregated Bitbucket CSV generated: ${outputFile}`);
