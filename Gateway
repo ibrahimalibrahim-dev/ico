@@ -1,28 +1,111 @@
-import com.atlassian.bitbucket.user.ApplicationUser
-import com.atlassian.bitbucket.repository.RepositoryService
-import com.atlassian.bitbucket.permission.PermissionService
-import com.atlassian.bitbucket.project.ProjectService
+import com.atlassian.sal.api.component.ComponentLocator
+import groovy.json.JsonOutput
+import java.nio.file.Paths
+import java.nio.file.Files
+import java.nio.charset.StandardCharsets
 
-def users = userService.getAllUsers()
-def projects = projectService.getAllProjects()
+// === SETUP SERVICES ===
+def userService = ComponentLocator.getComponent(com.atlassian.bitbucket.user.UserService)
+def groupService = ComponentLocator.getComponent(com.atlassian.bitbucket.user.group.GroupService)
+def projectService = ComponentLocator.getComponent(com.atlassian.bitbucket.project.ProjectService)
+def repositoryService = ComponentLocator.getComponent(com.atlassian.bitbucket.repository.RepositoryService)
+def permissionService = ComponentLocator.getComponent(com.atlassian.bitbucket.permission.PermissionService)
 
+// === FILE PATHS ===
+// Adjust paths if running on ScriptRunner console (or skip writing to file and just print)
+def baseDir = "/tmp/bitbucket_export" // change as needed
+new File(baseDir).mkdirs()
+
+def writeJson = { name, data ->
+    def path = Paths.get(baseDir, name)
+    Files.write(path, JsonOutput.prettyPrint(JsonOutput.toJson(data)).getBytes(StandardCharsets.UTF_8))
+    println "✅ JSON written: ${path}"
+}
+
+// ==============================
+// STEP 1: Users
+// ==============================
+def users = userService.getAllUsers().collect { u ->
+    [
+        name: u.name,
+        displayName: u.displayName,
+        email: u.emailAddress
+    ]
+}
+writeJson("users.json", users)
+
+// ==============================
+// STEP 2: Groups + members
+// ==============================
+def groups = groupService.getAllGroups().collect { g ->
+    def members = groupService.getUsersInGroup(g.name).collect { it.name }
+    [
+        group: g.name,
+        users: members
+    ]
+}
+writeJson("groups.json", groups)
+
+// ==============================
+// STEP 3: Projects
+// ==============================
+def projects = projectService.getAllProjects().collect { p ->
+    [
+        key: p.key,
+        name: p.name,
+        description: p.description
+    ]
+}
+writeJson("projects.json", projects)
+
+// ==============================
+// STEP 4: Repositories per project
+// ==============================
+def repos = []
+projectService.getAllProjects().each { p ->
+    repositoryService.findByProject(p).each { r ->
+        repos << [
+            project: p.key,
+            repo: r.slug,
+            name: r.name
+        ]
+    }
+}
+writeJson("repositories.json", repos)
+
+// ==============================
+// STEP 5: Permissions
+// ==============================
 def matrix = []
 
-projects.each { project ->
-    project.repositories.each { repo ->
-        users.each { user ->
-            def perm = permissionService.getRepositoryPermission(user, repo)
-            if (perm) {
-                matrix << [
-                    user: user.getName(),
-                    project: project.key,
-                    repo: repo.name,
-                    permission: perm.name()
-                ]
-            }
+repos.each { r ->
+    // 1️⃣ User permissions
+    users.each { u ->
+        def perm = permissionService.getRepositoryPermission(u.name, r.project.key + "/" + r.repo)
+        if (perm) {
+            matrix << [
+                type: "user",
+                name: u.name,
+                project: r.project,
+                repo: r.name,
+                permission: perm.name()
+            ]
+        }
+    }
+    // 2️⃣ Group permissions
+    groups.each { g ->
+        def perm = permissionService.getRepositoryPermission(g.group, r.project.key + "/" + r.repo)
+        if (perm) {
+            matrix << [
+                type: "group",
+                name: g.group,
+                project: r.project,
+                repo: r.name,
+                permission: perm.name()
+            ]
         }
     }
 }
+writeJson("permissions_matrix.json", matrix)
 
-// Convert matrix to JSON or CSV
-println groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(matrix))
+println "\n✅ Bitbucket access export completed. Files written to ${baseDir}"
