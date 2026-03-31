@@ -1,67 +1,28 @@
-const fs = require("fs");
-const path = require("path");
+import com.atlassian.bitbucket.user.ApplicationUser
+import com.atlassian.bitbucket.repository.RepositoryService
+import com.atlassian.bitbucket.permission.PermissionService
+import com.atlassian.bitbucket.project.ProjectService
 
-// === INPUT FILE ===
-const roleCatalogFile = path.join(__dirname, "role-catalog.json"); // JSON from adjusted Script 1
+def users = userService.getAllUsers()
+def projects = projectService.getAllProjects()
 
-// === OUTPUT FILE ===
-const roleCatalogCsvFile = path.join(__dirname, "jenkins_roles.csv");
+def matrix = []
 
-// ------------------------
-// HELPER: simplify permissions
-// ------------------------
-function simplifyPermission(permission) {
-  const p = permission.toLowerCase();
-  if (p.includes("read")) return "Read";
-  if (p.includes("cancel")) return "Cancel";
-  if (p.includes("build")) return "Build";
-  return null; // ignore all other permissions
+projects.each { project ->
+    project.repositories.each { repo ->
+        users.each { user ->
+            def perm = permissionService.getRepositoryPermission(user, repo)
+            if (perm) {
+                matrix << [
+                    user: user.getName(),
+                    project: project.key,
+                    repo: repo.name,
+                    permission: perm.name()
+                ]
+            }
+        }
+    }
 }
 
-// ------------------------
-// HELPER: make cell CSV-safe
-// ------------------------
-function csvSafe(value) {
-  if (value === null || value === undefined) return "";
-  const str = String(value);
-  // escape double quotes
-  const escaped = str.replace(/"/g, '""');
-  // wrap in quotes if contains comma or newline
-  if (escaped.includes(",") || escaped.includes("\n")) {
-    return `"${escaped}"`;
-  }
-  return escaped;
-}
-
-// ------------------------
-// READ JSON
-// ------------------------
-const roleCatalogRaw = JSON.parse(fs.readFileSync(roleCatalogFile, "utf-8"));
-
-// ------------------------
-// BUILD ROWS
-// ------------------------
-const roleCatalogRows = roleCatalogRaw.map(role => ({
-  Role: role.role,
-  Type: role.type,
-  Pattern: role.pattern || "",
-  Permissions: role.permissions
-    .map(simplifyPermission)
-    .filter(p => p !== null)
-    .join(", "),
-  AssignedSIDs: role.sids.join(", ")
-}));
-
-// ------------------------
-// WRITE CSV
-// ------------------------
-const roleCatalogHeader = ["Role", "Type", "Pattern", "Permissions", "AssignedSIDs"];
-const roleCatalogCsv = [
-  roleCatalogHeader.join(","),
-  ...roleCatalogRows.map(r =>
-    roleCatalogHeader.map(h => csvSafe(r[h])).join(",")
-  )
-].join("\n");
-
-fs.writeFileSync(roleCatalogCsvFile, roleCatalogCsv);
-console.log(`✅ Role catalog CSV generated: ${roleCatalogCsvFile}`);
+// Convert matrix to JSON or CSV
+println groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(matrix))
