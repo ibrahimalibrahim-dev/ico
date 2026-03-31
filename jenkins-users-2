@@ -1,3 +1,4 @@
+import groovy.json.JsonOutput
 import jenkins.model.Jenkins
 import hudson.model.Job
 import com.michelin.cio.hudson.plugins.rolestrategy.*
@@ -7,12 +8,9 @@ def strategy = jenkins.authorizationStrategy
 
 def BUILD_PERMISSION = hudson.model.Item.BUILD
 
-println "Evaluating who can trigger pipelines (Job/Build)\n"
+def results = []
 
-// get all jobs once
 def jobs = jenkins.getAllItems(Job)
-
-// legacy-safe role access
 def roleTypes = ["globalRoles", "projectRoles"]
 
 roleTypes.each { type ->
@@ -22,18 +20,22 @@ roleTypes.each { type ->
     roleMap.each { role, sids ->
         if (!role.permissions.contains(BUILD_PERMISSION)) return
 
-        println "ROLE: ${role.name} (${type})"
-        if (role.hasProperty("pattern")) {
-            println "  Pattern: ${role.pattern}"
-        }
-
         sids.each { sid ->
+            def isGroup = sid.contains("CN=") || sid.contains("OU=")
+
             jobs.each { job ->
                 if (!role.hasProperty("pattern") || job.fullName ==~ role.pattern) {
-                    println "    ${sid} -> ${job.fullName}"
+                    results << [
+                        sid: sid,
+                        sidType: isGroup ? "group" : "user",
+                        role: role.name,
+                        pipeline: job.fullName,
+                        permission: "BUILD"
+                    ]
                 }
             }
         }
-        println ""
     }
 }
+
+println JsonOutput.prettyPrint(JsonOutput.toJson(results))
