@@ -17,19 +17,21 @@ def users = userService.getAllUsers().collect { u ->
         name: u.name,
         displayName: u.displayName,
         email: u.emailAddress,
-        groups: u.groups.collect { it.name }  // safe way to get groups
+        groups: u.groups.collect { it.name } // safe way to get groups
     ]
 }
+
 println "=== USERS ==="
 println JsonOutput.prettyPrint(JsonOutput.toJson(users))
 
-// === PROJECTS & REPOS ===
+// === PROJECTS & REPOSITORIES ===
 def repos = []
 projectService.getAllProjects().each { p ->
     repositoryService.findByProject(p).each { r ->
         repos << [project: p.key, repo: r.slug, name: r.name, repoObj: r]
     }
 }
+
 println "\n=== REPOSITORIES ==="
 println JsonOutput.prettyPrint(JsonOutput.toJson(repos.collect { [project: it.project, repo: it.repo, name: it.name] }))
 
