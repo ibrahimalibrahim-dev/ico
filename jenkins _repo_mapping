@@ -1,0 +1,14 @@
+def mapRepo(service) {
+    def repoMap = [
+        "reponame": "repoName",
+        "testapi": "TestAPI",
+        "user-service": "UserService"
+    ]
+
+    if (service == null) {
+        return null
+    }
+
+    def key = service.toLowerCase()
+    return repoMap.containsKey(key) ? repoMap[key] : service
+}
