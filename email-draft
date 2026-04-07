@@ -1,0 +1,27 @@
+Hi Team,
+
+I wanted to follow up on the recent discussion around pull request (PR) targets and clarify why, for this phase, PRs should be raised against the **master branch** rather than other branches.
+
+Given that we are approaching a **production deployment**, it is critical that all changes are validated against the exact codebase that is currently running (or intended to run) in production. At present, **master represents our production baseline**, and any divergence between branches (e.g., develop vs master) introduces risk.
+
+We are already seeing a number of conflicts between the dev branch and master. If PRs continue to target branches other than master, those conflicts will remain hidden until later stages. This creates a scenario where:
+
+* Code may pass validation in a non-production branch but fail when merged into master
+* Integration issues are discovered too late in the cycle
+* Production stability is put at risk due to untested merge combinations
+
+By raising PRs directly to master, we ensure that:
+
+* All changes are tested against the true production baseline
+* Merge conflicts are identified and resolved early
+* The code being validated is exactly what is intended for deployment
+* We reduce last-minute surprises during release
+
+While targeting intermediate branches (e.g., develop) can be useful in other workflows, in our current context—where production deployment is imminent and branches are not fully aligned—this approach increases risk rather than reducing it.
+
+For this reason, please ensure that all PRs intended for this release are raised against **master**.
+
+If there are any concerns or blockers with this approach, let’s discuss them early so we can address them without impacting the release timeline.
+
+Thanks,
+[Your Name]
