@@ -1,69 +1,10 @@
-stage('Agent Diagnostics') {
-  steps {
-    script {
-      sh '''
-      set -x
+sh '''
+echo "=== JQ DETAILS ==="
+which jq
+ls -l $(which jq)
+jq --version
 
-      echo "========== BASIC INFO =========="
-      hostname
-      whoami
-      pwd
-      echo "IP:"
-      hostname -I || ip addr || ifconfig
-
-      echo "========== OS INFO =========="
-      uname -a
-
-      echo "========== PATH =========="
-      echo "$PATH"
-
-      echo "========== BINARY CHECK =========="
-      which curl || echo "curl NOT FOUND"
-      which jq || echo "jq NOT FOUND"
-      which node || echo "node NOT FOUND"
-
-      echo "Versions:"
-      curl --version || echo "curl failed"
-      jq --version || echo "jq failed"
-      node --version || echo "node failed"
-
-      echo "========== PATH CONTENT CHECK =========="
-      IFS=':' read -ra DIRS <<< "$PATH"
-      for d in "${DIRS[@]}"; do
-        if [ -d "$d" ]; then
-          echo "OK: $d"
-        else
-          echo "MISSING: $d"
-        fi
-      done
-
-      echo "========== DNS / CONNECTIVITY =========="
-      nslookup jira-server.com || echo "nslookup failed"
-
-      echo "Ping test:"
-      ping -c 2 jira-server.com || echo "ping failed"
-
-      echo "Port test (8443):"
-      nc -zv jira-server.com 8443 || echo "port check failed"
-
-      echo "========== CURL RAW TEST =========="
-      curl -v https://jira-server.com:8443/rest/api/2/myself || echo "curl raw failed"
-
-      echo "========== SSL DEBUG =========="
-      curl -vk https://jira-server.com:8443 || echo "SSL handshake failed"
-
-      echo "========== JQ TEST =========="
-      echo '{"key":"TEST-123"}' | jq -r .key || echo "jq parsing failed"
-
-      echo "========== FULL PIPELINE COMMAND TEST =========="
-      RESPONSE=$(curl -s -X GET https://jira-server.com:8443/rest/api/2/myself)
-      echo "Raw response:"
-      echo "$RESPONSE"
-
-      echo "$RESPONSE" | jq . || echo "jq failed on response"
-
-      echo "========== DONE =========="
-      '''
-    }
-  }
-}
+echo "=== TEST JQ BEHAVIOR ==="
+echo '{"key":"ABC-123"}' | jq -r .key
+echo '' | jq -r .key || echo "jq failed on empty input"
+'''
