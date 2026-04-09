@@ -1,21 +1,45 @@
-  script: '''
-  set -e
+sh '''
+set -e
 
-  RESPONSE=$(curl -s -w "\\n%{http_code}" -X POST \
-    -H "Authorization: Bearer ..." \
-    -H "Content-Type: application/json" \
-    -d @payload.json \
-    https://jira-server.com:8443/rest/api/2/issue)
+echo "========== BUILDING PAYLOAD ==========" >&2
+PAYLOAD=$(jq -n \
+  --arg PROJECT_KEY "$PROJECT_KEY" \
+  --arg summary "summary 123" \
+  --arg desc "$DESCRIPTION" \
+  '{
+    fields: {
+      project: { key: $PROJECT_KEY },
+      summary: $summary,
+      description: $desc,
+      issuetype: { name: "Task" }
+    }
+  }')
 
-  BODY=$(echo "$RESPONSE" | head -n -1)
-  STATUS=$(echo "$RESPONSE" | tail -n1)
+echo "$PAYLOAD" >&2
 
-  echo "STATUS=$STATUS" >&2
-  echo "BODY=$BODY" >&2
+echo "========== CALLING JIRA ==========" >&2
+RESPONSE=$(echo "$PAYLOAD" | curl -s -w "\\n%{http_code}" -X POST \
+  -H "Authorization: Bearer $JIRA_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d @- \
+  "$JIRA_URL/rest/api/2/issue")
 
-  if [ "$STATUS" != "201" ]; then
-    echo "JIRA CREATION FAILED" >&2
-    exit 1
-  fi
+BODY=$(echo "$RESPONSE" | head -n -1)
+STATUS=$(echo "$RESPONSE" | tail -n1)
 
-  echo "$BODY" | jq -r .key
+echo "HTTP STATUS: $STATUS" >&2
+echo "RESPONSE BODY:" >&2
+echo "$BODY" >&2
+
+echo "========== PARSING ISSUE KEY ==========" >&2
+ISSUE_KEY=$(echo "$BODY" | jq -r '.key // empty')
+
+echo "Parsed ISSUE_KEY: $ISSUE_KEY" >&2
+
+if [ -z "$ISSUE_KEY" ]; then
+  echo "❌ Jira issue creation failed" >&2
+  exit 1
+fi
+
+echo "✅ Created Jira issue: $ISSUE_KEY" >&2
+'''
