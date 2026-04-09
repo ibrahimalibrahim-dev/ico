@@ -1,34 +1,69 @@
-#!/bin/bash
+stage('Agent Diagnostics') {
+  steps {
+    script {
+      sh '''
+      set -x
 
-# ====== CONFIGURATION ======
-BASE_PATH="/opt/apps"              # Change this to your base directory
-OWNER="newuser"                    # Change to target user
-GROUP="newgroup"                   # Change to target group
+      echo "========== BASIC INFO =========="
+      hostname
+      whoami
+      pwd
+      echo "IP:"
+      hostname -I || ip addr || ifconfig
 
-# List of folder_app names
-FOLDERS=("folder_app1" "folder_app2" "folder_app3")
+      echo "========== OS INFO =========="
+      uname -a
 
-# ====== SCRIPT LOGIC ======
+      echo "========== PATH =========="
+      echo "$PATH"
 
-for folder in "${FOLDERS[@]}"; do
-    FULL_PATH="$BASE_PATH/$folder"
+      echo "========== BINARY CHECK =========="
+      which curl || echo "curl NOT FOUND"
+      which jq || echo "jq NOT FOUND"
+      which node || echo "node NOT FOUND"
 
-    echo "Processing $FULL_PATH..."
+      echo "Versions:"
+      curl --version || echo "curl failed"
+      jq --version || echo "jq failed"
+      node --version || echo "node failed"
 
-    # If folder exists, delete it recursively
-    if [ -d "$FULL_PATH" ]; then
-        echo "Deleting existing folder: $FULL_PATH"
-        rm -rf "$FULL_PATH"
-    fi
+      echo "========== PATH CONTENT CHECK =========="
+      IFS=':' read -ra DIRS <<< "$PATH"
+      for d in "${DIRS[@]}"; do
+        if [ -d "$d" ]; then
+          echo "OK: $d"
+        else
+          echo "MISSING: $d"
+        fi
+      done
 
-    # Create folder with nested /app directory
-    mkdir -p "$FULL_PATH/app"
+      echo "========== DNS / CONNECTIVITY =========="
+      nslookup jira-server.com || echo "nslookup failed"
 
-    # Change ownership recursively
-    chown -R "$OWNER:$GROUP" "$FULL_PATH"
+      echo "Ping test:"
+      ping -c 2 jira-server.com || echo "ping failed"
 
-    echo "Created $FULL_PATH/app and set ownership to $OWNER:$GROUP"
-    echo "--------------------------------------"
-done
+      echo "Port test (8443):"
+      nc -zv jira-server.com 8443 || echo "port check failed"
 
-echo "All folders processed successfully."
+      echo "========== CURL RAW TEST =========="
+      curl -v https://jira-server.com:8443/rest/api/2/myself || echo "curl raw failed"
+
+      echo "========== SSL DEBUG =========="
+      curl -vk https://jira-server.com:8443 || echo "SSL handshake failed"
+
+      echo "========== JQ TEST =========="
+      echo '{"key":"TEST-123"}' | jq -r .key || echo "jq parsing failed"
+
+      echo "========== FULL PIPELINE COMMAND TEST =========="
+      RESPONSE=$(curl -s -X GET https://jira-server.com:8443/rest/api/2/myself)
+      echo "Raw response:"
+      echo "$RESPONSE"
+
+      echo "$RESPONSE" | jq . || echo "jq failed on response"
+
+      echo "========== DONE =========="
+      '''
+    }
+  }
+}
