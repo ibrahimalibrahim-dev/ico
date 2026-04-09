@@ -1,10 +1,21 @@
-sh '''
-echo "=== JQ DETAILS ==="
-which jq
-ls -l $(which jq)
-jq --version
+  script: '''
+  set -e
 
-echo "=== TEST JQ BEHAVIOR ==="
-echo '{"key":"ABC-123"}' | jq -r .key
-echo '' | jq -r .key || echo "jq failed on empty input"
-'''
+  RESPONSE=$(curl -s -w "\\n%{http_code}" -X POST \
+    -H "Authorization: Bearer ..." \
+    -H "Content-Type: application/json" \
+    -d @payload.json \
+    https://jira-server.com:8443/rest/api/2/issue)
+
+  BODY=$(echo "$RESPONSE" | head -n -1)
+  STATUS=$(echo "$RESPONSE" | tail -n1)
+
+  echo "STATUS=$STATUS" >&2
+  echo "BODY=$BODY" >&2
+
+  if [ "$STATUS" != "201" ]; then
+    echo "JIRA CREATION FAILED" >&2
+    exit 1
+  fi
+
+  echo "$BODY" | jq -r .key
