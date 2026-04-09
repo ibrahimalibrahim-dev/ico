@@ -1,4 +1,3 @@
-sh '''
-echo "========== VERBOSE CURL ==========" >&2
-curl -v https://jira-server.com:8443/rest/api/2/myself
-'''
+Quick update: the Jira issue creation failure on that one Jenkins agent is due to TLS certificate trust. Curl was returning HTTP 000, and verbose output showed “self signed certificate in certificate chain.” Connection itself is fine (network/firewall OK), but the agent doesn’t trust the cert. When using -k, it works and returns 201.
+
+So it’s not pipeline logic, auth, or network — just SSL trust on that node. Do you want us to keep -k as a temporary workaround or proceed with installing the certificate properly?
