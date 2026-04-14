@@ -1,18 +1,61 @@
-def createIssue(Map config = [:]) {
-    return {
-        script {
-            withEnv(config.env ?: []) {
-                withCredentials(config.creds ?: []) {
-                    return sh(
-                        script: """
-                        # your full jq + curl logic here
-                        ISSUE_KEY=\$(jq -n ... | curl -sk ... | jq -r '.key')
-                        echo "\$ISSUE_KEY"
-                        """,
-                        returnStdout: true
-                    ).trim()
-                }
-            }
-        }
-    }()
-}
+Hi everyone,
+
+I wanted to provide a consolidated update on the investigation into the 401 errors encountered in the Jenkins pipeline when attempting to download the required JAR artifact.
+
+Over the past few days, we have conducted a thorough and systematic analysis across multiple areas to isolate the root cause. Below is a summary of what has been validated so far:
+
+**1. Artifact Availability and Repository Access**
+
+* The target artifact (`gradle-plugin-local-1.69.1.jar`) has been verified to exist in the Nexus repository.
+* Direct access tests from the Jenkins agent using curl (with authentication) successfully downloaded the artifact from both relevant repositories (`Maven_Fullstory` and `maven-public`).
+* This confirms that the repository paths are correct and the artifact is accessible.
+
+**2. Network Connectivity and SSL**
+
+* Connectivity from the Jenkins agent to the Nexus server is working as expected.
+* TLS/SSL handshake completes successfully when certificate verification is bypassed (due to internal/self-signed certificates), which is consistent with our environment setup.
+
+**3. Credentials and Permissions**
+
+* The credentials used were validated via curl and confirmed to have the necessary permissions to access the artifact in both repositories.
+* This indicates that authentication at the Nexus level is functioning correctly.
+
+**4. Repository Behavior**
+
+* Both repositories tested (`Maven_Fullstory` and `maven-public`) are able to serve the artifact when accessed directly.
+* This suggests that repository configuration and proxying (if applicable) are operating as expected.
+
+**5. Branch Comparison**
+
+* The same artifact download works successfully in other active branches using the same infrastructure and Nexus setup.
+* The issue is isolated to a specific branch where the 401 error is observed during the Gradle build process.
+
+---
+
+**Current Understanding**
+
+Based on the above validations, we are confident that:
+
+* The artifact exists and is accessible
+* Nexus repositories are functioning correctly
+* Credentials are valid and have appropriate permissions
+* Network connectivity is not a limiting factor
+
+The remaining area of focus is the way authentication and repository configuration are being applied within the Gradle build execution in the affected branch (particularly during dependency/plugin resolution).
+
+---
+
+**Next Steps**
+
+We are continuing to review:
+
+* Gradle repository and plugin resolution configuration
+* Credential propagation within the Jenkins pipeline
+* Any differences in build configuration between branches that may affect how repositories are resolved
+
+---
+
+Please let me know if there are any additional areas you would like us to validate. I will continue to share updates as we narrow this down further.
+
+Best regards,
+[Your Name]
