@@ -1,22 +1,6 @@
-Hi everyone,
+All external dependencies (artifact, repository access, credentials, and connectivity) have been validated and are functioning as expected. The behavior appears specific to how the affected branch is resolving dependencies during the Gradle build.
 
-I wanted to share a brief update on the 401 errors observed in the Jenkins pipeline when downloading the required JAR from Nexus.
+Next steps:
+We recommend reviewing the Gradle configuration in the affected branch, particularly repository resolution and authentication handling, as this is where the discrepancy is most likely occurring.
 
-Over the past few days, we’ve validated the following:
-
-* **Artifact availability:** The JAR is present and accessible in Nexus.
-* **Repository access:** Successful downloads were confirmed from both `Maven_Fullstory` and `maven-public` using authenticated curl from the Jenkins agent.
-* **Credentials:** The credentials in use are valid and have the required permissions.
-* **Connectivity:** Network and SSL connectivity between Jenkins and Nexus are functioning as expected.
-* **Branch comparison:** The same setup works in other active branches; the issue is isolated to one branch.
-
-**Current understanding:**
-All external factors (artifact, repository, credentials, and connectivity) have been validated. The issue appears to be related to how the affected branch resolves repositories and applies authentication during the Gradle build.
-
-**Next steps:**
-We are focusing on reviewing Gradle configuration and credential propagation within the pipeline for that branch.
-
-I’ll share further updates as we narrow this down.
-
-Best regards,
-[Your Name]
+Please let us know if any additional support is needed from our side.
