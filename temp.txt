@@ -1,26 +1,21 @@
 Hi Team,
 
-Thank you for the update and for continuing the investigation.
+Thank you for the update and for sharing the Bitbucket merge details.
 
-Based on your latest note, the key point appears to be:
+We have reviewed the current Jenkins behavior further. As this repository uses a Multibranch Pipeline, the reported failure is occurring during the SCM checkout / PR merge validation step, prior to execution of any pipeline stages or Jenkinsfile logic.
 
-> “A new branch has been created, so it does not have any commit history.”
+Current error:
 
-This is relevant because Jenkins PR pipelines typically perform a Git checkout/fetch and merge simulation between the source branch and the PR target branch. If the newly created target branch does not share commit lineage/history with the source branch, Git can return errors such as:
+`checkout failed: hudson.plugins.git.GitException`
+`git merge ... fatal: refusing to merge unrelated histories`
 
-`fatal: refusing to merge unrelated histories`
+This indicates the failure is happening at Git branch ancestry / merge validation level during PR discovery, rather than within the pipeline itself.
 
-From the Jenkins side, this would be a repository branch-history condition rather than a cache issue.
+We also reviewed the current branch graph/history and the present `master` branch appears isolated from the primary commit lineage, while the main historical timeline appears associated with `development` / previous master history. This would be consistent with the unrelated histories error being returned during PR validation.
 
-We understand you are able to complete the merge via Bitbucket UI, however the Jenkins PR validation process may not be using the same merge path/behavior as the UI merge action.
+Given the above, could the repository branch lineage and intended PR target branch please be revalidated from the Bitbucket side.
 
-To help move this forward quickly, could you please confirm:
-
-1. Which branch is intended to represent the mainline / production baseline
-2. Whether the new branch was created independently or from an existing historical branch
-3. Whether the PR target branch should instead be the historical branch containing prior commits
-
-In parallel, we are reviewing from our side as well to assist with resolution.
+Once branch ancestry is aligned, we are happy to continue support from the Jenkins side if any further issue remains.
 
 Regards,
 [Your Name / Team]
