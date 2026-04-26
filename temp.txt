@@ -1,21 +1,5 @@
-Hi Team,
+Just to clarify, the current error is occurring during Jenkins multibranch SCM checkout / PR merge validation, before the pipeline or Jenkinsfile starts.
 
-Thank you for the update and for sharing the Bitbucket merge details.
+So this would not be a normal pipeline-layer change. To apply something like --allow-unrelated-histories, it would likely require changes to Jenkins SCM/plugin configuration rather than the application pipeline itself.
 
-We have reviewed the current Jenkins behavior further. As this repository uses a Multibranch Pipeline, the reported failure is occurring during the SCM checkout / PR merge validation step, prior to execution of any pipeline stages or Jenkinsfile logic.
-
-Current error:
-
-`checkout failed: hudson.plugins.git.GitException`
-`git merge ... fatal: refusing to merge unrelated histories`
-
-This indicates the failure is happening at Git branch ancestry / merge validation level during PR discovery, rather than within the pipeline itself.
-
-We also reviewed the current branch graph/history and the present `master` branch appears isolated from the primary commit lineage, while the main historical timeline appears associated with `development` / previous master history. This would be consistent with the unrelated histories error being returned during PR validation.
-
-Given the above, could the repository branch lineage and intended PR target branch please be revalidated from the Bitbucket side.
-
-Once branch ancestry is aligned, we are happy to continue support from the Jenkins side if any further issue remains.
-
-Regards,
-[Your Name / Team]
+Given that, it would be better to first validate the repository branch ancestry / target branch setup, since the current error indicates unrelated histories between the PR branches.
