@@ -1,6 +1,26 @@
-All external dependencies (artifact, repository access, credentials, and connectivity) have been validated and are functioning as expected. The behavior appears specific to how the affected branch is resolving dependencies during the Gradle build.
+Hi Team,
 
-Next steps:
-We recommend reviewing the Gradle configuration in the affected branch, particularly repository resolution and authentication handling, as this is where the discrepancy is most likely occurring.
+Thank you for the update and for continuing the investigation.
 
-Please let us know if any additional support is needed from our side.
+Based on your latest note, the key point appears to be:
+
+> “A new branch has been created, so it does not have any commit history.”
+
+This is relevant because Jenkins PR pipelines typically perform a Git checkout/fetch and merge simulation between the source branch and the PR target branch. If the newly created target branch does not share commit lineage/history with the source branch, Git can return errors such as:
+
+`fatal: refusing to merge unrelated histories`
+
+From the Jenkins side, this would be a repository branch-history condition rather than a cache issue.
+
+We understand you are able to complete the merge via Bitbucket UI, however the Jenkins PR validation process may not be using the same merge path/behavior as the UI merge action.
+
+To help move this forward quickly, could you please confirm:
+
+1. Which branch is intended to represent the mainline / production baseline
+2. Whether the new branch was created independently or from an existing historical branch
+3. Whether the PR target branch should instead be the historical branch containing prior commits
+
+In parallel, we are reviewing from our side as well to assist with resolution.
+
+Regards,
+[Your Name / Team]
