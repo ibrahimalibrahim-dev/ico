@@ -1,5 +1,14 @@
-Just to clarify, the current error is occurring during Jenkins multibranch SCM checkout / PR merge validation, before the pipeline or Jenkinsfile starts.
+Hi Team,
 
-So this would not be a normal pipeline-layer change. To apply something like --allow-unrelated-histories, it would likely require changes to Jenkins SCM/plugin configuration rather than the application pipeline itself.
+Following today’s session, we are now able to successfully validate and merge PRs from `development` into `master` in Bitbucket, and the corresponding Jenkins multibranch PR checks are proceeding as expected after aligning branch history.
 
-Given that, it would be better to first validate the repository branch ancestry / target branch setup, since the current error indicates unrelated histories between the PR branches.
+As observed during the session, previous PR validation failures were related to branch ancestry differences between `development` and `master`. Once the histories were aligned during the live review, the SCM checkout and merge validation completed successfully in Jenkins.
+
+It was also noted during the discussion that `master_xyz` is currently being used within ongoing testing activities, while `development` is being validated for PR flow into the aligned `master` branch for CI purposes.
+
+Based on this, we will proceed with validating the standard PR flow from `development` into `master` as the primary CI path, and will continue testing further enterprise services once their corresponding branches are aligned to the same baseline.
+
+Please let us know once remaining services have been synchronized to the agreed branch structure so we can ensure consistent PR validation and proceed with end-to-end testing, including DAST integration.
+
+Regards,
+[Your Name / Team]
