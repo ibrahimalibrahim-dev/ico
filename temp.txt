@@ -1,14 +1,25 @@
-Hi Team,
+Dear Team,
 
-Following today’s session, we are now able to successfully validate and merge PRs from `development` into `master` in Bitbucket, and the corresponding Jenkins multibranch PR checks are proceeding as expected after aligning branch history.
+Thank you for the update regarding the Acunetix version prerequisite for onboarding DAST for our upcoming application go-live.
 
-As observed during the session, previous PR validation failures were related to branch ancestry differences between `development` and `master`. Once the histories were aligned during the live review, the SCM checkout and merge validation completed successfully in Jenkins.
+We would like to highlight that our current Acunetix setup does not have a dedicated UAT environment, and only the production instance is available at present. To perform the required version upgrade in a controlled and compliant manner, we would first need to establish a UAT environment by cloning the existing production server and database.
 
-It was also noted during the discussion that `master_xyz` is currently being used within ongoing testing activities, while `development` is being validated for PR flow into the aligned `master` branch for CI purposes.
+This activity would involve several dependent tasks, including but not limited to:
 
-Based on this, we will proceed with validating the standard PR flow from `development` into `master` as the primary CI path, and will continue testing further enterprise services once their corresponding branches are aligned to the same baseline.
+* Provisioning the UAT server environment
+* Cloning/restoring the production database to UAT
+* Completing required firewall connectivity requests
+* Applying necessary security controls and data masking for non-production use
+* Performing upgrade validation and functional testing in UAT
+* Raising and obtaining CAB approval for the production upgrade activity
+* Scheduling the production upgrade, including any required downtime window
+* Conducting post-upgrade verification in production
 
-Please let us know once remaining services have been synchronized to the agreed branch structure so we can ensure consistent PR validation and proceed with end-to-end testing, including DAST integration.
+Once the production Acunetix instance has been successfully upgraded and validated, we would then be able to proceed with the requested DAST onboarding and testing activities.
 
-Regards,
-[Your Name / Team]
+Given the above dependencies, we kindly request that sufficient time be factored into the project timeline to complete these prerequisites.
+
+Please let us know if you would like us to provide a more detailed effort estimate or proposed schedule.
+
+Best regards,
+[Your Name]
