@@ -1,3 +1,13 @@
-Given the above dependencies, we kindly request that adequate time be factored into the overall project plan to allow for completion of the prerequisite activities and required governance approvals.
-We will continue to progress the necessary steps and provide updates as milestones are achieved, with the aim of proceeding to DAST onboarding at the earliest feasible opportunity.
-Please let us know if any further clarification is required.
+| Phase | Activity                                                            | Target Completion |
+| ----- | ------------------------------------------------------------------- | ----------------- |
+| 1     | Confirm scope, infrastructure requirements, stakeholders, approvals | 05 May 2026       |
+| 2     | Provision UAT server and required storage/resources                 | 10 May 2026       |
+| 3     | Raise / complete firewall access requests and connectivity setup    | 14 May 2026       |
+| 4     | Clone production Acunetix server and database to UAT                | 18 May 2026       |
+| 5     | Apply database masking / security hardening for UAT                 | 20 May 2026       |
+| 6     | Perform Acunetix version upgrade in UAT                             | 24 May 2026       |
+| 7     | Functional testing, validation, and rollback readiness review       | 28 May 2026       |
+| 8     | Submit CAB request for production implementation                    | 31 May 2026       |
+| 9     | Production upgrade during approved downtime window                  | 07 June 2026      |
+| 10    | Post-upgrade validation and health checks                           | 09 June 2026      |
+| 11    | Commence DAST onboarding and scan execution                         | 10 June 2026      |
