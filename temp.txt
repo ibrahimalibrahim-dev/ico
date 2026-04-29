@@ -1,25 +1,3 @@
-Dear Team,
-
-Thank you for the update regarding the Acunetix version prerequisite for onboarding DAST for our upcoming application go-live.
-
-We would like to highlight that our current Acunetix setup does not have a dedicated UAT environment, and only the production instance is available at present. To perform the required version upgrade in a controlled and compliant manner, we would first need to establish a UAT environment by cloning the existing production server and database.
-
-This activity would involve several dependent tasks, including but not limited to:
-
-* Provisioning the UAT server environment
-* Cloning/restoring the production database to UAT
-* Completing required firewall connectivity requests
-* Applying necessary security controls and data masking for non-production use
-* Performing upgrade validation and functional testing in UAT
-* Raising and obtaining CAB approval for the production upgrade activity
-* Scheduling the production upgrade, including any required downtime window
-* Conducting post-upgrade verification in production
-
-Once the production Acunetix instance has been successfully upgraded and validated, we would then be able to proceed with the requested DAST onboarding and testing activities.
-
-Given the above dependencies, we kindly request that sufficient time be factored into the project timeline to complete these prerequisites.
-
-Please let us know if you would like us to provide a more detailed effort estimate or proposed schedule.
-
-Best regards,
-[Your Name]
+Given the above dependencies, we kindly request that adequate time be factored into the overall project plan to allow for completion of the prerequisite activities and required governance approvals.
+We will continue to progress the necessary steps and provide updates as milestones are achieved, with the aim of proceeding to DAST onboarding at the earliest feasible opportunity.
+Please let us know if any further clarification is required.
