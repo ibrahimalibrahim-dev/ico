@@ -1,13 +1,16 @@
-| Phase | Activity                                                            | Target Completion |
-| ----- | ------------------------------------------------------------------- | ----------------- |
-| 1     | Confirm scope, infrastructure requirements, stakeholders, approvals | 05 May 2026       |
-| 2     | Provision UAT server and required storage/resources                 | 10 May 2026       |
-| 3     | Raise / complete firewall access requests and connectivity setup    | 14 May 2026       |
-| 4     | Clone production Acunetix server and database to UAT                | 18 May 2026       |
-| 5     | Apply database masking / security hardening for UAT                 | 20 May 2026       |
-| 6     | Perform Acunetix version upgrade in UAT                             | 24 May 2026       |
-| 7     | Functional testing, validation, and rollback readiness review       | 28 May 2026       |
-| 8     | Submit CAB request for production implementation                    | 31 May 2026       |
-| 9     | Production upgrade during approved downtime window                  | 07 June 2026      |
-| 10    | Post-upgrade validation and health checks                           | 09 June 2026      |
-| 11    | Commence DAST onboarding and scan execution                         | 10 June 2026      |
+Dear OS Team,
+
+We would like to request provisioning of a Windows server for UAT purposes for our Acunetix security scanning environment.
+
+Please find the required specifications below:
+
+Operating System: Windows Server (latest supported version for UAT)
+CPU: 2 vCPU
+Memory: 16 GB RAM
+Disk: 100 GB storage
+
+This server will be used as a UAT environment for validating Acunetix configurations and scan execution prior to production changes.
+
+Kindly proceed with provisioning or let us know if any additional information is required.
+
+Regards,
