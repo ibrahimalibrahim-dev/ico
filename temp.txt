@@ -1,16 +1,34 @@
-Dear OS Team,
+script {
 
-We would like to request provisioning of a Windows server for UAT purposes for our Acunetix security scanning environment.
+    step([$class: 'DeployApplication',
+        siteName: 'UCD',
+        deployApp: 'APP',
+        deployEnv: 'ENV',
+        deployProc: 'PROC',
+        // other parameters
+    ])
 
-Please find the required specifications below:
+    def logLines = currentBuild.rawBuild.getLog(2000)
 
-Operating System: Windows Server (latest supported version for UAT)
-CPU: 2 vCPU
-Memory: 16 GB RAM
-Disk: 100 GB storage
+    def requestId = null
 
-This server will be used as a UAT environment for validating Acunetix configurations and scan execution prior to production changes.
+    logLines.each { line ->
+        def matcher = (line =~ /Deployment request id is:\s*([a-zA-Z0-9\-]+)/)
 
-Kindly proceed with provisioning or let us know if any additional information is required.
+        if (matcher.find()) {
+            requestId = matcher.group(1)
+        }
+    }
 
-Regards,
+    if (requestId) {
+        def deploymentUrl = "https://your-ucd-url/#applicationProcessRequest/${requestId}"
+
+        echo "Deployment URL: ${deploymentUrl}"
+
+        currentBuild.description =
+            "<a href='${deploymentUrl}'>UCD Deployment</a>"
+    }
+    else {
+        echo "Could not find deployment request id"
+    }
+}
