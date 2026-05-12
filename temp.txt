@@ -1,1 +1,28 @@
-/Deployment request id is:\s*'([a-zA-Z0-9\-]+)'/
+script {
+
+    int startLine = currentBuild.rawBuild.getLog(999999).size()
+
+    step([$class: 'DeployApplication',
+        siteName: 'UCD',
+        deployApp: 'IOS_APP',
+        deployEnv: 'ENV',
+        deployProc: 'ios-deploy'
+    ])
+
+    def newLines = currentBuild.rawBuild
+        .getLog(999999)
+        .drop(startLine)
+
+    def requestId = null
+
+    newLines.each { line ->
+
+        def matcher = (line =~ /Deployment request id is:\s*'([^']+)'/)
+
+        if (matcher.find()) {
+            requestId = matcher.group(1)
+        }
+    }
+
+    echo "IOS request id = ${requestId}"
+}
