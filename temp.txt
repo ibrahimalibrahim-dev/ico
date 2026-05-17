@@ -1,28 +1,15 @@
-script {
-
-    int startLine = currentBuild.rawBuild.getLog(999999).size()
-
-    step([$class: 'DeployApplication',
-        siteName: 'UCD',
-        deployApp: 'IOS_APP',
-        deployEnv: 'ENV',
-        deployProc: 'ios-deploy'
-    ])
-
-    def newLines = currentBuild.rawBuild
-        .getLog(999999)
-        .drop(startLine)
-
-    def requestId = null
-
-    newLines.each { line ->
-
-        def matcher = (line =~ /Deployment request id is:\s*'([^']+)'/)
-
-        if (matcher.find()) {
-            requestId = matcher.group(1)
-        }
-    }
-
-    echo "IOS request id = ${requestId}"
-}
+rm -rf /tmp/test-pr-checkout && \
+mkdir -p /tmp/test-pr-checkout && \
+cd /tmp/test-pr-checkout && \
+git init && \
+git remote add origin <repo-url> && \
+echo "===== TESTING REMOTE CONNECTIVITY =====" && \
+git ls-remote origin && \
+echo "===== SEARCHING FOR PR REFS =====" && \
+git ls-remote origin | grep 345 && \
+echo "===== FETCHING PR REF =====" && \
+git fetch origin refs/pull-requests/345/from:pr/345 && \
+echo "===== LOCAL BRANCHES =====" && \
+git branch -a && \
+echo "===== CHECKOUT =====" && \
+git checkout pr/345
