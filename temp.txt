@@ -1,15 +1,7 @@
-rm -rf /tmp/test-pr-checkout && \
-mkdir -p /tmp/test-pr-checkout && \
-cd /tmp/test-pr-checkout && \
-git init && \
-git remote add origin <repo-url> && \
-echo "===== TESTING REMOTE CONNECTIVITY =====" && \
-git ls-remote origin && \
-echo "===== SEARCHING FOR PR REFS =====" && \
-git ls-remote origin | grep 345 && \
-echo "===== FETCHING PR REF =====" && \
-git fetch origin refs/pull-requests/345/from:pr/345 && \
-echo "===== LOCAL BRANCHES =====" && \
-git branch -a && \
-echo "===== CHECKOUT =====" && \
-git checkout pr/345
+Thank you for sharing the PRs for all modules.
+
+We have started validating the updated PR flow through the Jenkins multibranch pipelines following the branch alignment changes discussed earlier.
+
+Given the scale involved (~63 enterprise services), please note that validation requires controlled execution and verification across each repository/pipeline combination to ensure PR behavior, SCM validation, and downstream integrations are functioning consistently.
+
+Accordingly, this will require reasonable execution time rather than immediate bulk confirmation. We will continue progressing through the validations and share any blockers or observations identified during testing.
