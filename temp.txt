@@ -1,12 +1,9 @@
 Hi Team,
 
-Kindly requesting approval for the pending firewall access request related to connectivity between the VDI environment and the UAT Acunetix server.
+Apologies, slight clarification on the earlier email.
 
-The access is required to support Acunetix upgrade validation and troubleshooting activities within the UAT environment prior to carrying out any corresponding changes on the Production server. This activity is currently needed by the ISD team as part of ongoing DAST target validation for the enterprise services applications.
+The current firewall request is pending Network team action/approval for the required connectivity configuration between the VDI environment and the UAT Acunetix server.
 
-Please note that the requested access is limited to the UAT environment only (no PROD/DR impact).
+The intention of the request remains to support Acunetix upgrade validation and DAST-related testing activities within UAT prior to any Production implementation.
 
-As the related testing activities are currently in progress and tied to the new core onboarding effort, timely approval would be appreciated to allow the teams to proceed accordingly and avoid further delays in validation activities.
-
-Regards,
-[Your Name]
+Thank you for the support and coordination.
