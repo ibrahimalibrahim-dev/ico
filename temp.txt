@@ -1,7 +1,12 @@
-Thank you for sharing the PRs for all modules.
+Hi Team,
 
-We have started validating the updated PR flow through the Jenkins multibranch pipelines following the branch alignment changes discussed earlier.
+Kindly requesting approval for the pending firewall access request related to connectivity between the VDI environment and the UAT Acunetix server.
 
-Given the scale involved (~63 enterprise services), please note that validation requires controlled execution and verification across each repository/pipeline combination to ensure PR behavior, SCM validation, and downstream integrations are functioning consistently.
+The access is required to support Acunetix upgrade validation and troubleshooting activities within the UAT environment prior to carrying out any corresponding changes on the Production server. This activity is currently needed by the ISD team as part of ongoing DAST target validation for the enterprise services applications.
 
-Accordingly, this will require reasonable execution time rather than immediate bulk confirmation. We will continue progressing through the validations and share any blockers or observations identified during testing.
+Please note that the requested access is limited to the UAT environment only (no PROD/DR impact).
+
+As the related testing activities are currently in progress and tied to the new core onboarding effort, timely approval would be appreciated to allow the teams to proceed accordingly and avoid further delays in validation activities.
+
+Regards,
+[Your Name]
