@@ -1,9 +1,12 @@
-Quick update regarding the Acunetix UAT setup delay.
+Hi [Senior Manager Name],
 
-I completed end-to-end troubleshooting today across the network, firewall, application, and server layers to isolate the issue. Network connectivity and firewall access over HTTPS/443 were validated successfully with the network team, however the application itself was not coming up.
+During validation and troubleshooting of the Acunetix UAT setup, it was identified that the current UAT clone only contains the base OS/application volume (C:), while the Acunetix runtime/application components in PROD reside on a secondary application volume (E:).
 
-Further investigation on the UAT server showed that the Acunetix services are configured against paths on a secondary application volume (E:) which currently does not exist on the UAT clone. Comparing against PROD confirmed that the Acunetix application/runtime components reside on E: in PROD, while the current UAT setup only contains the OS/application base volume (C:).
+As a result, the Acunetix services on UAT are currently unable to start since their configured paths reference the missing E: volume.
 
-As a result, the Acunetix services fail to start since the configured E:\ paths are missing on UAT.
+To proceed with the planned UAT upgrade validation and testing activities prior to PROD implementation, an additional E: drive with approximately 200 GB capacity is required on the UAT server for the necessary Acunetix application/runtime components.
 
-Before proceeding further, I wanted to check with you whether you would prefer that I go ahead and raise a request to provision/restore the E: volume on UAT, or if you would like to discuss with the OS team first given the additional storage requirement.
+If aligned, I will proceed with raising the required request accordingly.
+
+Regards,
+[Your Name]
