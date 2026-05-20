@@ -1,22 +1,12 @@
-Acunetix UAT Validation – Root Cause Identified
-
 Hi [Manager Name],
 
-Quick update regarding the Acunetix UAT setup and current testing delay.
+Quick update regarding the Acunetix UAT setup.
 
-I completed further troubleshooting today across the network, application, and server layers to isolate the issue preventing access to the UAT Acunetix instance. Network/firewall connectivity was verified successfully with the network team over HTTPS/443, however the application itself was not coming up.
+I completed troubleshooting today and identified that the issue is not firewall/network related. The UAT server is currently missing the secondary application volume (E:) that exists on PROD and contains the Acunetix application/runtime components.
 
-After validating the services locally on the UAT server, I identified that both Acunetix services were failing due to missing binaries/paths. Comparing against the PROD server confirmed that the current UAT clone only contains the OS/application base volume (C:), while the actual Acunetix runtime/application components reside on a secondary application volume (E:) in PROD, which is currently not present on UAT.
+As a result, the Acunetix services are unable to start since their configured paths point to E:\ locations that do not currently exist on the UAT server.
 
-As a result:
-
-* Acunetix services point to E:\ paths that do not exist on the UAT server
-* services fail to start with Windows “Error 2 – system cannot find the file specified”
-* application access/testing and upgrade activities cannot proceed until the secondary volume is provisioned/restored
-
-From the validation performed, this does not appear to be a firewall/network issue, but rather an incomplete application volume dependency on the cloned UAT server.
-
-I am currently preparing the next steps with the relevant teams to address the missing volume dependency so that UAT validation and subsequent upgrade activities can proceed.
+I wanted to check with you first before proceeding further — would you prefer that I go ahead and raise a request for provisioning/restoring the E: volume on UAT, or would you like to discuss with the relevant teams first given the storage considerations?
 
 Regards,
 [Your Name]
