@@ -1,5 +1,1 @@
-As discussed yesterday, we are now able to successfully access the UAT Acunetix instance via the server IP using the local account credentials shared over Teams, and SSO has been disabled for the UAT testing activity.
-
-During the upgrade validation, it was identified that outbound connectivity/proxy handling is required for the upgrade process to retrieve the necessary packages from the vendor endpoints. We are currently evaluating the most suitable approach, whether through the required proxy access or via the available offline/manual upgrade method.
-
-At this stage, the target is to complete the UAT upgrade activity by 25 May, following which we will be in a better position to confirm the PROD upgrade timeline.
+Just to align before I proceed with the proxy request — for the UAT upgrade activity, the required outbound destination is `*.amazonaws.com` over HTTPS/443 as discussed yesterday, correct?
