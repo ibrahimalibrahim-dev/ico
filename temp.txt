@@ -1,1 +1,3 @@
-Just to align before I proceed with the proxy request — for the UAT upgrade activity, the required outbound destination is `*.amazonaws.com` over HTTPS/443 as discussed yesterday, correct?
+Hi [Name], as discussed, the proxy access request for *.amazonaws.com over HTTPS/443 has now been submitted to ISD for the UAT Acunetix upgrade activity and we are currently awaiting their response.
+
+Sharing for visibility — please let me know if there are any adjustments required from the application side based on the submitted scope.
