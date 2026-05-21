@@ -1,12 +1,5 @@
-Hi [Senior Manager Name],
+As discussed yesterday, we are now able to successfully access the UAT Acunetix instance via the server IP using the local account credentials shared over Teams, and SSO has been disabled for the UAT testing activity.
 
-During validation and troubleshooting of the Acunetix UAT setup, it was identified that the current UAT clone only contains the base OS/application volume (C:), while the Acunetix runtime/application components in PROD reside on a secondary application volume (E:).
+During the upgrade validation, it was identified that outbound connectivity/proxy handling is required for the upgrade process to retrieve the necessary packages from the vendor endpoints. We are currently evaluating the most suitable approach, whether through the required proxy access or via the available offline/manual upgrade method.
 
-As a result, the Acunetix services on UAT are currently unable to start since their configured paths reference the missing E: volume.
-
-To proceed with the planned UAT upgrade validation and testing activities prior to PROD implementation, an additional E: drive with approximately 200 GB capacity is required on the UAT server for the necessary Acunetix application/runtime components.
-
-If aligned, I will proceed with raising the required request accordingly.
-
-Regards,
-[Your Name]
+At this stage, the target is to complete the UAT upgrade activity by 25 May, following which we will be in a better position to confirm the PROD upgrade timeline.
