@@ -1,3 +1,31 @@
-Hi [Name], as discussed, the proxy access request for *.amazonaws.com over HTTPS/443 has now been submitted to ISD for the UAT Acunetix upgrade activity and we are currently awaiting their response.
+Subject: Additional Proxy/Firewall Requirements for Acunetix Upgrade
 
-Sharing for visibility — please let me know if there are any adjustments required from the application side based on the submitted scope.
+Following the previously approved outbound access to `*.amazonaws.com` (TCP/443), the Acunetix upgrade process is still failing with HTTP `424 Failed Dependency` errors.
+
+Further investigation indicates that the Acunetix updater requires connectivity not only to AWS-hosted package repositories, but also to multiple Acunetix/Invicti service endpoints responsible for update metadata retrieval, licensing validation, dependency management, AcuMonitor services, and discovery/SCA functionality.
+
+Additionally, DNS resolution attempts for the Acunetix service endpoints from the UAT server currently time out, indicating the required destinations are not presently reachable from the environment.
+
+As per Acunetix official documentation, kindly allow outbound HTTPS connectivity (TCP/443) from the Acunetix UAT server to the following destinations:
+
+| Destination                                 | Port | Purpose                                                |
+| ------------------------------------------- | ---- | ------------------------------------------------------ |
+| `updates.acunetix.com`                      | 443  | Acunetix software updates and update metadata          |
+| `erp.acunetix.com`                          | 443  | Licensing and activation services                      |
+| `*.amazonaws.com`                           | 443  | Download location for update packages and dependencies |
+| `bxss.me`                                   | 443  | AcuMonitor out-of-band vulnerability testing           |
+| `sb.bxss.me`                                | 443  | Safe browsing verification services                    |
+| `sca.invicti.com`                           | 443  | Software Composition Analysis (SCA) services           |
+| `jwtsigner.invicti.com`                     | 443  | Discovery/authentication token services                |
+| `discovery-service.invicti.com`             | 443  | API discovery and related services                     |
+| `bxss.s3.dualstack.us-west-2.amazonaws.com` | 443  | AcuMonitor AWS backend storage/service endpoint        |
+
+Request Scope:
+
+* Source: Acunetix UAT server only
+* Direction: Outbound only
+* Protocol: HTTPS (TCP/443)
+* Duration: Temporary for upgrade/testing activity
+
+Note:
+The initially approved `*.amazonaws.com` rule alone appears insufficient, as the upgrade workflow depends on additional Acunetix/Invicti service endpoints prior to package retrieval, resulting in dependency failures during the upgrade process.
