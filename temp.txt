@@ -1,5 +1,1 @@
-Hi [Name], we are currently progressing the Acunetix UAT upgrade activity and working through the remaining environment/access dependencies identified during validation.
-
-At this stage, the upgrade activity is still in progress in UAT and we are coordinating with the relevant teams accordingly before proceeding further toward PROD planning.
-
-In parallel, we are also continuing to review and support the outstanding pre-PROD PR/pipeline-related items currently under validation.
+I completed the requested proxy change and validated with Network that it was implemented. The upgrade is still returning 424 Failed Dependency. I also performed some connectivity testing and found that resolution/connectivity to the Acunetix endpoints appears unsuccessful from the server. Before I engage Acunetix Support, I wanted to review the findings with you and see if there are any additional checks you'd like me to perform.
