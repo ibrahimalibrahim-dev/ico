@@ -1,1 +1,1 @@
-I completed the requested proxy change and validated with Network that it was implemented. The upgrade is still returning 424 Failed Dependency. I also performed some connectivity testing and found that resolution/connectivity to the Acunetix endpoints appears unsuccessful from the server. Before I engage Acunetix Support, I wanted to review the findings with you and see if there are any additional checks you'd like me to perform.
+/Scan scheduled with ID:\s*([^\s]+)/
