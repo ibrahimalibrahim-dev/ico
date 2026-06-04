@@ -1,0 +1,60 @@
+/**
+ * Init Logo Slider
+ */
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for Splide and AutoScroll
+    const waitForSplide = setInterval(() => {
+        if (window.Splide) {
+            clearInterval(waitForSplide);
+
+            const logoSliders = document.querySelectorAll('.splide.logo-slider');
+
+            logoSliders.forEach((slider) => {
+                const sliderID = slider.getAttribute("id");
+                const itemsPerPage = parseInt(slider.dataset.itemsPerPage) || 5;
+                const scrollSpeed = parseFloat(slider.dataset.scrollSpeed) || 1;
+
+                const logoSplide = new Splide('#' + sliderID, {
+                    type: 'loop',
+                    drag: false,
+                    arrows: false,
+                    pagination: false,
+                    perPage: itemsPerPage,
+                    focus: 'center',
+                    autoWidth: false,
+                    gap: '2rem',
+                    autoScroll: {
+                        speed: scrollSpeed,
+                        pauseOnHover: false,
+                        pauseOnFocus: false,
+                        rewind: false,
+                        autoStart: true
+                    },
+                    breakpoints: {
+                        640: {
+                            perPage: Math.min(2, itemsPerPage),
+                            gap: '1rem'
+                        },
+                        1024: {
+                            perPage: Math.min(3, itemsPerPage),
+                            gap: '1.5rem'
+                        },
+                        1280: {
+                            perPage: Math.min(4, itemsPerPage),
+                            gap: '2rem'
+                        }
+                    }
+                });
+
+                // Check AutoScroll extension for different namespaces
+                if (window.splide && window.splide.Extensions && window.splide.Extensions.AutoScroll) {
+                    logoSplide.mount({ AutoScroll: window.splide.Extensions.AutoScroll });
+                } else if (window.Splide && window.Splide.Extensions && window.Splide.Extensions.AutoScroll) {
+                    logoSplide.mount({ AutoScroll: window.Splide.Extensions.AutoScroll });
+                } else {
+                    logoSplide.mount();
+                }
+            });
+        }
+    }, 100);
+});
