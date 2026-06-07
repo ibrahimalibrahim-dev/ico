@@ -1,1 +1,1 @@
-/Scan scheduled with ID:\s*([^\s]+)/
+Acunetix is failing TLS certificate validation when connecting to updates.acunetix.com
