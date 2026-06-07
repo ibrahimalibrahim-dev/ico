@@ -1,67 +1,25 @@
-Proxy / Firewall Allow List Justification
+Subject:
 
-Justification:
+Allow Connectivity from Acunetix Production Server to Corporate Proxy Server
 
-As part of the Acunetix On-Premises upgrade process, outbound HTTPS connectivity is required from the Acunetix Production server to Acunetix/Invicti update and service endpoints.
+Description:
 
-The same connectivity requirements were validated and tested successfully within the UAT environment. During UAT testing, the upgrade process initially failed due to missing outbound access to required Acunetix/Invicti service endpoints. Once the required proxy destinations were permitted, the update workflow was able to proceed successfully.
+As part of the planned Acunetix Production upgrade activity, outbound connectivity from the Acunetix Production server to the corporate proxy server is required.
 
-The following destinations are required to support product updates, licensing validation, telemetry communication, dependency retrieval, and related Acunetix services:
-
-* updates.acunetix.com
-* telemetry.invicti.com
-* erp.acunetix.com
-* *.amazonaws.com
-
-Protocol:
-
-* HTTPS (TCP/443)
-
-Direction:
-
-* Outbound only
-
-Purpose:
-
-* Acunetix software updates
-* Dependency retrieval
-* Product telemetry and health communication
-* Licensing and update validation
-
-This request is based on successful UAT validation and is required to support the planned Acunetix Production upgrade activity.
-
-
-Network Service Check / SSL Inspection Bypass Justification
-
-Justification:
-
-During Acunetix UAT upgrade testing, outbound connectivity to required Acunetix/Invicti service endpoints was successfully established; however, update operations continued to fail due to TLS certificate validation errors.
-
-Application logs confirmed certificate verification failures when connecting to Acunetix update services, specifically indicating:
-
-* SSL_CERTIFICATE_VERIFY_FAILED
-* unable to get local issuer certificate
-* self-signed certificate in certificate chain
-
-Investigation determined that HTTPS/TLS inspection applied to the outbound traffic was causing Acunetix to reject the presented certificate chain during update validation.
-
-Following exclusion of the required Acunetix/Invicti endpoints from SSL/TLS inspection within UAT, update functionality completed successfully and validation scans were executed without issue.
+During UAT testing, the Acunetix update process was unable to communicate with external update services until connectivity to the corporate proxy server was established. Following implementation of the server-to-proxy access and completion of the required proxy and SSL inspection configurations, the Acunetix update process completed successfully.
 
 Request:
 
-Please exclude the following destinations from SSL/TLS inspection/decryption for outbound traffic originating from the Acunetix Production server:
+Please allow outbound connectivity from the Acunetix Production server to the corporate proxy server using the approved proxy IP address(es) and port(s).
 
-* updates.acunetix.com
-* telemetry.invicti.com
-* erp.acunetix.com
-* *.amazonaws.com
+Direction:
 
-Reason:
+* Outbound from Acunetix Production server
 
-Acunetix performs strict certificate validation against the remote service certificate chain. SSL/TLS inspection modifies the certificate presented to the application, resulting in certificate validation failures and preventing successful update operations.
+Purpose:
 
-This request is based on successful UAT validation and is required to support the planned Production upgrade.
+* Routing outbound Acunetix update, licensing, telemetry, and service communications through the organization's approved internet access path
 
+Justification:
 
-
-Network Service Check / SSL Inspection Bypass Justification
+This configuration was validated successfully in the UAT environment and is required to support the upcoming Acunetix Production upgrade and ongoing product maintenance activities.
