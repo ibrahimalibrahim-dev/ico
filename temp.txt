@@ -1,25 +1,24 @@
-Subject:
+Subject: Acunetix Production Server – Patching Status Verification
 
-Allow Connectivity from Acunetix Production Server to Corporate Proxy Server
+Dear Team,
 
-Description:
+I hope you are doing well.
 
-As part of the planned Acunetix Production upgrade activity, outbound connectivity from the Acunetix Production server to the corporate proxy server is required.
+As part of the ongoing Acunetix Production upgrade activities, we are currently preparing for the upcoming change implementation and related CAB submissions.
 
-During UAT testing, the Acunetix update process was unable to communicate with external update services until connectivity to the corporate proxy server was established. Following implementation of the server-to-proxy access and completion of the required proxy and SSL inspection configurations, the Acunetix update process completed successfully.
+During a recent review, it was noted that the Acunetix Production server may not have received the latest scheduled Windows patching cycle. Since completion of the server patching is a prerequisite before proceeding with the Acunetix application upgrade, I would appreciate your assistance in confirming the current patching status of the server.
 
-Request:
+Could you please advise:
 
-Please allow outbound connectivity from the Acunetix Production server to the corporate proxy server using the approved proxy IP address(es) and port(s).
+* Whether the Acunetix Production server was included in the most recent patching activity.
+* If patching was not performed, the reason for exclusion or any issues encountered.
+* The planned timeline for patching the server, if still pending.
 
-Direction:
+The Acunetix upgrade is part of an ongoing core project, and we are planning the subsequent activities based on successful completion and validation of the operating system patching. Your support will help us coordinate the remaining project milestones and CAB scheduling accordingly.
 
-* Outbound from Acunetix Production server
+Please let me know if any additional information is required from my side.
 
-Purpose:
+Thank you for your support and assistance.
 
-* Routing outbound Acunetix update, licensing, telemetry, and service communications through the organization's approved internet access path
-
-Justification:
-
-This configuration was validated successfully in the UAT environment and is required to support the upcoming Acunetix Production upgrade and ongoing product maintenance activities.
+Kind regards,
+[Your Name]
