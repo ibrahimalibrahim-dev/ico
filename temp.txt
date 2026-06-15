@@ -1,24 +1,15 @@
-Subject: Acunetix Production Server – Patching Status Verification
+Dear [Executive Manager],
 
-Dear Team,
+Approval is kindly requested to disable TLS/SSL inspection for the Acunetix UAT server when accessing the required Acunetix update-related domains.
 
-I hope you are doing well.
+This configuration is required to support Acunetix update and upgrade activities in accordance with the vendor's documented connectivity requirements.
 
-As part of the ongoing Acunetix Production upgrade activities, we are currently preparing for the upcoming change implementation and related CAB submissions.
+The requested exclusion is limited to the approved Acunetix update-related domains only.
 
-During a recent review, it was noted that the Acunetix Production server may not have received the latest scheduled Windows patching cycle. Since completion of the server patching is a prerequisite before proceeding with the Acunetix application upgrade, I would appreciate your assistance in confirming the current patching status of the server.
+Your approval is appreciated.
 
-Could you please advise:
-
-* Whether the Acunetix Production server was included in the most recent patching activity.
-* If patching was not performed, the reason for exclusion or any issues encountered.
-* The planned timeline for patching the server, if still pending.
-
-The Acunetix upgrade is part of an ongoing core project, and we are planning the subsequent activities based on successful completion and validation of the operating system patching. Your support will help us coordinate the remaining project milestones and CAB scheduling accordingly.
-
-Please let me know if any additional information is required from my side.
-
-Thank you for your support and assistance.
+Thank you.
 
 Kind regards,
+
 [Your Name]
