@@ -1,15 +1,16 @@
-Dear [Executive Manager],
+Confirmation of Proxy and TLS Inspection Configuration for Acunetix UAT
 
-Approval is kindly requested to disable TLS/SSL inspection for the Acunetix UAT server when accessing the required Acunetix update-related domains.
+Hi Team,
 
-This configuration is required to support Acunetix update and upgrade activities in accordance with the vendor's documented connectivity requirements.
+Ahead of today's troubleshooting session with the vendor, I would appreciate your confirmation that the configuration requested under ticket [Ticket Number] has been fully implemented.
 
-The requested exclusion is limited to the approved Acunetix update-related domains only.
+Specifically, could you please confirm that all domains listed in the approved ticket have:
 
-Your approval is appreciated.
+* Outbound proxy access enabled.
+* TLS/SSL inspection disabled (TLS bypass applied).
 
-Thank you.
+During update attempts, the Acunetix backend continues to report TLS certificate verification errors when connecting to update endpoints, including an AWS S3 endpoint (`*.s3.dualstack.us-east-1.amazonaws.com`).
 
-Kind regards,
+I would like to confirm the current network configuration before continuing the investigation with the vendor.
 
-[Your Name]
+Thank you for your support.
