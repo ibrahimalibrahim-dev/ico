@@ -1,16 +1,34 @@
-Confirmation of Proxy and TLS Inspection Configuration for Acunetix UAT
+Migration of PR Validation Environment to Secure Works
 
 Hi Team,
 
-Ahead of today's troubleshooting session with the vendor, I would appreciate your confirmation that the configuration requested under ticket [Ticket Number] has been fully implemented.
+Following the discussion and management approval, we will proceed with migrating the PR validation activities to the Secure Works environment due to the ongoing CBS performance and testing activities on the current PR server.
 
-Specifically, could you please confirm that all domains listed in the approved ticket have:
+As this is a new deployment environment, a number of prerequisite configurations will be required before application validation can resume. As an initial step, could you please confirm the following:
 
-* Outbound proxy access enabled.
-* TLS/SSL inspection disabled (TLS bypass applied).
+1. The Java version installed on the Secure Works server is compatible with the application requirements.
+2. The configured `JAVA_HOME` is set appropriately for the installed Java version.
+3. The application deployment directory is available and confirmed (e.g. `<APPLICATION_DEPLOYMENT_PATH>`).
+4. The shared library/upload directory is available and confirmed (e.g. `<SHARED_LIBRARY_PATH>`).
 
-During update attempts, the Acunetix backend continues to report TLS certificate verification errors when connecting to update endpoints, including an AWS S3 endpoint (`*.s3.dualstack.us-east-1.amazonaws.com`).
+Once the above has been confirmed, we will proceed with the remaining environment-specific configuration activities (e.g. UCD agent installation, connectivity, firewall validation, and deployment verification) before continuing PR validation.
 
-I would like to confirm the current network configuration before continuing the investigation with the vendor.
+This will also provide traceability of the environment baseline for subsequent testing activities.
 
-Thank you for your support.
+Kindly let us know once the above prerequisites have been completed so that we can proceed with the next phase.
+
+Regards,
+
+[Your Name]
+
+
+
+Following the discussion and management approval, we will proceed with migrating the PR validation activities to the Secure Works environment...
+
+Before proceeding, could you please confirm the intended purpose/classification of the Secure Works environment (e.g. PR/Test, Pre-Production, or Production) so that the deployment and validation activities can be aligned accordingly.
+
+As this is a new deployment environment, could you also please confirm:
+
+Java version...
+JAVA_HOME...
+...
