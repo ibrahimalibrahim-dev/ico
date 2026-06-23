@@ -1,34 +1,19 @@
-Migration of PR Validation Environment to Secure Works
+Reassigning Existing Projects from cxadmin to a Service Account
 
-Hi Team,
+Dear Checkmarx Support,
 
-Following the discussion and management approval, we will proceed with migrating the PR validation activities to the Secure Works environment due to the ongoing CBS performance and testing activities on the current PR server.
+We would like to inquire about the feasibility of reassigning existing Checkmarx SAST projects from the **cxadmin** account to a dedicated service account.
 
-As this is a new deployment environment, a number of prerequisite configurations will be required before application validation can resume. As an initial step, could you please confirm the following:
+Could you please advise:
 
-1. The Java version installed on the Secure Works server is compatible with the application requirements.
-2. The configured `JAVA_HOME` is set appropriately for the installed Java version.
-3. The application deployment directory is available and confirmed (e.g. `<APPLICATION_DEPLOYMENT_PATH>`).
-4. The shared library/upload directory is available and confirmed (e.g. `<SHARED_LIBRARY_PATH>`).
+* Is this supported?
+* If so, what is the recommended procedure?
+* Can multiple projects be updated in bulk, or must they be modified individually?
+* Will existing project configurations, scan history, and results remain intact after the change?
+* Are there any prerequisites, limitations, or considerations we should be aware of?
 
-Once the above has been confirmed, we will proceed with the remaining environment-specific configuration activities (e.g. UCD agent installation, connectivity, firewall validation, and deployment verification) before continuing PR validation.
+Our objective is to transition the existing projects to a service account without recreating or reconfiguring them.
 
-This will also provide traceability of the environment baseline for subsequent testing activities.
+Thank you, and we look forward to your guidance.
 
-Kindly let us know once the above prerequisites have been completed so that we can proceed with the next phase.
-
-Regards,
-
-[Your Name]
-
-
-
-Following the discussion and management approval, we will proceed with migrating the PR validation activities to the Secure Works environment...
-
-Before proceeding, could you please confirm the intended purpose/classification of the Secure Works environment (e.g. PR/Test, Pre-Production, or Production) so that the deployment and validation activities can be aligned accordingly.
-
-As this is a new deployment environment, could you also please confirm:
-
-Java version...
-JAVA_HOME...
-...
+Kind regards,
