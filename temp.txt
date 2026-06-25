@@ -1,19 +1,9 @@
-Reassigning Existing Projects from cxadmin to a Service Account
+Hi [Name],
 
-Dear Checkmarx Support,
+Thank you for confirming that the proxy rule and TLS inspection bypass are in place.
 
-We would like to inquire about the feasibility of reassigning existing Checkmarx SAST projects from the **cxadmin** account to a dedicated service account.
+I checked the Local Machine Trusted Root Certification Authorities store and multiple certificates are present. Could you please advise which proxy/root/intermediate certificate I should verify so I can confirm whether it is trusted on the server?
 
-Could you please advise:
+Additionally, the current Acunetix backend error is being reported against an AWS S3 endpoint (`*.s3.dualstack.us-east-1.amazonaws.com`). Could you please confirm whether the TLS inspection bypass applies to the associated AWS download endpoints as well, and not only the Acunetix/Invicti domains?
 
-* Is this supported?
-* If so, what is the recommended procedure?
-* Can multiple projects be updated in bulk, or must they be modified individually?
-* Will existing project configurations, scan history, and results remain intact after the change?
-* Are there any prerequisites, limitations, or considerations we should be aware of?
-
-Our objective is to transition the existing projects to a service account without recreating or reconfiguring them.
-
-Thank you, and we look forward to your guidance.
-
-Kind regards,
+Thank you.
