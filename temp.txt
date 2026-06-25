@@ -1,9 +1,14 @@
-Hi [Name],
+Dependency Check Report Attachment Size Limitation
 
-Thank you for confirming that the proxy rule and TLS inspection bypass are in place.
 
-I checked the Local Machine Trusted Root Certification Authorities store and multiple certificates are present. Could you please advise which proxy/root/intermediate certificate I should verify so I can confirm whether it is trusted on the server?
+Hello Team,
 
-Additionally, the current Acunetix backend error is being reported against an AWS S3 endpoint (`*.s3.dualstack.us-east-1.amazonaws.com`). Could you please confirm whether the TLS inspection bypass applies to the associated AWS download endpoints as well, and not only the Acunetix/Invicti domains?
+We have successfully onboarded the Jira ticket creation functionality across the pipelines and confirmed that ticket creation is working as expected.
+
+During testing, we identified that one application's Dependency Check report exceeds the Jira attachment size limit (report size > 80 MiB). We discussed this with the Jira administration team, who advised that increasing the attachment limit is not preferred due to storage and misuse concerns. The related Jira ticket is attached for reference.
+
+As a temporary workaround, we have implemented error handling in the pipeline so that if the report exceeds the configured threshold (currently 20 MiB), the attachment step is skipped while the remaining post-build actions (including Jira ticket creation and email notifications) continue successfully.
+
+Please let us know your preferred approach for handling oversized reports going forward. We would be interested in hearing any suggestions you may have.
 
 Thank you.
