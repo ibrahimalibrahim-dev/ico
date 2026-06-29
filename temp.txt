@@ -1,14 +1,77 @@
-Dependency Check Report Attachment Size Limitation
+Based on what you've collected, here's a clean summary.
 
+## Server Specifications
 
-Hello Team,
+| Item             | Value                                       |
+| ---------------- | ------------------------------------------- |
+| Hostname         | *(hostname confirmed)*                      |
+| IP Address       | *(use the IP you obtained)*                 |
+| Operating System | Red Hat Enterprise Linux (RHEL) 8.10        |
+| Architecture     | x86_64 (64-bit capable)                     |
+| CPU              | 12 vCPUs                                    |
+| Sockets          | 2                                           |
+| Cores per Socket | 6                                           |
+| Threads per Core | 1                                           |
+| Total Memory     | 46 GiB RAM                                  |
+| Swap             | 31 GiB                                      |
+| Number of Disks  | 5 disks (`sda`, `sdb`, `sdc`, `sdd`, `sde`) |
 
-We have successfully onboarded the Jira ticket creation functionality across the pipelines and confirmed that ticket creation is working as expected.
+### Disk Layout
 
-During testing, we identified that one application's Dependency Check report exceeds the Jira attachment size limit (report size > 80 MiB). We discussed this with the Jira administration team, who advised that increasing the attachment limit is not preferred due to storage and misuse concerns. The related Jira ticket is attached for reference.
+* **sda**
 
-As a temporary workaround, we have implemented error handling in the pipeline so that if the report exceeds the configured threshold (currently 20 MiB), the attachment step is skipped while the remaining post-build actions (including Jira ticket creation and email notifications) continue successfully.
+  * Boot partition (`sda1`)
+  * LVM partition (`sda2`) containing logical volumes such as:
 
-Please let us know your preferred approach for handling oversized reports going forward. We would be interested in hearing any suggestions you may have.
+    * root (`/`)
+    * swap
+    * `/var`
+    * other RHEL logical volumes
+* **sdb**
 
-Thank you.
+  * Member of LVM volume group `vg_u01`
+* **sdc**
+
+  * Member of LVM volume group `vg_u01`
+* **sdd**
+
+  * Member of LVM volume group `vg_u01`
+* **sde**
+
+  * Member of LVM volume group `vg_u01`
+
+This indicates the server is using **LVM (Logical Volume Manager)**, with four additional disks contributing to a shared logical volume.
+
+---
+
+## Ticket Summary
+
+**Provision Disaster Recovery (DR) server for Bitbucket Production**
+
+---
+
+## Description
+
+Provision a Disaster Recovery (DR) server by cloning the existing Bitbucket Production server configuration.
+
+Please provision the new server with specifications matching the production environment:
+
+* Hostname/IP of source server: *(provide hostname/IP)*
+* Operating System: Red Hat Enterprise Linux 8.10
+* CPU: 12 vCPUs (2 sockets × 6 cores)
+* Memory: 46 GiB RAM
+* Swap: 31 GiB
+* Storage:
+
+  * 5 disks (`sda`–`sde`)
+  * LVM-based storage configuration matching the production server
+
+The objective is to create a DR environment that mirrors the current production server configuration.
+
+---
+
+## Purpose
+
+Provision a Disaster Recovery server for the existing Bitbucket Production environment to support business continuity and disaster recovery requirements.
+
+This wording is concise, gives the OS team the information they need, and clearly states the objective without prescribing unnecessary implementation details.
