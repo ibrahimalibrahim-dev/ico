@@ -1,77 +1,13 @@
-Based on what you've collected, here's a clean summary.
+Hi Team,
 
-## Server Specifications
+As discussed, we are preparing a new production environment as part of the planned Nexus Repository upgrade and migration.
 
-| Item             | Value                                       |
-| ---------------- | ------------------------------------------- |
-| Hostname         | *(hostname confirmed)*                      |
-| IP Address       | *(use the IP you obtained)*                 |
-| Operating System | Red Hat Enterprise Linux (RHEL) 8.10        |
-| Architecture     | x86_64 (64-bit capable)                     |
-| CPU              | 12 vCPUs                                    |
-| Sockets          | 2                                           |
-| Cores per Socket | 6                                           |
-| Threads per Core | 1                                           |
-| Total Memory     | 46 GiB RAM                                  |
-| Swap             | 31 GiB                                      |
-| Number of Disks  | 5 disks (`sda`, `sdb`, `sdc`, `sdd`, `sde`) |
+We would like to request provisioning of the database required for the new Nexus Repository deployment. The database will be configured on the new production server once it has been provisioned.
 
-### Disk Layout
+For sizing purposes, please note that the current Nexus Repository environment has approximately **3 TB** of repository storage (blob store), with continued growth expected. We anticipate an initial storage requirement of approximately **4 TB**, with the ability to expand to **8 TB** in the future if required.
 
-* **sda**
+Could you please advise on the recommended database platform, version, and specifications for this deployment, and proceed with provisioning accordingly? Once available, please share the connection details (hostname, port, database/service name, and any other relevant information) so we can complete the Nexus configuration and connectivity testing.
 
-  * Boot partition (`sda1`)
-  * LVM partition (`sda2`) containing logical volumes such as:
+Please let us know if any additional information is required from our side.
 
-    * root (`/`)
-    * swap
-    * `/var`
-    * other RHEL logical volumes
-* **sdb**
-
-  * Member of LVM volume group `vg_u01`
-* **sdc**
-
-  * Member of LVM volume group `vg_u01`
-* **sdd**
-
-  * Member of LVM volume group `vg_u01`
-* **sde**
-
-  * Member of LVM volume group `vg_u01`
-
-This indicates the server is using **LVM (Logical Volume Manager)**, with four additional disks contributing to a shared logical volume.
-
----
-
-## Ticket Summary
-
-**Provision Disaster Recovery (DR) server for Bitbucket Production**
-
----
-
-## Description
-
-Provision a Disaster Recovery (DR) server by cloning the existing Bitbucket Production server configuration.
-
-Please provision the new server with specifications matching the production environment:
-
-* Hostname/IP of source server: *(provide hostname/IP)*
-* Operating System: Red Hat Enterprise Linux 8.10
-* CPU: 12 vCPUs (2 sockets × 6 cores)
-* Memory: 46 GiB RAM
-* Swap: 31 GiB
-* Storage:
-
-  * 5 disks (`sda`–`sde`)
-  * LVM-based storage configuration matching the production server
-
-The objective is to create a DR environment that mirrors the current production server configuration.
-
----
-
-## Purpose
-
-Provision a Disaster Recovery server for the existing Bitbucket Production environment to support business continuity and disaster recovery requirements.
-
-This wording is concise, gives the OS team the information they need, and clearly states the objective without prescribing unnecessary implementation details.
+Thank you.
