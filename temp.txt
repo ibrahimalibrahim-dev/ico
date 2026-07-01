@@ -1,13 +1,17 @@
-Hi Team,
+Dear ISD Team,
 
-As discussed, we are preparing a new production environment as part of the planned Nexus Repository upgrade and migration.
+We are planning to provision a Disaster Recovery (DR) server for the existing Bitbucket Production environment by cloning the current production server configuration, as there is currently no DR instance available.
 
-We would like to request provisioning of the database required for the new Nexus Repository deployment. The database will be configured on the new production server once it has been provisioned.
+We would like to request your approval to proceed with this activity.
 
-For sizing purposes, please note that the current Nexus Repository environment has approximately **3 TB** of repository storage (blob store), with continued growth expected. We anticipate an initial storage requirement of approximately **4 TB**, with the ability to expand to **8 TB** in the future if required.
+Please note the following:
 
-Could you please advise on the recommended database platform, version, and specifications for this deployment, and proceed with provisioning accordingly? Once available, please share the connection details (hostname, port, database/service name, and any other relevant information) so we can complete the Nexus configuration and connectivity testing.
+* The Bitbucket server does not host a local application database.
+* Repository data and the application database are stored on external storage/services and are not part of the server clone.
+* As no production database or sensitive data will be replicated as part of this server cloning activity, data masking is not required.
 
-Please let us know if any additional information is required from our side.
+The purpose of this activity is to establish a DR server that mirrors the production server configuration to support business continuity and disaster recovery.
+
+Kindly review and provide your approval to proceed. Please let us know if you require any additional information.
 
 Thank you.
