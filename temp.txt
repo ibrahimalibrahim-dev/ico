@@ -1,41 +1,11 @@
-IP address or URL of your Acunetix multi-engine installation on (default) port 3443
+Hi [Name],
 
-API calls to the AcuMonitor service for out-of-band vulnerability checking
+Thank you for reaching out, and it's a pleasure to meet you. I appreciate you taking the time to introduce yourself and your initiative to align with our priorities.
 
-https://bxss.me
+At the moment, we're focused on several ongoing initiatives, so I'll have to defer scheduling an alignment meeting. If the need arises in the future, I'll be happy to reach out and arrange a suitable time.
 
-API calls to the safe browsing service
+Thank you again, and I look forward to working with you.
 
-https://sb.bxss.me
+Best regards,
 
-API calls to the software composition analysis service
-
-https://sca.invicti.com
-
-AcuMonitor S3 bucket for out-of-band vulnerability checking
-
-https://bxss.s3.dualstack.us-west-2.amazonaws.com
-
-Access Token for the Invicti Discovery Service
-
-https://jwtsigner.invicti.com
-
-API calls to the Invicti Discovery Service
-
-https://discovery-service.invicti.com
-
-Check for software updates
-
-https://updates.acunetix.com
-
-Downloading of update packages for the internal scanning agent
-
-https://*.amazonaws.com
-
-Scanning requests to your target
-
-IP address/URL for your target, including destination port
-
-API calls for Invicti licensing and target management
-
-https://erp.acunetix.com
+[Your Name]
