@@ -1,17 +1,41 @@
-Dear ISD Team,
+IP address or URL of your Acunetix multi-engine installation on (default) port 3443
 
-We are planning to provision a Disaster Recovery (DR) server for the existing Bitbucket Production environment by cloning the current production server configuration, as there is currently no DR instance available.
+API calls to the AcuMonitor service for out-of-band vulnerability checking
 
-We would like to request your approval to proceed with this activity.
+https://bxss.me
 
-Please note the following:
+API calls to the safe browsing service
 
-* The Bitbucket server does not host a local application database.
-* Repository data and the application database are stored on external storage/services and are not part of the server clone.
-* As no production database or sensitive data will be replicated as part of this server cloning activity, data masking is not required.
+https://sb.bxss.me
 
-The purpose of this activity is to establish a DR server that mirrors the production server configuration to support business continuity and disaster recovery.
+API calls to the software composition analysis service
 
-Kindly review and provide your approval to proceed. Please let us know if you require any additional information.
+https://sca.invicti.com
 
-Thank you.
+AcuMonitor S3 bucket for out-of-band vulnerability checking
+
+https://bxss.s3.dualstack.us-west-2.amazonaws.com
+
+Access Token for the Invicti Discovery Service
+
+https://jwtsigner.invicti.com
+
+API calls to the Invicti Discovery Service
+
+https://discovery-service.invicti.com
+
+Check for software updates
+
+https://updates.acunetix.com
+
+Downloading of update packages for the internal scanning agent
+
+https://*.amazonaws.com
+
+Scanning requests to your target
+
+IP address/URL for your target, including destination port
+
+API calls for Invicti licensing and target management
+
+https://erp.acunetix.com
