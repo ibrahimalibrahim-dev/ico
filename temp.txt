@@ -1,25 +1,11 @@
-Dear All,
+Request for Written Confirmation – Assigning Checkmarx SAST Scanner Role
 
-As part of our planned maintenance activities, we intend to upgrade the Acunetix server to the latest supported version.
+Dear Team,
 
-Proposed Maintenance Window
+A development team has requested that the **SAST Scanner** role be assigned to multiple developers in Checkmarx. This role would allow them to update vulnerability statuses to **Proposed Not Exploitable**, after which ISD would review and approve or reject the proposed status.
 
-Date: [Date]
-Time: [Start Time] – [End Time]
+As this involves granting additional permissions across multiple users, we require written confirmation from ISD before proceeding.
 
-Purpose
-The upgrade will apply the latest vendor-supported version, including security updates, bug fixes, and product enhancements.
+Kindly confirm whether we may proceed with assigning the **SAST Scanner** role to the requested users.
 
-Expected Service Impact
-
-The Acunetix application will be unavailable during the maintenance window.
-New vulnerability scans cannot be initiated while the upgrade is in progress.
-Existing development workflows and Jenkins pipelines are not expected to be impacted by this activity.
-
-Should you have any concerns or objections regarding the proposed maintenance window, kindly let us know by [date/time] so they may be considered prior to CAB submission.
-
-If no objections are received by the above deadline, we will proceed with submitting the change for CAB approval.
-
-Thank you for your cooperation.
-
-Kind regards,
+Thank you.
