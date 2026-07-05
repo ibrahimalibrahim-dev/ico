@@ -1,6 +1,25 @@
-Service Impact:
+Dear All,
+
+As part of our planned maintenance activities, we intend to upgrade the Acunetix server to the latest supported version.
+
+Proposed Maintenance Window
+
+Date: [Date]
+Time: [Start Time] – [End Time]
+
+Purpose
+The upgrade will apply the latest vendor-supported version, including security updates, bug fixes, and product enhancements.
+
+Expected Service Impact
 
 The Acunetix application will be unavailable during the maintenance window.
 New vulnerability scans cannot be initiated while the upgrade is in progress.
-Any scheduled scans during the maintenance window should be avoided or will be rescheduled as appropriate.
 Existing development workflows and Jenkins pipelines are not expected to be impacted by this activity.
+
+Should you have any concerns or objections regarding the proposed maintenance window, kindly let us know by [date/time] so they may be considered prior to CAB submission.
+
+If no objections are received by the above deadline, we will proceed with submitting the change for CAB approval.
+
+Thank you for your cooperation.
+
+Kind regards,
