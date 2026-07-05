@@ -1,11 +1,6 @@
-Hi [Name],
+Service Impact:
 
-Thank you for reaching out, and it's a pleasure to meet you. I appreciate you taking the time to introduce yourself and your initiative to align with our priorities.
-
-At the moment, we're focused on several ongoing initiatives, so I'll have to defer scheduling an alignment meeting. If the need arises in the future, I'll be happy to reach out and arrange a suitable time.
-
-Thank you again, and I look forward to working with you.
-
-Best regards,
-
-[Your Name]
+The Acunetix application will be unavailable during the maintenance window.
+New vulnerability scans cannot be initiated while the upgrade is in progress.
+Any scheduled scans during the maintenance window should be avoided or will be rescheduled as appropriate.
+Existing development workflows and Jenkins pipelines are not expected to be impacted by this activity.
