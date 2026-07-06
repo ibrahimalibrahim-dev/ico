@@ -1,47 +1,15 @@
-Upgrade Acunetix Production Server to the Latest Supported Version
+## Description / Justification
 
+This server is being provisioned as a new UAT environment for the migration and upgrade of the existing Nexus Repository production instance (v3.64 → 3.93.2). Upon successful validation and user acceptance testing, the same environment will be promoted to Production.
 
-Upgrade the existing Acunetix Production server to the latest supported version following successful UAT validation. The activity includes pre-upgrade backup, software upgrade, post-upgrade validation, and verification of vulnerability scanning functionality.
+The current production repository manages approximately **3 TB of artifact data**, requiring a dedicated filesystem for Nexus blob storage. The proposed design allocates `/u01` as the primary blob store with an initial capacity of **4 TB**, expandable to **8 TB** to support future repository growth.
 
+The operating system and application components are distributed across dedicated logical volumes to align with current production standards and ensure operational consistency:
 
+* `/` – OS (100 GB)
+* `/home`, `/tmp`, `/var`, `/var/log`, `/var/log/audit` – system separation for stability and logging isolation
+* `/u01` – Nexus blob store (4 TB)
 
-Upgrade is required to maintain vendor support, security updates, bug fixes, and product stability. The previous version was outdated, reducing confidence in vulnerability assessment results. The upgrade was requested to ensure the platform continues to provide reliable and supported vulnerability scanning services.
+Nexus Repository 3.93.2 will utilize an external **PostgreSQL database** for metadata storage (components, assets, users, and configuration), while artifact storage remains on the `/u01` filesystem.
 
-
-
-
-Select whichever category in your CAB most closely maps to Security Services, Application Security, Vulnerability Management, or Security Platforms. Avoid selecting Jenkins, Bitbucket, CI/CD, or Digital Banking unless Acunetix is formally part of those services.
-
-
-Restore the production server from the pre-upgrade backup. Estimated recovery time: approximately 10 minutes, followed by service validation.
-
-
-
-Confirm approved CAB window.
-Confirm successful UAT validation.
-Confirm required proxy and TLS configurations remain in place.
-Confirm no active vulnerability scans are running.
-OS Team to take a full server backup/snapshot prior to upgrade.
-Verify backup completed successfully.
-
-
-
-
-Confirm backup completion.
-Notify stakeholders that maintenance has commenced.
-Launch Acunetix upgrade.
-Monitor upgrade progress until completion.
-Verify installed version.
-Confirm Acunetix services are running.
-Execute update check.
-Perform a validation scan.
-Confirm platform health.
-Notify stakeholders that maintenance has completed successfully.
-
-
-
-Stop upgrade activity if validation fails.
-Restore the production server from the pre-upgrade backup.
-Verify Acunetix services start successfully.
-Validate platform accessibility.
-Notify stakeholders that rollback has been completed.
+The specification includes additional CPU (8 vCPU) and memory (16 GB RAM) to support migration activities (H2 export, indexing rebuilds, and repository cutover) and ensure stable production performance under increased load.
