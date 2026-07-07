@@ -1,24 +1,11 @@
-URGENT: Assistance Required to Recover Deleted Project After Team Deletion
+Install UCD Agent on Secure Works Server for PR Validation Environment
 
 
-Dear Checkmarx Support,
 
-We require your urgent assistance regarding an accidental deletion in our Checkmarx environment.
+A new Secure Works server has been designated as the PR validation environment.
 
-A team was deleted, and after confirming the action, we discovered that the associated project was also deleted. We had assumed the confirmation prompt was only for deleting the team and did not realize it would also permanently remove the project.
+As a prerequisite for application deployments via UrbanCode Deploy (UCD), kindly install the UCD Agent on the target server.
 
-We have confirmed that the project is no longer visible in the UI and have stopped making any further changes to the environment.
+The required firewall connectivity between the Secure Works server and the UCD server has already been arranged. Once the agent installation is complete, please provide confirmation so that the remaining environment configuration and deployment validation activities can proceed.
 
-Could you please advise:
-
-* Whether the deleted project can be recovered.
-* If there is any supported recovery procedure (database-level or otherwise).
-* Whether recovery from backup is the only available option.
-* If you require any additional information (Checkmarx version, project name, logs, etc.) to assist with the recovery.
-
-As this is a production environment, we would appreciate your urgent guidance at your earliest convenience.
-
-Thank you.
-
-Kind regards,
-Ibrahim
+If any additional information (e.g. UCD server details, agent package, installation directory, or service account) is required, please advise.
