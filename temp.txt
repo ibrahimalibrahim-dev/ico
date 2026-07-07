@@ -1,15 +1,24 @@
-## Description / Justification
+URGENT: Assistance Required to Recover Deleted Project After Team Deletion
 
-This server is being provisioned as a new UAT environment for the migration and upgrade of the existing Nexus Repository production instance (v3.64 → 3.93.2). Upon successful validation and user acceptance testing, the same environment will be promoted to Production.
 
-The current production repository manages approximately **3 TB of artifact data**, requiring a dedicated filesystem for Nexus blob storage. The proposed design allocates `/u01` as the primary blob store with an initial capacity of **4 TB**, expandable to **8 TB** to support future repository growth.
+Dear Checkmarx Support,
 
-The operating system and application components are distributed across dedicated logical volumes to align with current production standards and ensure operational consistency:
+We require your urgent assistance regarding an accidental deletion in our Checkmarx environment.
 
-* `/` – OS (100 GB)
-* `/home`, `/tmp`, `/var`, `/var/log`, `/var/log/audit` – system separation for stability and logging isolation
-* `/u01` – Nexus blob store (4 TB)
+A team was deleted, and after confirming the action, we discovered that the associated project was also deleted. We had assumed the confirmation prompt was only for deleting the team and did not realize it would also permanently remove the project.
 
-Nexus Repository 3.93.2 will utilize an external **PostgreSQL database** for metadata storage (components, assets, users, and configuration), while artifact storage remains on the `/u01` filesystem.
+We have confirmed that the project is no longer visible in the UI and have stopped making any further changes to the environment.
 
-The specification includes additional CPU (8 vCPU) and memory (16 GB RAM) to support migration activities (H2 export, indexing rebuilds, and repository cutover) and ensure stable production performance under increased load.
+Could you please advise:
+
+* Whether the deleted project can be recovered.
+* If there is any supported recovery procedure (database-level or otherwise).
+* Whether recovery from backup is the only available option.
+* If you require any additional information (Checkmarx version, project name, logs, etc.) to assist with the recovery.
+
+As this is a production environment, we would appreciate your urgent guidance at your earliest convenience.
+
+Thank you.
+
+Kind regards,
+Ibrahim
