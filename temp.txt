@@ -1,10 +1,10 @@
-As part of Bitbucket DR testing, firewall access is required for SQL Server connectivity (TCP/1433) between the Bitbucket Production/DR servers and the Production/DR database servers.
+Hi [Manager Name],
 
-Connectivity testing performed using `nc` confirmed the following:
+An OS request has been raised to provision the DR server for Bitbucket Production. The request includes cloning the production server configuration to ensure the DR environment matches the current setup.
 
-* Production Bitbucket → Production Database: Successful
-* DR Bitbucket → Production Database: Timed out
-* Production Bitbucket → DR Database: Timed out
-* DR Bitbucket → DR Database: Timed out
+Please review and provide your approval for the OS team to proceed.
 
-Kindly implement the required firewall rules to allow the necessary connectivity between the Bitbucket servers and the Production and DR database servers on TCP port 1433.
+Ticket details: [Insert Ticket Link]
+
+Regards,
+Ibrahim
