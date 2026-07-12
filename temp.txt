@@ -1,11 +1,25 @@
-Install UCD Agent on Secure Works Server for PR Validation Environment
+Firewall Request – Bitbucket Production & DR Database Connectivity (TCP/1433)
 
 
 
-A new Secure Works server has been designated as the PR validation environment.
 
-As a prerequisite for application deployments via UrbanCode Deploy (UCD), kindly install the UCD Agent on the target server.
+As part of the Bitbucket Disaster Recovery (DR) validation, we investigated a startup issue on the newly cloned DR Bitbucket server. Although the Bitbucket service is running, the application fails to initialize and reports that the Spring WebApplicationContext is unavailable.
 
-The required firewall connectivity between the Secure Works server and the UCD server has already been arranged. Once the agent installation is complete, please provide confirmation so that the remaining environment configuration and deployment validation activities can proceed.
+As part of the troubleshooting, the following checks were performed:
 
-If any additional information (e.g. UCD server details, agent package, installation directory, or service account) is required, please advise.
+* Verified that the Bitbucket service is running on both Production and DR servers.
+* Verified that no host-based firewall is blocking traffic on either server (`firewalld` is inactive and no `iptables` rules are configured).
+* Performed TCP connectivity tests to the SQL Server databases on port 1433.
+
+Connectivity test results:
+
+* Production Bitbucket → Production Database: **Successful**
+* DR Bitbucket → Production Database: **Timed out**
+* Production Bitbucket → DR Database: **Timed out**
+* DR Bitbucket → DR Database: **Timed out**
+
+Based on these results, the issue appears to be network connectivity rather than an operating system or application configuration issue.
+
+Kindly implement the required firewall rules to allow SQL Server connectivity (TCP/1433) between the Bitbucket Production and DR servers and the corresponding Production and DR database servers, as per the approved DR architecture.
+
+This connectivity is required to complete Bitbucket DR validation and support database connectivity during both normal operation and disaster recovery scenarios.
