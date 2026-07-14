@@ -1,13 +1,11 @@
-Hi [Name],
+Week 1	Obtain OS approval from John Doe, schedule cloning, Ben Dover clones the production server to the DR server. Resolve any cloning issues.
 
-Thank you for reaching out, and I appreciate the update. I hope your upcoming visit to Kuwait goes well.
+Week 2	Validate the cloned server (services, Bitbucket startup, logs, storage, Java, application health). Configure DR IP, hostname, and any environment-specific settings.
 
-At the moment, our team is focused on several ongoing initiatives, and our schedule is quite full over the coming weeks.
+Week 3	Complete firewall implementation and verify connectivity to the Production and DR databases. Perform initial database connectivity testing and confirm the application's behavior if both Production and DR instances connect to the same database. Escalate to Atlassian/vendor if clarification is needed.
 
-Once your travel plans are finalized, please let us know your dates. We'll review our availability and, if schedules permit, we'll do our best to accommodate an in-person meeting.
+Week 4	Work with the IAM team on SSO integration. Test authentication and resolve any certificate, callback URL, or load balancer issues that arise.
 
-Safe travels, and I look forward to hearing from you.
+Week 5	Perform functional DR testing (login, repository browsing, clone, fetch, push, pull requests, plugins, indexing, scheduled jobs, mail, etc.). Address defects identified during testing.
 
-Best regards,
-
-[Your Name]
+Week 6 (Contingency / Closeout)	Retest after fixes and formally hand over the DR environment.
