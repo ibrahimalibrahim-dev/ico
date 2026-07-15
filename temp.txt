@@ -1,11 +1,18 @@
-Week 1	Obtain OS approval from John Doe, schedule cloning, Ben Dover clones the production server to the DR server. Resolve any cloning issues.
+Hi [Name],
 
-Week 2	Validate the cloned server (services, Bitbucket startup, logs, storage, Java, application health). Configure DR IP, hostname, and any environment-specific settings.
+I hope you are doing well.
 
-Week 3	Complete firewall implementation and verify connectivity to the Production and DR databases. Perform initial database connectivity testing and confirm the application's behavior if both Production and DR instances connect to the same database. Escalate to Atlassian/vendor if clarification is needed.
+I would like to follow up on the status of the UCD agent installation on the Secure Works server.
 
-Week 4	Work with the IAM team on SSO integration. Test authentication and resolve any certificate, callback URL, or load balancer issues that arise.
+At the moment, the agent is not yet visible from the UCD server, so I wanted to check whether the installation is still in progress or if any issues have been encountered during the setup.
 
-Week 5	Perform functional DR testing (login, repository browsing, clone, fetch, push, pull requests, plugins, indexing, scheduled jobs, mail, etc.). Address defects identified during testing.
+As this activity is currently impacting the CBS PR validation and subsequent testing activities, I would appreciate your earliest support in completing the installation or letting me know if any assistance is required from our side.
 
-Week 6 (Contingency / Closeout)	Retest after fixes and formally hand over the DR environment.
+Thank you, and I look forward to your update.
+
+Regards,
+
+[Your Name]
+
+
+Follow-up on UCD Agent Installation Status for Secure Works Server
