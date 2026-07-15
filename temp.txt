@@ -1,18 +1,15 @@
-Follow-up: UCD Agent Installation Status on Secure Works Server
-
-
 Hi Team,
 
-I hope you are doing well.
+Following the migration activities, the Secure Works environment has been successfully prepared for deployment validation. The UCD Agent has been installed, connectivity has been verified, and a successful deployment has been completed to confirm the Jenkins-to-UCD deployment flow.
 
-I would like to follow up on the status of the UCD Agent installation on the Secure Works server.
+As we continue validating the enterprise services, we have observed that several of the previously shared pull requests are either no longer available (e.g. declined/closed) or are in conflict, and therefore cannot be processed through the PR validation pipeline.
 
-At present, I am unable to see the agent registered within the UCD environment. I also attempted to reach you by phone earlier, but was unfortunately unable to get through.
+To continue the validation activities, could you please ensure that active PRs are available for all 64 Enterprise Services modules listed in the Confluence page and share them once ready.
 
-As this activity is currently on the critical path for the CBS PR validation and deployment activities, I would appreciate your earliest update on the installation status. If there are any issues or assistance required from our side, please let me know and we will be happy to support.
+Once valid PRs are available, each module will be validated individually through the Jenkins PR pipeline and subsequent UCD deployment to verify successful end-to-end execution.
 
-Thank you, and I look forward to your update.
+In parallel, we will continue progressing with DAST validation as soon as the Enterprise project configuration is completed. Kindly let us know if there are any updates from the ISD team regarding its readiness.
+
+We will continue progressing with the validations as the required dependencies become available and will keep the team informed of any observations identified during testing.
 
 Regards,
-
-[Your Name]
