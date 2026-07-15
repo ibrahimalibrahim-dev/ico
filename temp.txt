@@ -1,15 +1,17 @@
-Hi Team,
+**Current Status**
 
-Following the migration activities, the Secure Works environment has been successfully prepared for deployment validation. The UCD Agent has been installed, connectivity has been verified, and a successful deployment has been completed to confirm the Jenkins-to-UCD deployment flow.
+* Secure Works environment has been prepared for PR validation.
+* Required firewall connectivity has been established.
+* UCD Agent has been installed and connectivity verified.
+* End-to-end deployment has been successfully validated (Jenkins → UCD → Secure Works).
 
-As we continue validating the enterprise services, we have observed that several of the previously shared pull requests are either no longer available (e.g. declined/closed) or are in conflict, and therefore cannot be processed through the PR validation pipeline.
+**Current Dependencies**
 
-To continue the validation activities, could you please ensure that active PRs are available for all 64 Enterprise Services modules listed in the Confluence page and share them once ready.
+1. **Developer Team** – Active/valid Pull Requests are required for the Enterprise Services modules before PR validation can continue. Several previously provided PRs were found to be closed, declined, or in conflict and therefore cannot be validated.
+2. **ISD/Security** – Awaiting completion of the DAST Enterprise project configuration before DAST validation activities can commence.
 
-Once valid PRs are available, each module will be validated individually through the Jenkins PR pipeline and subsequent UCD deployment to verify successful end-to-end execution.
+**Next Actions**
 
-In parallel, we will continue progressing with DAST validation as soon as the Enterprise project configuration is completed. Kindly let us know if there are any updates from the ISD team regarding its readiness.
+Upon receipt of valid PRs and confirmation that the DAST Enterprise project is ready, validation will continue on a per-module basis, with each Enterprise Service undergoing individual Jenkins PR validation, deployment verification, and DAST testing where applicable.
 
-We will continue progressing with the validations as the required dependencies become available and will keep the team informed of any observations identified during testing.
-
-Regards,
+based on this, kindly amend the date to 19th of August so that each stakeholder is allowed time
