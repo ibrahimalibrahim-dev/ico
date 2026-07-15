@@ -1,16 +1,109 @@
-| Date                    | Activity                                                                                                           | Owner                          | Dependencies               |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ | -------------------------- |
-| **15 Jul (Wed)**        | Finalize infrastructure requirements (CPU, RAM, storage, PostgreSQL requirements) and submit to Infrastructure/DBA | DevSecOps                      | None                       |
-| **16 Jul (Thu)**        | Review comments from DBA/Infrastructure and finalize specifications                                                | DevSecOps / DBA                | DBA feedback               |
-| **19–20 Jul (Sun–Mon)** | Provision new VM (RHEL 9.x)                                                                                        | VMware / OS Team               | Infrastructure approval    |
-| **21–22 Jul (Tue–Wed)** | Provision PostgreSQL database and create Nexus database/user                                                       | DBA                            | VM available               |
-| **23 Jul (Thu)**        | Raise firewall requests:<br>• VDI → Nexus Server<br>• Nexus Server → PostgreSQL<br>• Any additional required ports | DevSecOps / Network            | VM + DB details            |
-| **26–28 Jul (Sun–Tue)** | Firewall implementation and verification                                                                           | Network                        | Approved firewall requests |
-| **29 Jul (Wed)**        | Install OS prerequisites (Java, required packages, service accounts, directories)                                  | OS Team                        | Firewall complete          |
-| **30 Jul (Thu)**        | Download and install Nexus Repository v3.93.2                                                                      | DevSecOps                      | OS ready                   |
-| **2–3 Aug (Sun–Mon)**   | Configure PostgreSQL connectivity, Blob Store (`/u01`), SSL/TLS (if applicable), and Nexus configuration           | DevSecOps                      | Installation complete      |
-| **4 Aug (Tue)**         | Validate Nexus startup, database connectivity, repository creation, uploads/downloads                              | DevSecOps                      | Configuration complete     |
-| **5–6 Aug (Wed–Thu)**   | Functional testing and troubleshooting (including repository formats and application connectivity)                 | DevSecOps / Application Owners | Successful validation      |
-| **9–11 Aug (Sun–Tue)**  | Begin controlled migration of repositories/applications to new environment (pilot applications)                    | DevSecOps / Application Teams  | Testing completed          |
-| **12–13 Aug (Wed–Thu)** | Address issues identified during pilot migration and perform regression validation                                 | DevSecOps                      | Pilot migration            |
-| **16 Aug (Sun)**        | Prepare promotion plan and Production readiness review                                                             | DevSecOps / Stakeholders       | Successful UAT             |
+Certainly. I'd actually present it this way to management because it reads more like a project plan than a task list and clearly shows dependencies and buffers.
+
+---
+
+## Nexus Repository v3.93.2 Upgrade & Migration Plan
+
+**Duration:** 15 July 2026 – 15 August 2026 *(Fridays and Saturdays excluded)*
+
+* **15 Jul (Wed)**
+
+  * Review existing Nexus environment and finalize target architecture.
+  * Confirm infrastructure specifications (CPU, RAM, storage, PostgreSQL).
+  * Submit database requirements to DBA team.
+  * Raise VM provisioning request with Infrastructure/VMware team.
+
+* **16 Jul (Thu)**
+
+  * Review and address feedback from DBA and Infrastructure teams.
+  * Finalize database requirements and server specifications.
+  * Obtain required approvals for infrastructure provisioning.
+
+* **19–21 Jul (Sun–Tue)**
+
+  * Provision new RHEL 9.x server.
+  * Build and harden the operating system.
+  * Allocate storage volumes (`/`, `/home`, `/tmp`, `/var`, `/var/log`, `/var/log/audit`, `/u01`).
+  * Install required OS prerequisites.
+
+* **22–23 Jul (Wed–Thu)**
+
+  * Provision PostgreSQL database.
+  * Configure database, user account, and required PostgreSQL extensions.
+  * Validate database connectivity.
+
+* **26–28 Jul (Sun–Tue)**
+
+  * Raise and implement required firewall rules:
+
+    * VDI → Nexus Server
+    * Nexus Server → PostgreSQL Database
+    * Any additional internal application connectivity required
+  * Verify end-to-end network connectivity.
+
+* **29–30 Jul (Wed–Thu)**
+
+  * Download Nexus Repository v3.93.2.
+  * Install Nexus Repository.
+  * Configure JVM, application directories, and service startup.
+  * Configure PostgreSQL as the backend database.
+
+* **2–4 Aug (Sun–Tue)**
+
+  * Configure Nexus repositories and blob store (`/u01`).
+  * Validate application startup.
+  * Verify repository creation, uploads, downloads, and database connectivity.
+  * Resolve any installation or configuration issues.
+
+* **5–6 Aug (Wed–Thu)**
+
+  * Perform functional validation.
+  * Validate repository formats required by applications.
+  * Conduct internal testing with application teams.
+
+* **9–11 Aug (Sun–Tue)**
+
+  * Begin phased migration of repositories/applications to the new environment.
+  * Validate migrated repositories.
+  * Resolve migration-related issues.
+
+* **12–13 Aug (Wed–Thu)**
+
+  * Perform regression testing.
+  * Review overall platform readiness.
+  * Document outstanding issues and mitigation plans.
+  * Prepare production promotion approach.
+
+* **15 Aug (Sat)**
+
+  * **Target milestone:** UAT environment fully established, validated, and ready for phased production promotion following stakeholder approval.
+
+---
+
+### Built-in Contingency
+
+The above plan includes contingency to accommodate:
+
+* Infrastructure and VMware provisioning timelines.
+* DBA provisioning and configuration activities.
+* Firewall implementation and approval lead times.
+* Nexus installation and configuration troubleshooting.
+* PostgreSQL integration and connectivity validation.
+* Internal testing and issue resolution.
+* Cross-team coordination and approval delays.
+
+---
+
+### Deliverables by Completion
+
+* New RHEL 9.x server provisioned.
+* PostgreSQL database provisioned and configured.
+* Required firewall rules implemented.
+* Nexus Repository v3.93.2 installed and operational.
+* External PostgreSQL integration completed.
+* Blob store configured on `/u01`.
+* UAT validation completed.
+* Initial repository/application migration commenced.
+* Environment prepared for controlled promotion to Production.
+
+This plan is conservative enough to account for dependencies on VMware, DBA, Network, and OS teams while remaining achievable within the requested timeframe.
