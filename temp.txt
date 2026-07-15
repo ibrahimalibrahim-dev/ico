@@ -1,18 +1,18 @@
-Hi [Name],
+Follow-up: UCD Agent Installation Status on Secure Works Server
+
+
+Hi Team,
 
 I hope you are doing well.
 
-I would like to follow up on the status of the UCD agent installation on the Secure Works server.
+I would like to follow up on the status of the UCD Agent installation on the Secure Works server.
 
-At the moment, the agent is not yet visible from the UCD server, so I wanted to check whether the installation is still in progress or if any issues have been encountered during the setup.
+At present, I am unable to see the agent registered within the UCD environment. I also attempted to reach you by phone earlier, but was unfortunately unable to get through.
 
-As this activity is currently impacting the CBS PR validation and subsequent testing activities, I would appreciate your earliest support in completing the installation or letting me know if any assistance is required from our side.
+As this activity is currently on the critical path for the CBS PR validation and deployment activities, I would appreciate your earliest update on the installation status. If there are any issues or assistance required from our side, please let me know and we will be happy to support.
 
 Thank you, and I look forward to your update.
 
 Regards,
 
 [Your Name]
-
-
-Follow-up on UCD Agent Installation Status for Secure Works Server
