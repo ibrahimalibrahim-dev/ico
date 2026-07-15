@@ -1,17 +1,16 @@
-**Current Status**
-
-* Secure Works environment has been prepared for PR validation.
-* Required firewall connectivity has been established.
-* UCD Agent has been installed and connectivity verified.
-* End-to-end deployment has been successfully validated (Jenkins → UCD → Secure Works).
-
-**Current Dependencies**
-
-1. **Developer Team** – Active/valid Pull Requests are required for the Enterprise Services modules before PR validation can continue. Several previously provided PRs were found to be closed, declined, or in conflict and therefore cannot be validated.
-2. **ISD/Security** – Awaiting completion of the DAST Enterprise project configuration before DAST validation activities can commence.
-
-**Next Actions**
-
-Upon receipt of valid PRs and confirmation that the DAST Enterprise project is ready, validation will continue on a per-module basis, with each Enterprise Service undergoing individual Jenkins PR validation, deployment verification, and DAST testing where applicable.
-
-based on this, kindly amend the date to 19th of August so that each stakeholder is allowed time
+| Date                    | Activity                                                                                                           | Owner                          | Dependencies               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ | -------------------------- |
+| **15 Jul (Wed)**        | Finalize infrastructure requirements (CPU, RAM, storage, PostgreSQL requirements) and submit to Infrastructure/DBA | DevSecOps                      | None                       |
+| **16 Jul (Thu)**        | Review comments from DBA/Infrastructure and finalize specifications                                                | DevSecOps / DBA                | DBA feedback               |
+| **19–20 Jul (Sun–Mon)** | Provision new VM (RHEL 9.x)                                                                                        | VMware / OS Team               | Infrastructure approval    |
+| **21–22 Jul (Tue–Wed)** | Provision PostgreSQL database and create Nexus database/user                                                       | DBA                            | VM available               |
+| **23 Jul (Thu)**        | Raise firewall requests:<br>• VDI → Nexus Server<br>• Nexus Server → PostgreSQL<br>• Any additional required ports | DevSecOps / Network            | VM + DB details            |
+| **26–28 Jul (Sun–Tue)** | Firewall implementation and verification                                                                           | Network                        | Approved firewall requests |
+| **29 Jul (Wed)**        | Install OS prerequisites (Java, required packages, service accounts, directories)                                  | OS Team                        | Firewall complete          |
+| **30 Jul (Thu)**        | Download and install Nexus Repository v3.93.2                                                                      | DevSecOps                      | OS ready                   |
+| **2–3 Aug (Sun–Mon)**   | Configure PostgreSQL connectivity, Blob Store (`/u01`), SSL/TLS (if applicable), and Nexus configuration           | DevSecOps                      | Installation complete      |
+| **4 Aug (Tue)**         | Validate Nexus startup, database connectivity, repository creation, uploads/downloads                              | DevSecOps                      | Configuration complete     |
+| **5–6 Aug (Wed–Thu)**   | Functional testing and troubleshooting (including repository formats and application connectivity)                 | DevSecOps / Application Owners | Successful validation      |
+| **9–11 Aug (Sun–Tue)**  | Begin controlled migration of repositories/applications to new environment (pilot applications)                    | DevSecOps / Application Teams  | Testing completed          |
+| **12–13 Aug (Wed–Thu)** | Address issues identified during pilot migration and perform regression validation                                 | DevSecOps                      | Pilot migration            |
+| **16 Aug (Sun)**        | Prepare promotion plan and Production readiness review                                                             | DevSecOps / Stakeholders       | Successful UAT             |
