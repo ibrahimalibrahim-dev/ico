@@ -1,12 +1,9 @@
-Following our assessment of the production Bitbucket server storage, the application volume (`/u01`) is currently allocated with **1 TB**, of which approximately **394 GB** is utilized.
+Thank you for providing the initial set of PRs.
 
-The Bitbucket Home directory accounts for the majority of the storage usage, with the following breakdown:
+We have completed validation of the 11 modules received and have updated their corresponding status in the Confluence tracking page. Kindly take the necessary actions based on the recorded results.
 
-* `Atlassian/home/stash` (active Bitbucket data): **240 GB**
-* `Atlassian/home/stash - backup 2020` (historical backup): **157 GB**
+As discussed, we understand the remaining PRs are currently being updated. To help us maintain progress against the agreed timelines, kindly continue sharing the outstanding PRs as they become available so that validation can proceed without unnecessary delay.
 
-After reviewing the contents with the application team, the `stash - backup 2020` directory has been identified as a historical backup and is **not required for the initial DR clone**. If needed, it can be archived and transferred separately at a later stage.
+Additionally, we would appreciate it if updates to the Confluence tracking page could be managed by our team. As the page serves as the official tracking and validation record for this activity, maintaining a single point of ownership helps preserve traceability and consistency of the documented results. Going forward, please share any new PRs or status updates via email or Teams, and we will update the Confluence page accordingly.
 
-Accordingly, please proceed with cloning the production server while excluding the `Atlassian/home/stash - backup 2020` directory. The active Bitbucket application data under `Atlassian/home/stash` should be included in the clone.
-
-Please proceed with the cloning activity at the earliest convenience.
+Thank you for your cooperation.
