@@ -1,9 +1,9 @@
-Thank you for providing the initial set of PRs.
+Hi Team,
 
-We have completed validation of the 11 modules received and have updated their corresponding status in the Confluence tracking page. Kindly take the necessary actions based on the recorded results.
+As a reminder, kindly refrain from making direct updates to the Enterprise Services Confluence tracking page.
 
-As discussed, we understand the remaining PRs are currently being updated. To help us maintain progress against the agreed timelines, kindly continue sharing the outstanding PRs as they become available so that validation can proceed without unnecessary delay.
+The page is maintained by our team as the official validation and progress record for the activity. Maintaining a single point of ownership is important to preserve traceability, consistency, and an accurate history of the validation results.
 
-Additionally, we would appreciate it if updates to the Confluence tracking page could be managed by our team. As the page serves as the official tracking and validation record for this activity, maintaining a single point of ownership helps preserve traceability and consistency of the documented results. Going forward, please share any new PRs or status updates via email or Teams, and we will update the Confluence page accordingly.
+Kindly continue sharing PRs and any related updates via email or Teams, and we will update the Confluence page accordingly after validation.
 
 Thank you for your cooperation.
