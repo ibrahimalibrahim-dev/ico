@@ -1,9 +1,11 @@
 Hi Team,
 
-As a reminder, kindly refrain from making direct updates to the Enterprise Services Confluence tracking page.
+As discussed previously, kindly refrain from making direct updates to the Enterprise Services Confluence tracking page.
 
-The page is maintained by our team as the official validation and progress record for the activity. Maintaining a single point of ownership is important to preserve traceability, consistency, and an accurate history of the validation results.
-
-Kindly continue sharing PRs and any related updates via email or Teams, and we will update the Confluence page accordingly after validation.
+The page serves as the official validation and progress tracker for our team. To maintain traceability and consistency, we kindly request that all PRs and related updates be shared via email or Teams, and we will update the Confluence page following validation.
 
 Thank you for your cooperation.
+
+Regards,
+
+[Your Name]
