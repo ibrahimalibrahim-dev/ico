@@ -1,5 +1,13 @@
-Noted, thank you.
+**Purpose**
 
-I'll update the Jira ticket to clearly distinguish our completed activities from the outstanding dependencies with the Development and ISD teams. Where required, I'll also raise separate sub-tickets for the Development team to track their pending actions and provide better visibility of the overall progress.
+This sub-task has been created to track the outstanding ISD activities required before Dynamic Application Security Testing (DAST) can commence for the Enterprise Services project.
 
-Regards,
+The parent Enterprise Services ticket includes DAST validation as part of the overall delivery; however, execution is currently dependent upon completion of the required Acunetix project configuration.
+
+**ISD Activities**
+
+* Configure the Acunetix DAST project for the Enterprise Services application.
+* Confirm the project is ready for DAST execution.
+* Communicate completion so validation activities can proceed.
+
+Once the configuration has been completed, kindly notify the DevSecOps team so DAST validation can commence.
