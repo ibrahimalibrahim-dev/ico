@@ -1,10 +1,36 @@
-Hi Team,
+Hi [Manager],
 
-As discussed previously, kindly refrain from making direct updates to the Enterprise Services Confluence tracking page.
+I wanted to provide a brief status update on the Enterprise Services activity, as the task has become primarily dependent on external deliverables rather than execution from our side.
 
-The page serves as the official validation and progress tracker for our team. To maintain traceability and consistency, we kindly request that all PRs and related updates be shared via email or Teams, and we will update the Confluence page following validation.
+**Current Status**
 
-Thank you for your cooperation.
+* The Secure Works environment has been prepared and validated from our side (firewall connectivity, UCD Agent installation, and deployment path verification).
+* Following the migration from the original Pre-Prod environment to Secure Works, the end-to-end validation process had to be re-established before module validation could resume. As a result, previously completed validation on the original environment could not simply continue and had to be repeated on the new server.
+* We have requested PRs for all Enterprise Services modules; however, only 35 have been provided to date.
+
+**Current Dependencies**
+
+The remaining work is currently dependent on the following:
+
+1. **Development Team**
+
+   * Provision of the remaining PRs.
+   * Resolution of environment and application configuration issues identified during validation (e.g. WebLogic authentication/configuration, Jenkinsfile updates, application-specific configuration, and server-side prerequisites).
+
+2. **ISD**
+
+   * Completion of the DAST Enterprise project configuration before DAST validation can begin.
+
+At this stage, each module cannot be considered complete until:
+
+* A valid PR is available.
+* Jenkins validation completes successfully.
+* UCD deployment completes successfully.
+* DAST validation is completed once the ISD configuration is available.
+
+Given that these activities depend on deliverables from both the Development and ISD teams, I believe it would be beneficial to obtain target completion dates for the outstanding developer activities and the DAST configuration so that a realistic completion plan can be established.
+
+From our side, we will continue validating modules as soon as the required PRs and environment configurations become available.
 
 Regards,
 
