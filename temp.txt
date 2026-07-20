@@ -1,14 +1,5 @@
-Open Firewall Access from Bitbucket DR Server to LDAP Server (TCP/389)
+As part of the Bitbucket Disaster Recovery (DR) setup and testing, firewall access is required from the Bitbucket DR server to the configured LDAP server.
 
+The Bitbucket user directory is configured to use **LDAP over TCP port 389 with SSL/TLS disabled** (matching the current Production configuration).
 
-Enable LDAP user authentication for the Bitbucket Disaster Recovery (DR) environment.
-
-
-
-
-
-As part of the Bitbucket Disaster Recovery (DR) setup and testing, firewall access is required from the Bitbucket DR server to the configured LDAP server on TCP port 389.
-
-During testing, the Bitbucket application was successfully brought online and the login page is accessible. However, user authentication fails because the configured LDAP user directory is not reachable from the DR environment.
-
-Kindly open the required firewall access from the Bitbucket DR server to the LDAP server on TCP/389 to enable LDAP authentication for the DR instance.
+Kindly open firewall access from the Bitbucket DR server to the LDAP server on **TCP/389** to enable LDAP authentication for the DR instance.
