@@ -1,12 +1,5 @@
-**Progress Update:**
+Noted, thank you.
 
-* Performed initial validation of the newly cloned Bitbucket DR server. The Bitbucket service was running; however, the application failed to start and reported a **SpringMVC dispatcher initialization** error.
-* Reviewed Bitbucket application logs and investigated potential application and infrastructure causes.
-* Verified that no host-based firewall restrictions existed on either the Production or DR Bitbucket servers.
-* Performed network connectivity testing to the SQL Server databases. The DR server was unable to establish connectivity to the Production database on TCP/1433, indicating a network connectivity issue.
-* Coordinated with the Network team to implement the required firewall access and restarted the Bitbucket service/server to apply the changes.
-* Confirmed successful application startup. The Bitbucket DR login page is now accessible, confirming that the initial startup issue has been resolved.
-* Continued troubleshooting authentication. Login attempts failed due to the DR server being unable to communicate with the configured LDAP user directory.
-* Worked with the OS team to review the Production Bitbucket user directory configuration and confirmed that Production uses **LDAP over TCP/389 (SSL/TLS disabled)**.
-* A firewall request has been submitted to allow the required LDAP connectivity from the Bitbucket DR server to the configured LDAP server, matching the existing Production configuration.
-* Pending implementation of the LDAP firewall rule, after which user authentication and end-to-end DR validation will be completed.
+I'll update the Jira ticket to clearly distinguish our completed activities from the outstanding dependencies with the Development and ISD teams. Where required, I'll also raise separate sub-tickets for the Development team to track their pending actions and provide better visibility of the overall progress.
+
+Regards,
