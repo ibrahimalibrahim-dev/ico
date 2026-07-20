@@ -1,13 +1,25 @@
+Development Dependency – Enterprise Services PR Readiness and UCD Deployment Configuration
+
+
+
+
 **Purpose**
 
-This sub-task has been created to track the outstanding ISD activities required before Dynamic Application Security Testing (DAST) can commence for the Enterprise Services project.
+This sub-task has been created to track the outstanding Development activities required before Enterprise Services validation can be completed.
 
-The parent Enterprise Services ticket includes DAST validation as part of the overall delivery; however, execution is currently dependent upon completion of the required Acunetix project configuration.
+The parent Enterprise Services ticket covers end-to-end validation through the Jenkins PR pipeline and successful deployment via UrbanCode Deploy (UCD). Validation can only proceed once the required Development deliverables are available.
 
-**ISD Activities**
+**Development Activities**
 
-* Configure the Acunetix DAST project for the Enterprise Services application.
-* Confirm the project is ready for DAST execution.
-* Communicate completion so validation activities can proceed.
+* Provide valid Pull Requests (PRs) for the assigned Enterprise Services modules.
+* Resolve PR conflicts, declined/closed PRs, or repository-related issues as applicable.
+* Ensure the required Jenkinsfile and application configuration are available on the appropriate branches.
+* Resolve application and server-side configuration issues identified during validation (e.g. middleware/application configuration).
 
-Once the configuration has been completed, kindly notify the DevSecOps team so DAST validation can commence.
+**UCD Access**
+
+If UCD access has not yet been configured for the assigned Development personnel, kindly raise the appropriate ITB request to obtain access.
+
+This will allow the Development team to directly observe deployment execution, identify the stage at which failures occur, and resolve Development-owned configuration issues more efficiently before requesting further validation.
+
+Once the above activities have been completed, kindly notify the DevSecOps team so validation can resume.
