@@ -1,37 +1,14 @@
-Hi [Manager],
+Open Firewall Access from Bitbucket DR Server to LDAP Server (TCP/389)
 
-I wanted to provide a brief status update on the Enterprise Services activity, as the task has become primarily dependent on external deliverables rather than execution from our side.
 
-**Current Status**
+Enable LDAP user authentication for the Bitbucket Disaster Recovery (DR) environment.
 
-* The Secure Works environment has been prepared and validated from our side (firewall connectivity, UCD Agent installation, and deployment path verification).
-* Following the migration from the original Pre-Prod environment to Secure Works, the end-to-end validation process had to be re-established before module validation could resume. As a result, previously completed validation on the original environment could not simply continue and had to be repeated on the new server.
-* We have requested PRs for all Enterprise Services modules; however, only 35 have been provided to date.
 
-**Current Dependencies**
 
-The remaining work is currently dependent on the following:
 
-1. **Development Team**
 
-   * Provision of the remaining PRs.
-   * Resolution of environment and application configuration issues identified during validation (e.g. WebLogic authentication/configuration, Jenkinsfile updates, application-specific configuration, and server-side prerequisites).
+As part of the Bitbucket Disaster Recovery (DR) setup and testing, firewall access is required from the Bitbucket DR server to the configured LDAP server on TCP port 389.
 
-2. **ISD**
+During testing, the Bitbucket application was successfully brought online and the login page is accessible. However, user authentication fails because the configured LDAP user directory is not reachable from the DR environment.
 
-   * Completion of the DAST Enterprise project configuration before DAST validation can begin.
-
-At this stage, each module cannot be considered complete until:
-
-* A valid PR is available.
-* Jenkins validation completes successfully.
-* UCD deployment completes successfully.
-* DAST validation is completed once the ISD configuration is available.
-
-Given that these activities depend on deliverables from both the Development and ISD teams, I believe it would be beneficial to obtain target completion dates for the outstanding developer activities and the DAST configuration so that a realistic completion plan can be established.
-
-From our side, we will continue validating modules as soon as the required PRs and environment configurations become available.
-
-Regards,
-
-[Your Name]
+Kindly open the required firewall access from the Bitbucket DR server to the LDAP server on TCP/389 to enable LDAP authentication for the DR instance.
