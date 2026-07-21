@@ -1,12 +1,8 @@
-Hi Team,
+Hi [Manager],
 
-Thank you for the update and for providing the remaining PRs. We will continue validating them and will communicate any observations identified during testing.
+Noted, thank you.
 
-To improve visibility and accurately reflect ownership of the remaining activities, dedicated Jira sub-tasks have been created for the outstanding Development and ISD deliverables associated with the Enterprise Services initiative.
-
-To further streamline the validation process, we recommend that the Development team obtain UCD access (where not already available) by raising the appropriate ITB request. This will provide direct visibility of deployment execution and enable Development-owned configuration issues to be identified and resolved more efficiently before further validation.
-
-We will continue progressing with the remaining modules as the required prerequisites are completed.
+I'll continue prioritizing the Windows upgrade activities and update the related Jira tickets to clearly reflect the current status, completed work, and any outstanding external dependencies. Where applicable, separate sub-tasks will continue to be used to track Development and ISD activities so ownership and progress remain visible.
 
 Regards,
 
