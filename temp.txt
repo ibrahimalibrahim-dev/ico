@@ -1,3 +1,66 @@
-The purpose of this sub-task is to track the outstanding Development activities associated with PR readiness and UCD deployment configuration. Validation by DevSecOps is performed once the required Development deliverables have been completed.
+After our discussion, I would only change the responses for **Questions 1, 3, 5, and slightly refine 6**. Questions **2** and **4** are already solid.
 
-As end-to-end validation is still pending, the sub-task will remain assigned to the Development team until the identified Development activities have been completed and verified.
+---
+
+## 1. Database Sizing / Growth (**Updated**)
+
+> The current Nexus Repository manages approximately **3 TB of repository artifacts (blob store)**, with continued growth anticipated. The blob store will remain on the Nexus application server and is planned with an initial capacity of **4 TB**, expandable to **8 TB** as repository usage increases.
+>
+> The PostgreSQL database will store Nexus Repository application data (repository configuration, components, assets, users, roles, and related repository information), while repository artifacts will remain on the dedicated blob store. As this is a new PostgreSQL deployment, there is no existing PostgreSQL database from which to estimate growth. We would appreciate the DBA team's recommendation for the initial database sizing based on the anticipated application workload and Sonatype best practices.
+
+**Reason for change:** We no longer imply that PostgreSQL itself requires 4–8 TB. We clearly distinguish the blob store from the relational database.
+
+---
+
+## 3. Limitations / Operational Constraints (**Updated**)
+
+> * Repository artifacts (blob store) will remain on dedicated application storage (`/u01`) and will not be stored in PostgreSQL.
+> * Reliable, low-latency network connectivity between the Nexus application server and the centralized PostgreSQL server is required.
+> * The PostgreSQL database should be provisioned in accordance with Sonatype Nexus Repository v3.93.2 installation guidance.
+> * Database administration activities (backup, monitoring, maintenance, high availability, and patching) will follow the organization's centralized PostgreSQL standards.
+
+**Reason for change:** We removed statements that tell the DBA how to configure ownership and permissions. Those are implementation details for the DBA team.
+
+---
+
+## 5. Security Constraints (**Updated**)
+
+> Security controls, including SELinux configuration, TLS requirements, encryption standards, database access controls, and any compliance requirements (e.g., FIPS), will be implemented in accordance with the Bank's Information Security policies and the centralized PostgreSQL platform standards.
+>
+> No additional Nexus Repository v3.93.2 security constraints have been identified beyond the vendor's installation recommendations.
+
+**Reason for change:** We avoid making commitments on behalf of the Security team while confirming there are no unusual Nexus-specific requirements.
+
+---
+
+## 6. Data Migration (**Slightly Refined**)
+
+> This is a new deployment and not an in-place database migration.
+>
+> A new Nexus Repository v3.93.2 environment will be deployed in UAT using PostgreSQL as the backend database. Repository migration will be performed in a controlled, application-by-application manner before the environment is promoted to Production.
+
+**Reason for refinement:** "Application-by-application" is more accurate than implying you'll migrate database contents. You're standing up a new platform and gradually validating and moving repositories.
+
+---
+
+## Questions 2 and 4
+
+I would leave these **exactly as they are**.
+
+### 2. High Availability Architecture
+
+> The initial deployment will consist of a single Nexus Repository application node connected to the organization's centralized PostgreSQL platform. No application clustering or load balancing is planned as part of this phase.
+>
+> The proposed architecture has been designed to support future expansion to a multi-node deployment if required. Any future high-availability implementation would utilize the centralized PostgreSQL platform together with shared blob storage accessible by all Nexus application nodes.
+
+### 4. Compatibility Version
+
+> **Application:** Sonatype Nexus Repository v3.93.2
+>
+> **Operating System:** Red Hat Enterprise Linux (RHEL) 9.x
+>
+> **Database Platform:** PostgreSQL 16.6 (centralized PostgreSQL platform)
+
+---
+
+I think this version is much stronger than our first draft because it clearly defines the boundary between the **application**, the **database platform**, and the **security team's responsibilities**. It also avoids committing the DBA team to an arbitrary PostgreSQL size while still giving them the information they need to provision the environment.
