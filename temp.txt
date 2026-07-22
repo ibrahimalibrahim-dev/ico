@@ -1,3 +1,80 @@
-Kindly open SSH (TCP port 22) connectivity from the BeyondTrust administration server to the Bitbucket Production Node 2 server.
+I think we've reached a much better understanding now, and I'd answer each question in a way that **clearly separates application responsibilities from DBA and Security responsibilities**. That protects your team while still giving the DBA team everything they need.
 
-This access is required to perform the initial server configuration and Bitbucket application setup for the second production node.
+---
+
+### 1. Database sizing / growth
+
+> The current Nexus Repository manages approximately **3 TB of repository data (blob store)**, with continued growth anticipated. The blob store will remain on the Nexus application server and is planned with an **initial capacity of 4 TB**, expandable to **8 TB** as repository usage increases.
+>
+> The PostgreSQL database will store **repository metadata only** (repository configuration, components, assets, users, roles, and security information). As this is a new PostgreSQL deployment, there is no existing PostgreSQL database size to reference. We would appreciate the DBA team's recommendation for the initial PostgreSQL database sizing based on the anticipated workload and vendor best practices.
+
+**Why this works:** It avoids incorrectly implying the PostgreSQL database itself will be 4–8 TB while giving the DBAs the repository size as useful context.
+
+---
+
+### 2. High Availability Architecture
+
+> The initial deployment will consist of a **single Nexus Repository application node** connected to the organization's centralized PostgreSQL platform. No application clustering or load balancing is planned as part of this phase.
+>
+> The proposed architecture has been designed to support future expansion to a multi-node deployment if required. Any future high-availability implementation would utilize the centralized PostgreSQL platform together with shared blob storage accessible by all Nexus application nodes.
+
+**Why this works:** It answers today's design while demonstrating you've considered future HA without requesting unnecessary infrastructure now.
+
+---
+
+### 3. Limitations / Operational Constraints
+
+> * Repository artifacts (blob store) will remain on dedicated application storage (`/u01`) and will not be stored in PostgreSQL.
+> * Reliable, low-latency network connectivity between the Nexus application server and the centralized PostgreSQL server is required.
+> * The PostgreSQL database should be provisioned in accordance with Sonatype Nexus Repository v3.93.2 installation guidance.
+> * Database administration activities (backup, monitoring, patching, high availability, and maintenance) will follow the organization's centralized PostgreSQL standards.
+
+**Why this works:** It states the application's requirements without telling the DBAs how to administer their platform.
+
+---
+
+### 4. Compatibility Version
+
+> **Application:** Sonatype Nexus Repository v3.93.2
+>
+> **Operating System:** Red Hat Enterprise Linux (RHEL) 9.x
+>
+> **Database Platform:** PostgreSQL 16.6 (centralized PostgreSQL platform)
+
+**Why this works:** It states the supported target environment without overcomplicating the response.
+
+---
+
+### 5. Security Constraints
+
+> Security controls, including SELinux configuration, TLS requirements, encryption standards, database access controls, and any compliance requirements (e.g., FIPS), will be implemented in accordance with the Bank's Information Security policies and the centralized PostgreSQL platform standards.
+>
+> No additional Nexus-specific security constraints have been identified beyond the vendor's installation recommendations.
+
+**Why this works:** You're not making commitments on behalf of the Security team, while confirming there are no unusual Nexus requirements.
+
+---
+
+### 6. Data Migration
+
+> This is a **new deployment** and **not a direct database migration**.
+>
+> A new Nexus Repository v3.93.2 environment will be deployed in UAT using PostgreSQL as the backend database. Following validation, repository migration will be performed in a controlled, application-by-application manner before promoting the environment to Production.
+
+**Why this works:** It accurately reflects your migration strategy and avoids suggesting an in-place database migration.
+
+---
+
+## One final suggestion
+
+For **Question 1**, I would avoid the phrase:
+
+> "The PostgreSQL database will store metadata only..."
+
+Some DBAs unfamiliar with repository managers may read "metadata" as "only a few megabytes."
+
+Instead, I'd slightly rephrase it:
+
+> "The PostgreSQL database will store Nexus Repository application data (repository configuration, components, assets, users, roles, and related repository information), while repository artifacts (blob store) will remain on dedicated application storage."
+
+This makes it clear the database is an important part of the application, even though the large binary artifacts remain outside the database. It's a small wording change, but it reduces the chance of the DBAs underestimating the workload.
