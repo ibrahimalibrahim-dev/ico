@@ -1,9 +1,16 @@
-Hi [Manager],
+Firewall Request – Allow SSH (Port 22) Access to Bitbucket Production Node 2
 
-Noted, thank you.
 
-I'll continue prioritizing the Windows upgrade activities and update the related Jira tickets to clearly reflect the current status, completed work, and any outstanding external dependencies. Where applicable, separate sub-tasks will continue to be used to track Development and ISD activities so ownership and progress remain visible.
 
-Regards,
 
-[Your Name]
+As part of the Bitbucket High Availability (HA) implementation, a second Bitbucket production server has been provisioned and its IP address has been reserved.
+
+Initial connectivity verification confirmed that the server IP is reachable via DNS lookup from the VDI. However:
+
+* Access to the server via SSH (TCP port 22) from the BeyondTrust administration server is unsuccessful.
+* The OS team has verified that the server is not reachable on port 22 and advised that this is likely due to a firewall restriction.
+* Browser access to the server is also currently unavailable, preventing further configuration and validation activities.
+
+Kindly review the firewall configuration and allow SSH (TCP port 22) connectivity from the BeyondTrust administration server to the Bitbucket Production Node 2 server.
+
+This access is required to perform the initial server configuration, application installation, and subsequent Bitbucket High Availability setup activities.
