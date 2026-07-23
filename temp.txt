@@ -1,3 +1,7 @@
-Just checking in regarding the Enterprise Services DAST configuration sub-task.
+A quick clarification regarding the Development dependency sub-tasks.
 
-Could you kindly let me know if there has been any progress on the activity? If work has already commenced, would you mind updating the Jira status to In Progress so that it accurately reflects the current state of the task?
+These sub-tasks are intended to remain assigned to the Development team until the required Development activities have been completed and successfully validated. Reassigning them to DevSecOps prior to completion does not accurately reflect the ownership or current status of the outstanding work.
+
+Kindly keep the Development dependency sub-tasks assigned to the Development team and continue documenting any updates within the ticket. DevSecOps will perform the required validation and provide feedback through the same ticket until the activity is completed.
+
+Thank you for your cooperation.
