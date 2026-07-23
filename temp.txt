@@ -1,7 +1,12 @@
-As part of the design and planning activities for the Nexus Repository v3.93.2 upgrade and migration, further review of the Sonatype architecture and database requirements was performed to validate the proposed PostgreSQL deployment.
+Update on Checkmarx False Positive Review
 
-During this review, it was clarified that the current ~3 TB storage reported by Nexus corresponds to the blob store (repository artifacts such as JARs, packages, Docker layers, etc.) and is separate from the PostgreSQL database, which stores Nexus application data (repository configuration, components, assets, users, roles, and related metadata).
 
-Based on this clarification, the previously discussed 4 TB (expandable to 8 TB) storage requirement applies to the application server storage (blob store) rather than the PostgreSQL database. The PostgreSQL database sizing will be determined separately in coordination with the DBA team based on the application's metadata workload and Sonatype deployment recommendations.
+Dear Team,
 
-This review has been documented to ensure the infrastructure requests submitted to the OS and DBA teams accurately reflect the application architecture and vendor guidance before provisioning activities commence.
+An alignment session was held with the Security team regarding the Checkmarx vulnerability identified in the SAST scan. As the ISD team was unavailable, another Security representative attended the meeting to review the finding.
+
+The vulnerability has been assessed as a false positive (not exploitable). The remaining action is to obtain the required firewall approvals from both the Security and Network teams. Once these approvals are completed, the SAST scan is expected to pass, allowing the developer to resume the deployment process.
+
+This activity supports the upcoming release of the bank's website.
+
+Kind regards,
