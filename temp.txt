@@ -1,7 +1,13 @@
-A quick clarification regarding the Development dependency sub-tasks.
+Hi Team,
 
-These sub-tasks are intended to remain assigned to the Development team until the required Development activities have been completed and successfully validated. Reassigning them to DevSecOps prior to completion does not accurately reflect the ownership or current status of the outstanding work.
+Following the recent updates, I would like to clarify the intended use of the Development dependency sub-tasks.
 
-Kindly keep the Development dependency sub-tasks assigned to the Development team and continue documenting any updates within the ticket. DevSecOps will perform the required validation and provide feedback through the same ticket until the activity is completed.
+The Development dependency sub-tasks are intended to remain assigned to the Development team until the required Development activities have been completed and successfully validated. Reassigning these sub-tasks to DevSecOps prior to completion does not accurately reflect the ownership or current status of the outstanding work.
+
+To maintain clear traceability and visibility throughout the validation process, kindly keep the Development dependency sub-tasks assigned to the Development team and continue documenting any updates within the respective Jira tickets. DevSecOps will continue validating the deliverables, document any observations, and provide feedback through the same tickets until the activities are successfully completed.
 
 Thank you for your cooperation.
+
+Regards,
+
+[Your Name]
