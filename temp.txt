@@ -1,12 +1,3 @@
-Update on Checkmarx False Positive Review
+Just checking in regarding the Enterprise Services DAST configuration sub-task.
 
-
-Dear Team,
-
-An alignment session was held with the Security team regarding the Checkmarx vulnerability identified in the SAST scan. As the ISD team was unavailable, another Security representative attended the meeting to review the finding.
-
-The vulnerability has been assessed as a false positive (not exploitable). The remaining action is to obtain the required firewall approvals from both the Security and Network teams. Once these approvals are completed, the SAST scan is expected to pass, allowing the developer to resume the deployment process.
-
-This activity supports the upcoming release of the bank's website.
-
-Kind regards,
+Could you kindly let me know if there has been any progress on the activity? If work has already commenced, would you mind updating the Jira status to In Progress so that it accurately reflects the current state of the task?
