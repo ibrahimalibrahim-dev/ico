@@ -1,10 +1,10 @@
 Hi Team,
 
-During our review of the staging Nexus 3.95.0-07 environment, we noticed that `nexus-store.properties` is currently configured with an H2 database URL, whereas the UAT environment is configured to use the external PostgreSQL database.
+During our review of the staging Nexus 3.95.0-07 environment, we noticed that `nexus-store.properties` is currently showing an H2 database URL, whereas UAT is configured to use the external PostgreSQL database.
 
-Could you please confirm whether you are aware of this change and if there is any specific reason for the staging configuration to differ from UAT?
+Could you please advise if you are aware of any reason why the staging configuration may have changed from PostgreSQL to H2? In particular, we would like to understand whether this could occur as part of the database connection or initialization process, or if there is another explanation for the change.
 
-As we are planning to promote the staging environment to production, we would like to ensure the database configuration is aligned with the approved design and that no unexpected changes have occurred.
+As we are planning to promote the staging environment to production, we want to ensure the configuration remains aligned with the requested PostgreSQL setup and that there are no unexpected changes.
 
 Your clarification would be appreciated.
 
