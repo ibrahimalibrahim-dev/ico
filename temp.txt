@@ -1,20 +1,12 @@
-Nexus production promotion — CAB readiness
+Hi Team,
 
+During our review of the staging Nexus 3.95.0-07 environment, we noticed that `nexus-store.properties` is currently configured with an H2 database URL, whereas the UAT environment is configured to use the external PostgreSQL database.
 
+Could you please confirm whether you are aware of this change and if there is any specific reason for the staging configuration to differ from UAT?
 
+As we are planning to promote the staging environment to production, we would like to ensure the database configuration is aligned with the approved design and that no unexpected changes have occurred.
 
+Your clarification would be appreciated.
 
-
-Dear [Manager Name],
-
-Before submitting the CAB for the weekend promotion, I would like to highlight the remaining prerequisites.
-
-The staging Nexus environment has passed its initial validation. However, the Tenable Nessus scan identified 3 High and 1 Critical RHEL 9 vulnerabilities, which require OS team remediation or formal suppression. The corporate certificate is also still pending.
-
-We therefore need to complete the remediation, apply the certificate, and rescan the server to confirm there are no outstanding High or Critical findings before proceeding with CAB submission.
-
-Given the realistic remediation and scanning timeline, and the possibility of additional findings, I believe Express CAB would be the most realistic option if the weekend window is still available.
-
-I will continue coordinating with the OS team and proceed with the CAB once the prerequisites are cleared.
-
-Please advise if you would prefer a different approach to the timeline.
+Best regards,
+Ibrahim
