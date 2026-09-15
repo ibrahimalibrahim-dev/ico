@@ -1,19 +1,23 @@
-**Service Account:** `s_nexusService`
+Clarification Required – High Packet Loss Alert for DR Server
 
-**Password Change Procedure**
 
-Any password change for the `s_nexusService` Linux service account shall be performed by an authorized OS/System Administrator through the organization's approved access/change-management process.
 
-Following the password change, the account shall be verified to ensure that authentication remains functional. The Nexus service shall also be verified to confirm that it starts and operates correctly under the `s_nexusService` account.
 
-The new password shall be handled in accordance with the organization's approved password-management requirements and shall not be stored in plaintext application configuration files, scripts, tickets, or email.
 
-**Password Recovery / Reset Procedure**
 
-The existing password shall not be recovered from the Linux password database. If the password is lost or forgotten, an authorized OS/System Administrator shall perform a password reset through the approved administrative procedure.
 
-Following the reset, account access and Nexus service operation shall be validated. The password reset shall be recorded through the applicable organizational request/change-management process.
 
-**Dependency Consideration**
+Hi Team,
 
-The `s_nexusService` account is used as the operating-system service account for Nexus. If the account password is not referenced by any Nexus application configuration or external integration, changing the Linux account password does not require updating the Nexus application configuration. Any future dependency that uses the account password shall be managed through the organization's approved credential-management process.
+We have received a monitoring notification for High Packet Loss between the PROD and DR servers, with the DR server identified as the affected endpoint.
+
+The DR server is currently not in service, and the monitoring notification has already been disabled from the monitoring side. However, the packet-loss notification is still being generated.
+
+The NOC ticket received for this issue is attached for reference. Based on the behavior observed, we would like to clarify whether the notification could be related to the network/switch/router path or monitoring infrastructure, rather than the DR server/application itself.
+
+Could you please review the attached NOC ticket and advise on the appropriate ownership/team for handling such alerts going forward? This will help ensure that similar notifications are routed directly to the relevant team rather than being forwarded to DevSecOps when there is no application-side action required.
+
+I have copied our Monitoring Engineer for visibility and any additional details required from the monitoring side.
+
+Regards,
+Ibrahim
