@@ -1,1 +1,19 @@
-s_nexusService ALL=(root) /usr/bin/systemctl start nexus, /usr/bin/systemctl stop nexus, /usr/bin/systemctl restart nexus, /usr/bin/systemctl status nexus
+**Service Account:** `s_nexusService`
+
+**Password Change Procedure**
+
+Any password change for the `s_nexusService` Linux service account shall be performed by an authorized OS/System Administrator through the organization's approved access/change-management process.
+
+Following the password change, the account shall be verified to ensure that authentication remains functional. The Nexus service shall also be verified to confirm that it starts and operates correctly under the `s_nexusService` account.
+
+The new password shall be handled in accordance with the organization's approved password-management requirements and shall not be stored in plaintext application configuration files, scripts, tickets, or email.
+
+**Password Recovery / Reset Procedure**
+
+The existing password shall not be recovered from the Linux password database. If the password is lost or forgotten, an authorized OS/System Administrator shall perform a password reset through the approved administrative procedure.
+
+Following the reset, account access and Nexus service operation shall be validated. The password reset shall be recorded through the applicable organizational request/change-management process.
+
+**Dependency Consideration**
+
+The `s_nexusService` account is used as the operating-system service account for Nexus. If the account password is not referenced by any Nexus application configuration or external integration, changing the Linux account password does not require updating the Nexus application configuration. Any future dependency that uses the account password shall be managed through the organization's approved credential-management process.
