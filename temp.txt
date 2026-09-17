@@ -1,23 +1,5 @@
-Clarification Required – High Packet Loss Alert for DR Server
-
-
-
-
-
-
-
-
-Hi Team,
-
-We have received a monitoring notification for High Packet Loss between the PROD and DR servers, with the DR server identified as the affected endpoint.
-
-The DR server is currently not in service, and the monitoring notification has already been disabled from the monitoring side. However, the packet-loss notification is still being generated.
-
-The NOC ticket received for this issue is attached for reference. Based on the behavior observed, we would like to clarify whether the notification could be related to the network/switch/router path or monitoring infrastructure, rather than the DR server/application itself.
-
-Could you please review the attached NOC ticket and advise on the appropriate ownership/team for handling such alerts going forward? This will help ensure that similar notifications are routed directly to the relevant team rather than being forwarded to DevSecOps when there is no application-side action required.
-
-I have copied our Monitoring Engineer for visibility and any additional details required from the monitoring side.
-
-Regards,
-Ibrahim
+Engineered and supported enterprise DevSecOps platforms, integrating SAST, DAST, SCA, CI/CD, artifact management, and security tooling across development environments.
+Led infrastructure and application migrations/upgrades across Nexus Repository, Acunetix, Jenkins, UCD, Bitbucket, and associated Linux/Windows environments.
+Designed and troubleshot secure enterprise integrations, covering LDAP/LDAPS, Entra ID/OIDC, TLS certificates, proxies, firewalls, databases, network connectivity, and service accounts.
+Supported high-availability and disaster-recovery initiatives, including Bitbucket DR, shared storage/NFS, database connectivity, application failover, and production/DR synchronization.
+Collaborated across DevSecOps, Security/ISD, Network, OS, NOC, and application teams to resolve complex production blockers, manage dependencies, and drive infrastructure changes through enterprise governance.
