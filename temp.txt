@@ -1,5 +1,7 @@
-Engineered and supported enterprise DevSecOps platforms, integrating SAST, DAST, SCA, CI/CD, artifact management, and security tooling across development environments.
-Led infrastructure and application migrations/upgrades across Nexus Repository, Acunetix, Jenkins, UCD, Bitbucket, and associated Linux/Windows environments.
-Designed and troubleshot secure enterprise integrations, covering LDAP/LDAPS, Entra ID/OIDC, TLS certificates, proxies, firewalls, databases, network connectivity, and service accounts.
-Supported high-availability and disaster-recovery initiatives, including Bitbucket DR, shared storage/NFS, database connectivity, application failover, and production/DR synchronization.
-Collaborated across DevSecOps, Security/ISD, Network, OS, NOC, and application teams to resolve complex production blockers, manage dependencies, and drive infrastructure changes through enterprise governance.
+**Status Update – Nexus Staging to Production**
+
+Following ISD requirements, a dedicated service account was requested as `s_devOps` cannot be reused across tools. The account has been approved and created, with **BeyondTrust onboarding still in progress**.
+
+ISD also requested written confirmation regarding the OS checklist, as the server was commissioned from the approved Red Hat golden image, where the checklist is not normally completed separately.
+
+**Current status:** Service account created; BeyondTrust onboarding and OS checklist clarification remain pending.
