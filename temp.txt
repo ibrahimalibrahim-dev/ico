@@ -1,7 +1,7 @@
-**Status Update – Nexus Staging to Production**
+**Security/ISD dependencies have introduced additional pre-RET requirements:**
 
-Following ISD requirements, a dedicated service account was requested as `s_devOps` cannot be reused across tools. The account has been approved and created, with **BeyondTrust onboarding still in progress**.
+* ISD requested a dedicated service account, as the existing `s_devOps` account cannot be reused across tools. The account creation has been approved and completed; BeyondTrust onboarding is still pending.
+* As the server was commissioned from the approved Red Hat golden image, ISD requested written confirmation regarding the OS checklist, as this is not normally completed separately for golden-image-based OS commissioning.
+* OS has confirmed that the service account cannot be onboarded to the server while it remains in staging. The server will only be promoted to production following RET approval, CAB approval, and execution of the promotion activity.
 
-ISD also requested written confirmation regarding the OS checklist, as the server was commissioned from the approved Red Hat golden image, where the checklist is not normally completed separately.
-
-**Current status:** Service account created; BeyondTrust onboarding and OS checklist clarification remain pending.
+**Current status:** Service account creation is complete. Remaining items are BeyondTrust onboarding and resolution/confirmation of the staging-to-production onboarding dependency before RET can proceed.
