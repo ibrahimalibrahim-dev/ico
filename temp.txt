@@ -1,7 +1,109 @@
-**Security/ISD dependencies have introduced additional pre-RET requirements:**
+### UCD OIDC – Vendor Validation
 
-* ISD requested a dedicated service account, as the existing `s_devOps` account cannot be reused across tools. The account creation has been approved and completed; BeyondTrust onboarding is still pending.
-* As the server was commissioned from the approved Red Hat golden image, ISD requested written confirmation regarding the OS checklist, as this is not normally completed separately for golden-image-based OS commissioning.
-* OS has confirmed that the service account cannot be onboarded to the server while it remains in staging. The server will only be promoted to production following RET approval, CAB approval, and execution of the promotion activity.
+**Current status:**
+UCD `8.2.1.0.ifix01.1187776` reaches Entra ID successfully in the browser, including MFA, and receives the authorization callback. Failure occurs during the **server-side token exchange**, with:
 
-**Current status:** Service account creation is complete. Remaining items are BeyondTrust onboarding and resolution/confirmation of the staging-to-production onboarding dependency before RET can proceed.
+```text
+Requesting auth token: tokenEndpoint=...
+failed to parse ID token response
+java.net.ConnectException: Connection timed out
+```
+
+### Tests completed
+
+**1. Direct connectivity from UCD server**
+
+```bash
+curl -vk --connect-timeout 10 --max-time 30 \
+"https://login.microsoftonline.com/<TENANT_ID>/v2.0/.well-known/openid-configuration"
+```
+
+Result: **Connection timed out**.
+
+**2. Check proxy environment**
+
+```bash
+env | grep -i proxy
+```
+
+Result: **No proxy variables configured**.
+
+**3. Test through corporate proxy**
+
+```bash
+curl -vk --connect-timeout 10 --max-time 30 \
+-x http://<PROXY_HOST>:<PROXY_PORT> \
+"https://login.microsoftonline.com/<TENANT_ID>/v2.0/.well-known/openid-configuration"
+```
+
+Result: **Successful**.
+
+**4. Test Entra token endpoint through proxy**
+
+```bash
+curl -vk --connect-timeout 10 --max-time 30 \
+-x http://<PROXY_HOST>:<PROXY_PORT> \
+"https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token"
+```
+
+Result: **Successful connection/HTTP response**.
+
+### JDK proxy configuration
+
+UCD is running on Java `11.0.20`.
+
+Check:
+
+```bash
+$JAVA_HOME/conf/net.properties
+```
+
+Current relevant settings:
+
+```text
+java.net.useSystemProxies=false
+
+# http.proxyHost=
+# http.proxyPort=80
+# https.proxyHost=
+# https.proxyPort=443
+
+http.nonProxyHosts=localhost|127.*|[:::1]
+ftp.nonProxyHosts=localhost|127.*|[:::1]
+```
+
+### Vendor validation required
+
+Please confirm:
+
+1. Which HTTP client/mechanism UCD OIDC uses for the token exchange.
+2. How proxy settings are supported/configured for UCD `8.2.1.0.ifix01`.
+3. Whether `https.proxyHost` / `https.proxyPort`, `java.net.useSystemProxies`, or a UCD-specific proxy configuration should be used.
+4. Whether a UCD restart is required after the proxy configuration change.
+5. Whether the corporate proxy requires authentication or TLS inspection/CA import.
+6. Whether there are any known OIDC/proxy issues or recommended iFixes for this UCD version.
+
+**Important:** No configuration change will be made during validation until the supported UCD configuration method, restart requirement, and rollback approach are confirmed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Entra ID configuration/authentication: evidence currently points to working.
+Network/proxy path: evidence shows a working route exists through the corporate proxy.
+UCD: the failing component is the UCD server-side token exchange, and the identified Java defaults do not currently use the working proxy path.
+Vendor: needs to identify/validate the supported UCD configuration to make the OIDC client use that path.
