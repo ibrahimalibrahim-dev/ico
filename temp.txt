@@ -1,15 +1,8 @@
-**Update:**
+**Status Update – Bitbucket UAT NFS Migration**
 
-Vendor session completed. During the session, the following was demonstrated:
-
-* Direct `curl` to the Entra token endpoint → **connection timeout**.
-* Same endpoint through corporate proxy → **successful connection**.
-* UCD `net.properties` shows `java.net.useSystemProxies=false` and no proxy configured.
-* UCD OIDC Discovery using the Entra endpoint also → **timeout**.
-* UCD logs continue to show `java.net.ConnectException: Connection timed out` during token exchange.
-
-Vendor advised involving Network. Network has confirmed no traffic is visible for the failed direct connection.
-
-**Next step:** Engage OS specialist to validate the server/JVM proxy configuration and determine how UCD should be configured to use the working corporate proxy path.
-
-**Status:** OIDC issue remains under investigation; no configuration changes made.
+* **UAT NFS mounted and validated** for read/write access from the Bitbucket server.
+* **~279 GB of Bitbucket shared data** identified and synchronized to the NFS using `rsync`.
+* **Synchronization validated:** latest incremental check confirmed **0 files requiring transfer**, confirming the NFS copy is currently aligned with the source.
+* **Next steps:** Complete Bitbucket NFS configuration/application validation, followed by DR testing.
+* **Timeline:** Extension requested until **mid-October**, as the Nexus staging-to-production migration required priority focus and significant cross-team coordination.
+* **Target:** Complete remaining UAT/DR activities by mid-October, subject to validation and external dependencies.
