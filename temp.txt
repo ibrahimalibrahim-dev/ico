@@ -1,109 +1,29 @@
-### UCD OIDC – Vendor Validation
+### UCD OIDC – Current Status and Troubleshooting Update
 
-**Current status:**
-UCD `8.2.1.0.ifix01.1187776` reaches Entra ID successfully in the browser, including MFA, and receives the authorization callback. Failure occurs during the **server-side token exchange**, with:
+A troubleshooting session was conducted with the UCD vendor to validate the ongoing OIDC authentication issue.
 
-```text
-Requesting auth token: tokenEndpoint=...
-failed to parse ID token response
-java.net.ConnectException: Connection timed out
-```
+The following was demonstrated during the session:
 
-### Tests completed
+* **Direct connectivity to the Entra ID token endpoint from the UCD server** results in a connection timeout.
+* **The same endpoint accessed through the corporate proxy** successfully establishes connectivity.
+* UCD Java `net.properties` was reviewed and currently has `java.net.useSystemProxies=false`, with no HTTP/HTTPS proxy configured.
+* UCD OIDC **Discovery** was also tested using the Entra ID discovery endpoint with the tenant ID. The request remains loading and eventually times out.
+* UCD logs continue to show the failure occurring during the server-side token exchange, including `java.net.ConnectException: Connection timed out`.
 
-**1. Direct connectivity from UCD server**
+These tests were demonstrated to the vendor in real time. Based on the current evidence, the issue is occurring during **UCD server-side communication with Entra ID**, with connectivity succeeding when explicitly routed through the corporate proxy.
 
-```bash
-curl -vk --connect-timeout 10 --max-time 30 \
-"https://login.microsoftonline.com/<TENANT_ID>/v2.0/.well-known/openid-configuration"
-```
+The vendor requested that Network be engaged for further investigation. Network has been consulted previously and advised that no corresponding traffic is visible from the UCD server for the failed direct connection attempts.
 
-Result: **Connection timed out**.
+### Next Step
 
-**2. Check proxy environment**
+As the proxy path has been demonstrated to work while the direct application connectivity times out, the next step is to engage the **OS specialist** to validate the server/JVM-level proxy configuration and determine how the UCD application is expected to use the corporate proxy.
 
-```bash
-env | grep -i proxy
-```
+The following will be validated:
 
-Result: **No proxy variables configured**.
+1. UCD/Java proxy configuration and supported configuration method.
+2. Whether the UCD OIDC component is expected to inherit JVM proxy settings.
+3. Whether additional JVM/application-level proxy configuration is required.
+4. Whether any OS-level routing, proxy, or security configuration is preventing the UCD Java process from using the working proxy path.
+5. Any restart/change requirements before implementing configuration changes.
 
-**3. Test through corporate proxy**
-
-```bash
-curl -vk --connect-timeout 10 --max-time 30 \
--x http://<PROXY_HOST>:<PROXY_PORT> \
-"https://login.microsoftonline.com/<TENANT_ID>/v2.0/.well-known/openid-configuration"
-```
-
-Result: **Successful**.
-
-**4. Test Entra token endpoint through proxy**
-
-```bash
-curl -vk --connect-timeout 10 --max-time 30 \
--x http://<PROXY_HOST>:<PROXY_PORT> \
-"https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/token"
-```
-
-Result: **Successful connection/HTTP response**.
-
-### JDK proxy configuration
-
-UCD is running on Java `11.0.20`.
-
-Check:
-
-```bash
-$JAVA_HOME/conf/net.properties
-```
-
-Current relevant settings:
-
-```text
-java.net.useSystemProxies=false
-
-# http.proxyHost=
-# http.proxyPort=80
-# https.proxyHost=
-# https.proxyPort=443
-
-http.nonProxyHosts=localhost|127.*|[:::1]
-ftp.nonProxyHosts=localhost|127.*|[:::1]
-```
-
-### Vendor validation required
-
-Please confirm:
-
-1. Which HTTP client/mechanism UCD OIDC uses for the token exchange.
-2. How proxy settings are supported/configured for UCD `8.2.1.0.ifix01`.
-3. Whether `https.proxyHost` / `https.proxyPort`, `java.net.useSystemProxies`, or a UCD-specific proxy configuration should be used.
-4. Whether a UCD restart is required after the proxy configuration change.
-5. Whether the corporate proxy requires authentication or TLS inspection/CA import.
-6. Whether there are any known OIDC/proxy issues or recommended iFixes for this UCD version.
-
-**Important:** No configuration change will be made during validation until the supported UCD configuration method, restart requirement, and rollback approach are confirmed.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Entra ID configuration/authentication: evidence currently points to working.
-Network/proxy path: evidence shows a working route exists through the corporate proxy.
-UCD: the failing component is the UCD server-side token exchange, and the identified Java defaults do not currently use the working proxy path.
-Vendor: needs to identify/validate the supported UCD configuration to make the OIDC client use that path.
+**Current status:** OIDC authentication remains unresolved. Evidence collected so far indicates that the issue is isolated to the **UCD server-side connectivity/proxy integration path**, and further OS-level validation is required before any configuration change is made.
