@@ -1,29 +1,15 @@
-### UCD OIDC – Current Status and Troubleshooting Update
+**Update:**
 
-A troubleshooting session was conducted with the UCD vendor to validate the ongoing OIDC authentication issue.
+Vendor session completed. During the session, the following was demonstrated:
 
-The following was demonstrated during the session:
+* Direct `curl` to the Entra token endpoint → **connection timeout**.
+* Same endpoint through corporate proxy → **successful connection**.
+* UCD `net.properties` shows `java.net.useSystemProxies=false` and no proxy configured.
+* UCD OIDC Discovery using the Entra endpoint also → **timeout**.
+* UCD logs continue to show `java.net.ConnectException: Connection timed out` during token exchange.
 
-* **Direct connectivity to the Entra ID token endpoint from the UCD server** results in a connection timeout.
-* **The same endpoint accessed through the corporate proxy** successfully establishes connectivity.
-* UCD Java `net.properties` was reviewed and currently has `java.net.useSystemProxies=false`, with no HTTP/HTTPS proxy configured.
-* UCD OIDC **Discovery** was also tested using the Entra ID discovery endpoint with the tenant ID. The request remains loading and eventually times out.
-* UCD logs continue to show the failure occurring during the server-side token exchange, including `java.net.ConnectException: Connection timed out`.
+Vendor advised involving Network. Network has confirmed no traffic is visible for the failed direct connection.
 
-These tests were demonstrated to the vendor in real time. Based on the current evidence, the issue is occurring during **UCD server-side communication with Entra ID**, with connectivity succeeding when explicitly routed through the corporate proxy.
+**Next step:** Engage OS specialist to validate the server/JVM proxy configuration and determine how UCD should be configured to use the working corporate proxy path.
 
-The vendor requested that Network be engaged for further investigation. Network has been consulted previously and advised that no corresponding traffic is visible from the UCD server for the failed direct connection attempts.
-
-### Next Step
-
-As the proxy path has been demonstrated to work while the direct application connectivity times out, the next step is to engage the **OS specialist** to validate the server/JVM-level proxy configuration and determine how the UCD application is expected to use the corporate proxy.
-
-The following will be validated:
-
-1. UCD/Java proxy configuration and supported configuration method.
-2. Whether the UCD OIDC component is expected to inherit JVM proxy settings.
-3. Whether additional JVM/application-level proxy configuration is required.
-4. Whether any OS-level routing, proxy, or security configuration is preventing the UCD Java process from using the working proxy path.
-5. Any restart/change requirements before implementing configuration changes.
-
-**Current status:** OIDC authentication remains unresolved. Evidence collected so far indicates that the issue is isolated to the **UCD server-side connectivity/proxy integration path**, and further OS-level validation is required before any configuration change is made.
+**Status:** OIDC issue remains under investigation; no configuration changes made.
