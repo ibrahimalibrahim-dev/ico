@@ -1,8 +1,12 @@
-**Status Update – Bitbucket UAT NFS Migration**
+### Current Status & Priorities
 
-* **UAT NFS mounted and validated** for read/write access from the Bitbucket server.
-* **~279 GB of Bitbucket shared data** identified and synchronized to the NFS using `rsync`.
-* **Synchronization validated:** latest incremental check confirmed **0 files requiring transfer**, confirming the NFS copy is currently aligned with the source.
-* **Next steps:** Complete Bitbucket NFS configuration/application validation, followed by DR testing.
-* **Timeline:** Extension requested until **mid-October**, as the Nexus staging-to-production migration required priority focus and significant cross-team coordination.
-* **Target:** Complete remaining UAT/DR activities by mid-October, subject to validation and external dependencies.
+* **UCD / Entra ID OIDC:** Investigation confirmed the issue is related to server-side proxy/connectivity between UCD and Entra ID. OS has proposed validating the configuration in UAT first to avoid production downtime; however, UAT does not have Entra ID, so validation will initially be limited to network/connectivity testing.
+
+* **Current priorities:** Focus is currently on:
+
+  * **CICD firewall migration**, with existing firewall rules expiring by end of October and requiring completion to maintain service continuity.
+  * **Nexus / SPM onboarding**, being progressed with Development on the upgraded Nexus platform.
+
+Given the production impact and firm deadlines associated with these activities, they have been prioritized ahead of the annual assessment.
+
+**Request:** Extend the assessment deadline to **30 November 2026** to allow completion of these higher-priority activities and ensure the assessment can be completed with appropriate focus.
