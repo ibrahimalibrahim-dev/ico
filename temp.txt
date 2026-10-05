@@ -1,12 +1,5 @@
-### Current Status & Priorities
+**Outcome:**
 
-* **UCD / Entra ID OIDC:** Investigation confirmed the issue is related to server-side proxy/connectivity between UCD and Entra ID. OS has proposed validating the configuration in UAT first to avoid production downtime; however, UAT does not have Entra ID, so validation will initially be limited to network/connectivity testing.
+Vendor troubleshooting session completed. UCD OIDC connectivity and proxy behavior were reviewed and reproduced, confirming the issue occurs during server-side connectivity to Entra ID.
 
-* **Current priorities:** Focus is currently on:
-
-  * **CICD firewall migration**, with existing firewall rules expiring by end of October and requiring completion to maintain service continuity.
-  * **Nexus / SPM onboarding**, being progressed with Development on the upgraded Nexus platform.
-
-Given the production impact and firm deadlines associated with these activities, they have been prioritized ahead of the annual assessment.
-
-**Request:** Extend the assessment deadline to **30 November 2026** to allow completion of these higher-priority activities and ensure the assessment can be completed with appropriate focus.
+The vendor session is therefore considered complete. The underlying **Entra ID/OIDC issue remains open under the parent ticket**, with OS-level proxy/connectivity validation identified as the next step.
