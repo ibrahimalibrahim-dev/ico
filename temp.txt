@@ -1,5 +1,11 @@
-One of [Manager]’s key strengths is his ability to manage available resources effectively despite the current demands and timelines associated with the Core rollout. Given the existing resource constraints and the need for additional team capacity, he demonstrates good prioritization and makes effective use of the resources available to the team. His ability to maintain focus on critical deliverables while balancing competing priorities is particularly valuable during a period of significant organizational and operational demand.
+### Nexus Swift Proxy – Status Update
 
+* Initial Xcode build failure showed **HTTP 403 / CONNECT tunnel blocked**, indicating proxy/network-level blocking.
+* Direct testing from the server confirmed **Nexus connectivity is working** and the request reaches the Nexus application.
+* Nexus logs initially showed **Java PKIX/certificate trust failure** when connecting to GitHub through the corporate Netskope proxy.
+* Direct `curl` testing from the server successfully established the proxy connection and TLS, confirming **OS-level certificate trust and network connectivity**.
+* The required Netskope/Proxy CA certificate was subsequently added to the **Nexus JDK truststore**, and Nexus was restarted.
+* The previous **PKIX certificate error is now resolved**, and Network has confirmed the traffic is being accepted.
+* The remaining response is **HTTP 403 – “URL is blocked in accordance with [Company] procedures.”**
 
-
-One area where [Manager] could become even more effective is through continued focus on longer-term resource and capacity planning. While he manages the current resources effectively, the ongoing demands of the Core rollout and competing priorities highlight the importance of anticipating capacity requirements early and ensuring that responsibilities are appropriately distributed across the team. Greater focus on proactive workforce planning and delegation could further strengthen the team’s ability to sustain delivery while reducing dependency on limited resources.
+**Current status:** The remaining issue appears to be a **corporate proxy/security policy block**. Service Desk has been engaged and has escalated the matter for management review.
