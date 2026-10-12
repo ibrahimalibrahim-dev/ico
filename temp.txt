@@ -1,11 +1,7 @@
-### Nexus Swift Proxy – Status Update
+Hi Team,
 
-* Initial Xcode build failure showed **HTTP 403 / CONNECT tunnel blocked**, indicating proxy/network-level blocking.
-* Direct testing from the server confirmed **Nexus connectivity is working** and the request reaches the Nexus application.
-* Nexus logs initially showed **Java PKIX/certificate trust failure** when connecting to GitHub through the corporate Netskope proxy.
-* Direct `curl` testing from the server successfully established the proxy connection and TLS, confirming **OS-level certificate trust and network connectivity**.
-* The required Netskope/Proxy CA certificate was subsequently added to the **Nexus JDK truststore**, and Nexus was restarted.
-* The previous **PKIX certificate error is now resolved**, and Network has confirmed the traffic is being accepted.
-* The remaining response is **HTTP 403 – “URL is blocked in accordance with [Company] procedures.”**
+The UCD agent vulnerability remediation is being treated as a high priority. I am currently working through the investigation and validation steps to ensure the remediation approach is safe and effective.
 
-**Current status:** The remaining issue appears to be a **corporate proxy/security policy block**. Service Desk has been engaged and has escalated the matter for management review.
+I will provide a further update once I have more clarity on the implementation timeline.
+
+Best regards,  
