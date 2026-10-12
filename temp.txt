@@ -1,7 +1,9 @@
 Hi Team,
 
-The UCD agent vulnerability remediation is being treated as a high priority. I am currently working through the investigation and validation steps to ensure the remediation approach is safe and effective.
+As discussed, we need to retrieve the existing UCD agent installer (`ucd-agent-installer.zip` / `devops-deploy-agent.zip`, where available) from a representative sample of the existing servers to establish a baseline that closely reflects the current production setup.
 
-I will provide a further update once I have more clarity on the implementation timeline.
+The objective is to use the existing installation package and configuration as a reference for reproducing the current agent setup in UAT, validating the proposed Log4j remediation, and confirming that the agent continues to function as expected.
 
-Best regards,  
+Please assist with locating and retrieving the relevant installer packages from the selected servers. Where available, please also retain the associated version/build information to help us identify the exact package currently in use.
+
+Best regards,
