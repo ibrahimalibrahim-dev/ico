@@ -1,9 +1,12 @@
-Hi Team,
+Hi All,
 
-As discussed, we need to retrieve the existing UCD agent installer (`ucd-agent-installer.zip` / `devops-deploy-agent.zip`, where available) from a representative sample of the existing servers to establish a baseline that closely reflects the current production setup.
+The initial build failure was investigated, and the WebLogic-related findings were shared with the development team, who subsequently resolved the issue.
 
-The objective is to use the existing installation package and configuration as a reference for reproducing the current agent setup in UAT, validating the proposed Log4j remediation, and confirming that the agent continues to function as expected.
+The current failure again appears to involve the WebLogic step, which is experiencing prolonged execution and frequent failures despite no changes to the pipeline logic. As this step interacts with your server, please investigate the underlying WebLogic or connectivity issue.
 
-Please assist with locating and retrieving the relevant installer packages from the selected servers. Where available, please also retain the associated version/build information to help us identify the exact package currently in use.
+DevSecOps remains available to assist with pipeline-level investigation where relevant, based on the available logs and findings. Please also ensure the necessary UCD access is in place to monitor the pipeline and support troubleshooting.
 
-Best regards,
+Any further investigation will be scoped according to the identified issue and agreed ownership.
+
+Regards,  
+DevSecOps Team
