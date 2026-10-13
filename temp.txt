@@ -1,12 +1,5 @@
-Hi All,
+The initial failure was investigated, and the WebLogic-related findings were shared with the development team, who resolved the issue. The subsequent failure involves the same WebLogic step, with prolonged execution and frequent failures despite no changes to the pipeline logic.
 
-The initial build failure was investigated, and the WebLogic-related findings were shared with the development team, who subsequently resolved the issue.
+Further investigation of the underlying WebLogic or server connectivity issue falls under the development team's ownership. DevSecOps remains available to assist with pipeline-level troubleshooting where relevant, subject to the available logs and findings.
 
-The current failure again appears to involve the WebLogic step, which is experiencing prolonged execution and frequent failures despite no changes to the pipeline logic. As this step interacts with your server, please investigate the underlying WebLogic or connectivity issue.
-
-DevSecOps remains available to assist with pipeline-level investigation where relevant, based on the available logs and findings. Please also ensure the necessary UCD access is in place to monitor the pipeline and support troubleshooting.
-
-Any further investigation will be scoped according to the identified issue and agreed ownership.
-
-Regards,  
-DevSecOps Team
+Closing this ticket as the initial investigation is complete. Any subsequent failures should be tracked separately with the relevant error details.
