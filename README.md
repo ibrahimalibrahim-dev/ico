@@ -1,17 +1,10 @@
-RE: UCD Agent Vulnerability Remediation
+Dear Team,
 
+Please be advised that Checkmarx is currently experiencing a service issue, with network errors and MSSQL connection timeouts observed on the server.
 
-Hi Team,
+Consequently, Jenkins pipelines are experiencing significant delays at the Checkmarx scanning stage and ultimately failing.
 
-As an update, we have established a UAT test environment using the existing UCD agent installation and confirmed successful connectivity to UCD Production.
+This has been raised with the vendor as a **high-priority issue**, and we are following up for resolution. We will provide an update once service is restored.
 
-We have requested Tenable scan configuration to establish a baseline for the identified vulnerabilities before proceeding with the updated agent installation and validating the remediation.
-
-The activity remains a high priority, and we will continue to provide updates as progress is made.
-
-Best regards,
-
-
-
-
-The existing UCD agent has been installed on the UAT server and successfully connected to UCD Production. Tenable scan configuration has been requested to establish a vulnerability baseline before proceeding with the updated agent installation and validating remediation. Currently pending Tenable configuration and scan results.
+Regards,  
+DevSecOps Team
