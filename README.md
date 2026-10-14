@@ -1,10 +1,14 @@
+Urgent Escalation: Checkmarx Service Disruption – Vendor Troubleshooting Session Required
+
+
+
 Dear Team,
 
-Please be advised that Checkmarx is currently experiencing a service issue, with network errors and MSSQL connection timeouts observed on the server.
+Checkmarx is currently experiencing service issues, with network errors and MSSQL connection timeouts observed on the server. This is impacting Jenkins pipelines, which are experiencing prolonged delays at the Checkmarx stage before ultimately failing.
 
-Consequently, Jenkins pipelines are experiencing significant delays at the Checkmarx scanning stage and ultimately failing.
+A vendor support case has been raised, and given the impact on CI/CD operations, we require an urgent troubleshooting session with the vendor to investigate and resolve the issue.
 
-This has been raised with the vendor as a **high-priority issue**, and we are following up for resolution. We will provide an update once service is restored.
+Please prioritize arranging a session at the earliest opportunity and confirm the available times.
 
 Regards,  
 DevSecOps Team
