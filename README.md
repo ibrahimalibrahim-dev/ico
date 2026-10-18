@@ -1,14 +1,11 @@
-Urgent Escalation: Checkmarx Service Disruption – Vendor Troubleshooting Session Required
+**Status:** Tenable Nessus agent installation and service status have been verified. Pending Security team configuration to initiate the vulnerability scan, as they are the technical owners of Tenable.
 
 
 
-Dear Team,
+**Swift Package Manager Proxy – Status Update**
 
-Checkmarx is currently experiencing service issues, with network errors and MSSQL connection timeouts observed on the server. This is impacting Jenkins pipelines, which are experiencing prolonged delays at the Checkmarx stage before ultimately failing.
+Nexus Repository 3.95.0-07 has been configured with a Swift proxy to GitHub, and connectivity from the Mac build environment has been confirmed.
 
-A vendor support case has been raised, and given the impact on CI/CD operations, we require an urgent troubleshooting session with the vendor to investigate and resolve the issue.
+Testing has identified a dependency-resolution incompatibility: Tuist is attempting to clone dependencies using Git over HTTP, whereas the Nexus Swift proxy is intended for registry-based package resolution. I am validating the appropriate Tuist/SwiftPM configuration to route dependency resolution through Nexus.
 
-Please prioritize arranging a session at the earliest opportunity and confirm the available times.
-
-Regards,  
-DevSecOps Team
+**Next step:** Confirm the supported registry configuration and validate the build end-to-end through Nexus.
