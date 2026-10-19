@@ -1,1 +1,3 @@
-We have checked out the branch provided, updated the dependency URLs to point to Nexus, and tested connectivity from the Mac server. The Nexus Swift proxy returns HTTP 200 and valid package metadata via `curl`. However, Tuist is still failing when attempting to clone dependencies from Nexus. Could you please investigate the Tuist dependency configuration and cloning workflow on the development side?
+**Status: On Hold**
+
+Connectivity to the Nexus Swift proxy has been validated from the Mac server using `curl`, returning HTTP 200 with package metadata. Project onboarding is pending Development's validation and configuration of dependency retrieval through Tuist. The ticket will remain on hold until the developer-side configuration is completed.
