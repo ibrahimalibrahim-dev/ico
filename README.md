@@ -1,3 +1,5 @@
-**Status: On Hold**
+**Closure Update:**
 
-Connectivity to the Nexus Swift proxy has been validated from the Mac server using `curl`, returning HTTP 200 with package metadata. Project onboarding is pending Development's validation and configuration of dependency retrieval through Tuist. The ticket will remain on hold until the developer-side configuration is completed.
+Prod 2 baseline setup is complete, including LDAPS connectivity and database firewall access. The remaining HA/DR activities, including load balancer and shared NFS implementation, will be tracked separately under the main HA/DR ticket due to cross-environment dependencies and required change governance.
+
+Closing this sub-task as its defined scope is complete. The overall HA/DR initiative remains in progress.
