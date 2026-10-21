@@ -1,1 +1,8 @@
-**Update:** CAB has been prepared for the production UCD JVM proxy configuration change, planned for next weekend. The activity will address the outstanding Entra ID OIDC authentication gap, with database backup, VM snapshot, and rollback procedures in place. Post-change validation will cover Entra ID login, UCD service health, and deployment pipelines.
+Summary: Request Virtual IP Reservation for Bitbucket DR Load Balancer
+
+
+Requesting a Virtual IP (VIP) reservation for the Bitbucket Disaster Recovery (DR) environment to support load balancer configuration.
+
+The reserved VIP will be used as the DR access endpoint, enabling traffic to be directed to the designated Bitbucket DR server through the load balancer.
+
+Please confirm the allocated VIP and any additional requirements for load balancer configuration.
