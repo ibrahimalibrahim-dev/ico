@@ -1,13 +1,7 @@
-UAT Validation – UCD Agent and JDK Upgrade Sequence
+Following the successful UAT validation and Tenable rescanning, we are ready to coordinate the next phase of UCD agent security patching.
 
-Validate the supported upgrade sequence for the UCD agent and JDK in UAT, in coordination with IBM support.
+We propose starting with the least critical servers, prioritizing UAT environments, and proceeding in batches of 10 servers. This phased approach will allow us to monitor the results, validate application and agent functionality, and address any issues before expanding to subsequent batches.
 
-The following scenarios will be evaluated based on vendor guidance:
+The remediation scope varies by server: some require Log4j library updates, while others also require JDK upgrades. Accordingly, each batch will be assessed and validated based on the applicable changes, with the rollout progressing in a measured and controlled manner.
 
-UCD agent first, then JDK: Upgrade the UCD agent, validate its operation, upgrade the JDK, and revalidate agent connectivity and deployment functionality.
-
-JDK first, then UCD agent: Upgrade the JDK, validate compatibility with the existing agent, upgrade the UCD agent, and revalidate agent connectivity and deployment functionality.
-
-For the selected approach, track execution, validation results, identified issues, and any required corrective actions. Confirm the final JDK version and supported configuration, and perform a follow-up Tenable scan to verify remediation of the identified vulnerabilities.
-
-Completion criteria: Vendor-supported upgrade sequence confirmed, UAT validation completed, agent functionality verified, and Tenable findings reviewed before proceeding with production remediation.
+Please coordinate with us on identifying the initial batch of servers and agreeing on a suitable implementation schedule.
