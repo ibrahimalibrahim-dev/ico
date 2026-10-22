@@ -1,7 +1,13 @@
-During yesterday's session, we upgraded the UCD agent on our UAT server and reran the Tenable scan. The previously identified agent-related vulnerabilities are now cleared.
+UAT Validation – UCD Agent and JDK Upgrade Sequence
 
-However, the scan has identified additional JDK vulnerabilities. We are considering upgrading the JDK to IBM Semeru Java 11.0.32.1 as the next step.
+Validate the supported upgrade sequence for the UCD agent and JDK in UAT, in coordination with IBM support.
 
-During the original installation, `JAVA_HOME` was configured to point to the existing JDK, and the JRE/JDK home directory was also specified. We would like to confirm the supported procedure for updating the JDK used by the UCD agent.
+The following scenarios will be evaluated based on vendor guidance:
 
-Specifically, where should `JAVA_HOME` or the agent's Java runtime path be updated so that the new JDK is used persistently when the agent starts as a systemd service, rather than only through a shell-level `export`? Please also confirm whether any agent-specific configuration or service files need to be updated, and whether replacing the existing JDK directory is supported.
+UCD agent first, then JDK: Upgrade the UCD agent, validate its operation, upgrade the JDK, and revalidate agent connectivity and deployment functionality.
+
+JDK first, then UCD agent: Upgrade the JDK, validate compatibility with the existing agent, upgrade the UCD agent, and revalidate agent connectivity and deployment functionality.
+
+For the selected approach, track execution, validation results, identified issues, and any required corrective actions. Confirm the final JDK version and supported configuration, and perform a follow-up Tenable scan to verify remediation of the identified vulnerabilities.
+
+Completion criteria: Vendor-supported upgrade sequence confirmed, UAT validation completed, agent functionality verified, and Tenable findings reviewed before proceeding with production remediation.
