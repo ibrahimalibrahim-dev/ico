@@ -1,17 +1,7 @@
-RE: UCD Agent Vulnerability Remediation
+During yesterday's session, we upgraded the UCD agent on our UAT server and reran the Tenable scan. The previously identified agent-related vulnerabilities are now cleared.
 
+However, the scan has identified additional JDK vulnerabilities. We are considering upgrading the JDK to IBM Semeru Java 11.0.32.1 as the next step.
 
-Hi Team,
+During the original installation, `JAVA_HOME` was configured to point to the existing JDK, and the JRE/JDK home directory was also specified. We would like to confirm the supported procedure for updating the JDK used by the UCD agent.
 
-As an update, we have established a UAT test environment using the existing UCD agent installation and confirmed successful connectivity to UCD Production.
-
-We have requested Tenable scan configuration to establish a baseline for the identified vulnerabilities before proceeding with the updated agent installation and validating the remediation.
-
-The activity remains a high priority, and we will continue to provide updates as progress is made.
-
-Best regards,
-
-
-
-
-The existing UCD agent has been installed on the UAT server and successfully connected to UCD Production. Tenable scan configuration has been requested to establish a vulnerability baseline before proceeding with the updated agent installation and validating remediation. Currently pending Tenable configuration and scan results.
+Specifically, where should `JAVA_HOME` or the agent's Java runtime path be updated so that the new JDK is used persistently when the agent starts as a systemd service, rather than only through a shell-level `export`? Please also confirm whether any agent-specific configuration or service files need to be updated, and whether replacing the existing JDK directory is supported.
