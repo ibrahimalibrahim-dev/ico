@@ -1,12 +1,16 @@
-Dear Team,
+Hi Digital Team,
 
-Please defer the decommissioning of the referenced NFS server until further notice.
+The UCD agents have been patched across the identified UAT, DEV, QA, and Pre-Production servers to version **8.1.2**. The relevant server details are listed below:
 
-While we acknowledge that the server has been powered off for the past 2–3 months, further assessment is required from our end to establish any existing dependencies and confirm whether it can be safely decommissioned.
+[Insert server list / snippet]
 
-We will provide an update once the assessment has been completed and the decommissioning decision can be confirmed.
+Production patching will be scheduled separately, subject to CAB approval. The relevant stakeholders will be informed accordingly once the implementation schedule is confirmed.
 
-Thank you for your understanding.
+Regarding the JDK remediation, configuration of the updated JDK is currently in progress. During validation, we encountered an error indicating that the `.env` file is missing from the relevant service account's home directory. We are investigating this as part of the ongoing configuration and validation.
 
-Best regards,  
+UCD link: [Insert UCD link]
+
+Further updates will be shared as validation progresses and the remaining activities are completed.
+
+Regards,  
 DevSecOps Team
