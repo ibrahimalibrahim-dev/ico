@@ -1,7 +1,12 @@
-Following the successful UAT validation and Tenable rescanning, we are ready to coordinate the next phase of UCD agent security patching.
+Dear Team,
 
-We propose starting with the least critical servers, prioritizing UAT environments, and proceeding in batches of 10 servers. This phased approach will allow us to monitor the results, validate application and agent functionality, and address any issues before expanding to subsequent batches.
+Please defer the decommissioning of the referenced NFS server until further notice.
 
-The remediation scope varies by server: some require Log4j library updates, while others also require JDK upgrades. Accordingly, each batch will be assessed and validated based on the applicable changes, with the rollout progressing in a measured and controlled manner.
+While we acknowledge that the server has been powered off for the past 2–3 months, further assessment is required from our end to establish any existing dependencies and confirm whether it can be safely decommissioned.
 
-Please coordinate with us on identifying the initial batch of servers and agreeing on a suitable implementation schedule.
+We will provide an update once the assessment has been completed and the decommissioning decision can be confirmed.
+
+Thank you for your understanding.
+
+Best regards,  
+DevSecOps Team
