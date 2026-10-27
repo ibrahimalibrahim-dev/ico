@@ -1,13 +1,12 @@
-Dear Digital Team,
+Dear Team,
 
-As part of our ongoing Nexus upgrade and Swift Package Manager integration, we are preparing to transition project dependencies to the new Nexus environment.
+Thank you for sharing your concerns.
 
-To support this, kindly assist with the following:
+The firewall access is not limited to Swift Package Manager. As the existing Nexus server is planned for decommissioning, the relevant developer workstations and build environments will need connectivity to the new Nexus server to ensure continued access to required dependencies.
 
-- **Firewall access:** Raise the required firewall requests to allow connectivity from your workstations to the new Nexus server using its DNS name and IP address.
-- **Development branch:** Provide a branch that we can use to incrementally update and validate the project dependencies to use Nexus instead of GitHub.
+Regarding existing Gradle, npm, and other projects currently using Nexus, these will also need to be migrated to the new server, where applicable.
 
-Once these are in place, we can coordinate the changes and validate the integration with minimal disruption to ongoing development.
+To ensure a controlled transition, we propose updating the project configurations through dedicated testing branches first. This will allow us to validate connectivity, dependency resolution, and build integration against the new Nexus environment before merging the changes into the main branches. Migration can then proceed incrementally in coordination with the respective development teams, minimizing disruption to ongoing development.
 
 Thank you for your cooperation and support.
 
