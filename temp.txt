@@ -1,1 +1,14 @@
-**Status Update:** Nexus proxy configuration and connectivity testing are complete from our end. Progress is pending developer action to raise the required firewall requests from their workstations and update dependency configurations to use Nexus instead of GitHub. The task will proceed once these dependencies are addressed.
+Dear Digital Team,
+
+As part of our ongoing Nexus upgrade and Swift Package Manager integration, we are preparing to transition project dependencies to the new Nexus environment.
+
+To support this, kindly assist with the following:
+
+- **Firewall access:** Raise the required firewall requests to allow connectivity from your workstations to the new Nexus server using its DNS name and IP address.
+- **Development branch:** Provide a branch that we can use to incrementally update and validate the project dependencies to use Nexus instead of GitHub.
+
+Once these are in place, we can coordinate the changes and validate the integration with minimal disruption to ongoing development.
+
+Thank you for your cooperation and support.
+
+Best regards,
