@@ -1,16 +1,1 @@
-Hi Digital Team,
-
-The UCD agents have been patched across the identified UAT, DEV, QA, and Pre-Production servers to version **8.1.2**. The relevant server details are listed below:
-
-[Insert server list / snippet]
-
-Production patching will be scheduled separately, subject to CAB approval. The relevant stakeholders will be informed accordingly once the implementation schedule is confirmed.
-
-Regarding the JDK remediation, configuration of the updated JDK is currently in progress. During validation, we encountered an error indicating that the `.env` file is missing from the relevant service account's home directory. We are investigating this as part of the ongoing configuration and validation.
-
-UCD link: [Insert UCD link]
-
-Further updates will be shared as validation progresses and the remaining activities are completed.
-
-Regards,  
-DevSecOps Team
+**Status Update:** Nexus proxy configuration and connectivity testing are complete from our end. Progress is pending developer action to raise the required firewall requests from their workstations and update dependency configurations to use Nexus instead of GitHub. The task will proceed once these dependencies are addressed.
