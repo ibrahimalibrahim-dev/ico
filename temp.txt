@@ -1,16 +1,15 @@
-
-Jenkins Pipeline Impact – Checkmarx Service
-
+Checkmarx Certificate Expiry – Jenkins Pipeline Impact
 
 
+Dear [OS Team Manager],
 
+We would appreciate your support in clarifying the certificate renewal and notification process for the Checkmarx service, as we understand the certificate involved is internally managed.
 
+The recent certificate expiry has affected Checkmarx availability and disrupted Jenkins pipeline execution, impacting Digital deployment activities.
 
+To help avoid similar disruptions in the future, it would be beneficial to ensure that upcoming certificate expirations and renewals are communicated to the relevant teams in advance, particularly where critical CI/CD services are concerned.
 
-Dear Team,
+Thank you for your support and cooperation.
 
-Please be advised that Jenkins pipelines are currently impacted due to an issue with the Checkmarx service.
-
-The issue is under investigation, and remediation efforts are underway. We will provide a further update once service has been restored.
-
-Thank you for your understanding.
+Best regards,  
+DevSecOps Team
