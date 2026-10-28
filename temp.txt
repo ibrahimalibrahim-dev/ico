@@ -1,13 +1,16 @@
+
+Jenkins Pipeline Impact – Checkmarx Service
+
+
+
+
+
+
+
 Dear Team,
 
-Thank you for sharing your concerns.
+Please be advised that Jenkins pipelines are currently impacted due to an issue with the Checkmarx service.
 
-The firewall access is not limited to Swift Package Manager. As the existing Nexus server is planned for decommissioning, the relevant developer workstations and build environments will need connectivity to the new Nexus server to ensure continued access to required dependencies.
+The issue is under investigation, and remediation efforts are underway. We will provide a further update once service has been restored.
 
-Regarding existing Gradle, npm, and other projects currently using Nexus, these will also need to be migrated to the new server, where applicable.
-
-To ensure a controlled transition, we propose updating the project configurations through dedicated testing branches first. This will allow us to validate connectivity, dependency resolution, and build integration against the new Nexus environment before merging the changes into the main branches. Migration can then proceed incrementally in coordination with the respective development teams, minimizing disruption to ongoing development.
-
-Thank you for your cooperation and support.
-
-Best regards,
+Thank you for your understanding.
