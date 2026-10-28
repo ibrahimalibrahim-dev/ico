@@ -1,12 +1,10 @@
 Dear [Name],
 
-Thank you for your support in addressing the issue.
+Thank you for your support in resolving the issue.
 
-The certificate expiry was identified only after Checkmarx availability and Jenkins pipeline execution had been impacted, resulting in disruption to Digital deployment activities. While service has been restored across the majority of the affected environments, remediation remains ongoing for the remaining servers.
+The relevant distribution list is [email address].
 
-We will share the relevant distribution list for future notifications. It would be helpful to ensure that certificate expirations are communicated sufficiently in advance, allowing the concerned teams to plan accordingly and avoid similar service disruptions.
-
-Thank you for your continued support and cooperation.
+Given the impact on Checkmarx availability and Digital deployments, we would appreciate your support in ensuring that certificate expiry monitoring and advance notifications are incorporated into the process for internally managed certificates, so that the relevant teams can take the necessary action ahead of expiry.
 
 Best regards,  
 DevSecOps Team
