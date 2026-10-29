@@ -1,17 +1,14 @@
-[Application/System] – [Specific Issue or Unexpected Behaviour]
+Urgent Assistance Required – Server Access for Checkmarx Certificate Update
 
 
-**Issue Description:**
-Describe the issue encountered, including the affected application/component, the observed behaviour, and the expected behaviour.
 
-**Recent Changes:**
-Confirm whether any recent code changes, deployments, configuration updates, dependency upgrades, or other modifications may be related to the issue. If applicable, specify what changed and when.
+Dear Team,
 
-**Error Details / Evidence:**
-Provide the relevant error messages, logs, screenshots, timestamps, or other information required to reproduce or investigate the issue.
+Please find attached the certificates currently identified by our team for your reference.
 
-**Impact:**
-Describe the impact on the application, functionality, or development/release process.
+Additionally, we require assistance with resetting or retrieving the passwords for a couple of servers, as we are currently unsure which ticket type to raise to initiate this request.
 
-**Actions Taken:**
-List any troubleshooting steps already performed and their outcomes.
+Given the urgency of the ongoing Checkmarx remediation, we would appreciate your support in facilitating the required access at the earliest opportunity, so that we can SSH into the affected servers and apply the renewed certificate for the new Checkmarx server.
+
+Thank you for your assistance and support.
+
