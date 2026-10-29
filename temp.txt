@@ -1,10 +1,26 @@
-Dear [Name],
+**CAB Title:** UCD Agent and JDK Security Patching – Production and DR Servers
 
-Thank you for your support in resolving the issue.
+**Business Justification:**
+Remediate identified Log4j and JDK vulnerabilities on production and DR UCD agents to address security findings and maintain a secure, supported environment.
 
-The relevant distribution list is [email address].
+**Description:**
+Upgrade UCD agents from version 7.x to 8.1.2.3 and JDK from 11.0.20 to 11.0.32.1 across the identified production and DR servers. Implementation will be performed in batches across multiple days, outside business hours, with validation and vulnerability scanning following each batch. Production application deployments are outside the scope of this change and will require a separate CAB.
 
-Given the impact on Checkmarx availability and Digital deployments, we would appreciate your support in ensuring that certificate expiry monitoring and advance notifications are incorporated into the process for internally managed certificates, so that the relevant teams can take the necessary action ahead of expiry.
+**Pre-Release Plan:**
+- Coordinate with the OS team to execute the required commands on production and DR servers.
+- Confirm the implementation schedule and server availability with the concerned teams.
+- Review the validated UAT procedure and confirm the required installation packages and configuration settings are available.
 
-Best regards,  
-DevSecOps Team
+**Deployment Plan:**
+- Execute the changes in batches outside business hours.
+- Upgrade the UCD agent from version 7.x to 8.1.2.3.
+- Upgrade JDK from 11.0.20 to 11.0.32.1 and apply the required configuration, ownership, and permissions.
+- Validate the agent version, Java configuration, service logs, and UCD connectivity.
+- Run Tenable scans after each batch and review the findings before proceeding to the next batch.
+- Remove obsolete JDK files only after confirming they are no longer referenced or required.
+
+**Rollback Plan:**
+- Stop the affected UCD agent service if issues occur.
+- Restore the previous JDK and UCD agent versions and their original configurations, ownership, and permissions, using the backups or preserved installation files.
+- Restart the service and validate UCD connectivity.
+- Suspend subsequent batches until the issue is resolved.
