@@ -1,14 +1,16 @@
-Urgent Assistance Required – Server Access for Checkmarx Certificate Update
+### Update – UCD Entra ID / Proxy Integration
 
+Following further discussions with IBM, the vendor confirmed that DevOps Deploy does not currently provide native support for Entra ID authentication through a proxy. They also confirmed that this configuration has not been tested by IBM and that its compatibility and potential impact are unknown.
 
+Although proxy configuration was discussed as a possible workaround, IBM has not provided confirmation that the proposed implementation is supported or safe for Production.
 
-Dear Team,
+IBM's recommendations:
+- Test the configuration in a lower environment using a separate Authentication Realm.
+- Do not implement in Production without prior testing.
+- Submit an IBM Idea if native proxy support for Entra ID is required.
 
-Please find attached the certificates currently identified by our team for your reference.
+**Decision:** Following discussion with management, we will not proceed with the proposed Production configuration without explicit confirmation and approval from IBM.
 
-Additionally, we require assistance with resetting or retrieving the passwords for a couple of servers, as we are currently unsure which ticket type to raise to initiate this request.
+**Next step:** Escalate the matter to management to agree on the way forward for the outstanding Security Annual Assessment requirement, given the current product limitation and the absence of an Entra ID-enabled UAT environment.
 
-Given the urgency of the ongoing Checkmarx remediation, we would appreciate your support in facilitating the required access at the earliest opportunity, so that we can SSH into the affected servers and apply the renewed certificate for the new Checkmarx server.
-
-Thank you for your assistance and support.
-
+IBM's response will be retained as supporting documentation for the assessment and future discussions.
