@@ -1,26 +1,95 @@
-**CAB Title:** UCD Agent and JDK Security Patching – Production and DR Servers
+**CAB Title:** UCD Agent Upgrade – Production and DR Servers (7.x to 8.1.2.3)
 
 **Business Justification:**
-Remediate identified Log4j and JDK vulnerabilities on production and DR UCD agents to address security findings and maintain a secure, supported environment.
+
+Upgrade the existing UCD agents to address identified security vulnerabilities, including Log4j-related findings, and maintain a secure and supported agent environment.
 
 **Description:**
-Upgrade UCD agents from version 7.x to 8.1.2.3 and JDK from 11.0.20 to 11.0.32.1 across the identified production and DR servers. Implementation will be performed in batches across multiple days, outside business hours, with validation and vulnerability scanning following each batch. Production application deployments are outside the scope of this change and will require a separate CAB.
+
+Upgrade UCD agents from version 7.x to 8.1.2.3 across the identified production and DR servers. Implementation will be carried out in batches across multiple days, outside business hours, with post-upgrade validation and vulnerability scanning following each batch.
+
+This activity will be coordinated with the separate JDK upgrade CAB, as both upgrades form part of the overall UCD security remediation initiative. Implementation dates, target servers, and corresponding IP addresses will be documented in this ticket as the rollout progresses.
 
 **Pre-Release Plan:**
-- Coordinate with the OS team to execute the required commands on production and DR servers.
+
+- Coordinate with the OS team to execute the required commands on production and DR servers, as DevSecOps does not have direct production server access.
 - Confirm the implementation schedule and server availability with the concerned teams.
-- Review the validated UAT procedure and confirm the required installation packages and configuration settings are available.
+- Ensure the validated UAT upgrade procedure and required installation packages are available.
+- Confirm the previous agent version and required configuration are available for rollback.
 
 **Deployment Plan:**
-- Execute the changes in batches outside business hours.
+
+- Execute the upgrade in batches outside business hours.
 - Upgrade the UCD agent from version 7.x to 8.1.2.3.
-- Upgrade JDK from 11.0.20 to 11.0.32.1 and apply the required configuration, ownership, and permissions.
-- Validate the agent version, Java configuration, service logs, and UCD connectivity.
-- Run Tenable scans after each batch and review the findings before proceeding to the next batch.
-- Remove obsolete JDK files only after confirming they are no longer referenced or required.
+- Validate the installed agent version, service status, logs, and connectivity to the UCD server.
+- Perform post-upgrade Tenable scans for each batch and review the findings before proceeding.
+- Document the servers and corresponding IP addresses covered during each implementation window.
+- Coordinate the JDK upgrade activity under its respective CAB ticket.
 
 **Rollback Plan:**
+
 - Stop the affected UCD agent service if issues occur.
-- Restore the previous JDK and UCD agent versions and their original configurations, ownership, and permissions, using the backups or preserved installation files.
-- Restart the service and validate UCD connectivity.
+- Restore the previous UCD agent version and its original configuration using preserved installation files and backups.
+- Restart the agent service and validate connectivity to the UCD server.
 - Suspend subsequent batches until the issue is resolved.
+
+
+
+
+
+
+
+
+
+
+
+**CAB Title:** JDK Security Upgrade – Production and DR Servers (11.0.20 to 11.0.32.1)
+
+**Business Justification:**
+
+Remediate identified JDK vulnerabilities across production and DR servers by upgrading the existing Java runtime to a newer supported maintenance release, reducing security exposure and maintaining the security posture of the UCD environment.
+
+**Description:**
+
+Upgrade the JDK from version 11.0.20 to 11.0.32.1 across the identified production and DR servers. Implementation will be carried out in batches across multiple days, outside business hours, with post-upgrade validation and vulnerability scanning following each batch.
+
+This activity will be coordinated with the separate UCD Agent upgrade CAB, as both upgrades form part of the overall UCD security remediation initiative. Implementation dates, target servers, and corresponding IP addresses will be documented in this ticket as the rollout progresses.
+
+**Pre-Release Plan:**
+
+- Coordinate with the OS team to execute the required commands on production and DR servers.
+- Confirm the implementation schedule and server availability with the concerned teams.
+- Ensure the validated UAT JDK installation and configuration procedure is available.
+- Confirm the existing JDK version, JAVA_HOME configuration, service-specific Java references, ownership, and permissions.
+- Preserve the existing JDK installation and configuration to support rollback.
+
+**Deployment Plan:**
+
+- Execute the upgrade in batches outside business hours.
+- Install JDK version 11.0.32.1 alongside the existing JDK.
+- Update JAVA_HOME and any applicable service-specific Java configuration to reference the new JDK.
+- Apply the required ownership and permissions.
+- Validate the active Java version, UCD agent service status, logs, and connectivity.
+- Remove obsolete JDK installations only after confirming they are no longer referenced or required.
+- Perform post-upgrade Tenable scans for each batch and review the findings before proceeding.
+- Document the servers and corresponding IP addresses covered during each implementation window.
+- Coordinate the UCD Agent upgrade activity under its respective CAB ticket.
+
+**Rollback Plan:**
+
+- Stop the affected UCD agent service if issues occur.
+- Restore the previous JDK version and original JAVA_HOME and service-specific configuration.
+- Reinstate the original ownership and permissions.
+- Restart the agent service and validate Java execution and UCD connectivity.
+- Suspend subsequent batches until the issue is resolved.
+
+
+
+
+
+
+
+
+
+
+
