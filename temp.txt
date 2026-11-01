@@ -1,7 +1,18 @@
-As requested by the CAB Officer, this change has been submitted as an individual CAB request for tomorrow's meeting. Approval is appreciated to allow the activity to proceed as scheduled.
+Following CAB officer guidance, the UCD Agent and JDK upgrades have been separated into two individual CAB submissions, while maintaining coordination between both activities under the same security remediation initiative.
+
+Both changes are planned in batches across multiple days, outside business hours, with the target servers, corresponding IP addresses, and validation results documented in their respective tickets.
+
+The CAB review is scheduled for tomorrow. Approval is appreciated to proceed with the planned activities.
 
 
 
 
+CAB Approval Request – Individual Change Submission
 
-Hi, just a quick update — the CAB Officer requested that this change be submitted as an individual CAB request ahead of tomorrow's meeting. I've submitted it accordingly. Your approval would be appreciated so we can proceed as planned.
+Hi,
+
+As requested by the CAB Officer, I have submitted the change as an individual CAB request for tomorrow's CAB meeting.
+
+Your review and approval would be appreciated ahead of the meeting to allow the change to proceed as scheduled.
+
+Thank you.
