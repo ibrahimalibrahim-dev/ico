@@ -1,30 +1,13 @@
-JDK and UCD Agent Upgrade – Daily Server Patching Plan (ISD)
+Hello,
 
-Prepare and coordinate a phased patching schedule for the identified ISD server inventory.
+Thank you for the clarification regarding the current support limitations of DevOps Deploy with proxied Entra ID authentication.
 
-The activity will be divided into daily execution batches, with specific server IPs assigned to each day to ensure controlled upgrades, effective coordination with OS, and sufficient time for post-upgrade validation.
+Given the confirmation that this configuration has not been tested by IBM and is not currently a natively supported feature, we will not proceed with the proposed Production implementation without IBM's explicit confirmation and approval.
 
-**Required planning:**
-- Identify and allocate target server IPs across the planned execution days.
-- Define the daily patching sequence and required OS support.
-- Account for server availability and operational dependencies.
-- Perform post-upgrade version and service validation for each batch.
-- Document completed IPs, pending servers, and any exceptions.
+For clarity, the activity had been arranged based on the previously discussed configuration approach, with the intention of validating it in a lower environment first. The limitation regarding IBM's lack of support and testing was only explicitly established during the scheduled activity. It would have been beneficial to have this clarified earlier in the investigation to allow us to assess the feasibility and plan accordingly.
 
+Following internal discussion with management, we have decided to cancel the planned activity pending further direction.
 
+We appreciate your assistance and would welcome IBM's confirmation should a supported implementation approach become available.
 
-
-
-JDK and UCD Agent Upgrade – Daily Production/DR Patching Plan (Digital)
-
-Prepare a phased, day-by-day patching schedule for the identified Digital Production and DR servers required for the subsequent Production-to-UAT cloning activities.
-
-Specific server IPs will be allocated to each execution day, allowing the upgrades to be performed in controlled batches while coordinating the required OS support and minimizing operational impact.
-
-**Required planning:**
-- Identify and allocate Production and DR server IPs across the planned execution days.
-- Define daily execution batches and required OS support.
-- Coordinate appropriate maintenance windows.
-- Validate JDK and UCD Agent versions following each batch.
-- Track completed servers, outstanding IPs, and exceptions.
-
+Regards,
