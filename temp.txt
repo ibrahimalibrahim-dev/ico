@@ -1,31 +1,30 @@
-JDK and UCD Agent Upgrade – Environment-Wide Server Patching
+JDK and UCD Agent Upgrade – Daily Server Patching Plan (ISD)
 
-Coordinate and execute the required JDK and UCD Agent upgrades across the identified server inventory (approximately 100 servers).
+Prepare and coordinate a phased patching schedule for the identified ISD server inventory.
 
-The activity involves coordinating with OS and relevant application teams to establish execution batches, confirm server readiness, and perform the upgrades with appropriate post-upgrade validation.
+The activity will be divided into daily execution batches, with specific server IPs assigned to each day to ensure controlled upgrades, effective coordination with OS, and sufficient time for post-upgrade validation.
 
-This activity is part of the broader JDK and UCD Agent patching initiative and will be coordinated with the related Digital server upgrade requirements to maintain a consistent execution approach.
-
-**Scope:**
-- Validate the target server inventory and current installed versions.
-- Coordinate patching windows and execution batches with OS.
-- Upgrade UCD Agents and JDK versions as applicable.
-- Perform post-upgrade service and version verification.
-- Document completed servers, outstanding dependencies, and any exceptions.
+**Required planning:**
+- Identify and allocate target server IPs across the planned execution days.
+- Define the daily patching sequence and required OS support.
+- Account for server availability and operational dependencies.
+- Perform post-upgrade version and service validation for each batch.
+- Document completed IPs, pending servers, and any exceptions.
 
 
 
 
 
-JDK and UCD Agent Upgrade – Digital Production and DR Servers
+JDK and UCD Agent Upgrade – Daily Production/DR Patching Plan (Digital)
 
-Coordinate the required JDK and UCD Agent upgrades on the identified Digital Production and DR servers, which are required to support the planned server cloning and UAT preparation activities.
+Prepare a phased, day-by-day patching schedule for the identified Digital Production and DR servers required for the subsequent Production-to-UAT cloning activities.
 
-The upgrades will be coordinated with the broader server patching initiative to ensure consistent execution, version alignment, and appropriate validation across the environments.
+Specific server IPs will be allocated to each execution day, allowing the upgrades to be performed in controlled batches while coordinating the required OS support and minimizing operational impact.
 
-**Scope:**
-- Confirm the target Production and DR server inventory.
-- Coordinate execution windows and required OS support.
-- Perform the applicable JDK and UCD Agent upgrades.
-- Validate installed versions and service availability following the upgrades.
-- Confirm readiness for the subsequent Production-to-UAT cloning activities.
+**Required planning:**
+- Identify and allocate Production and DR server IPs across the planned execution days.
+- Define daily execution batches and required OS support.
+- Coordinate appropriate maintenance windows.
+- Validate JDK and UCD Agent versions following each batch.
+- Track completed servers, outstanding IPs, and exceptions.
+
