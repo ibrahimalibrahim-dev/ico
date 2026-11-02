@@ -1,13 +1,30 @@
-Hello,
+UCD Agent Review – Identification of Unused/Duplicate Agents and Safe Removal Procedure
 
-Thank you for the clarification regarding the current support limitations of DevOps Deploy with proxied Entra ID authentication.
 
-Given the confirmation that this configuration has not been tested by IBM and is not currently a natively supported feature, we will not proceed with the proposed Production implementation without IBM's explicit confirmation and approval.
 
-For clarity, the activity had been arranged based on the previously discussed configuration approach, with the intention of validating it in a lower environment first. The limitation regarding IBM's lack of support and testing was only explicitly established during the scheduled activity. It would have been beneficial to have this clarified earlier in the investigation to allow us to assess the feasibility and plan accordingly.
 
-Following internal discussion with management, we have decided to cancel the planned activity pending further direction.
 
-We appreciate your assistance and would welcome IBM's confirmation should a supported implementation approach become available.
 
-Regards,
+As part of the ongoing UCD Agent and JDK security remediation initiative, we are reviewing the registered agents across our environments to identify outdated or potentially unused installations before proceeding with production patching.
+
+During this review, we identified two scenarios requiring vendor investigation and guidance:
+
+**1. Offline agent registered on the UCD Server itself**
+- Under Resources → Agents, an agent associated with the UCD Server is listed as offline.
+- Its last recorded contact dates back to May 2024.
+- We would like to understand whether this agent is still required, whether any dependencies remain, and the supported procedure for safely removing the agent and its associated JDK, if no longer needed.
+
+**2. Multiple agents installed on the same server**
+- We identified a server where two agents appear to be registered.
+- Based on the resource configuration, only one agent appears to be actively utilized, while the other has no associated resources.
+- We would like to confirm whether the unused agent can be safely uninstalled, including its associated JDK, without affecting the active agent or any existing deployments.
+
+**Requested Assistance:**
+
+Given that both scenarios involve production servers, we would appreciate arranging a joint working session with IBM support to investigate these cases and walk us through the appropriate checks and removal procedures.
+
+Where possible, we would like to reproduce these scenarios in UAT and validate the required steps before considering any changes in production.
+
+This will help us identify potential dependencies, avoid unintended impact, and ensure that unnecessary agent installations and their associated JDKs can be safely removed as part of the broader security remediation activity.
+
+Please advise on your availability for a working session.
