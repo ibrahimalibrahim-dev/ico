@@ -1,30 +1,18 @@
-UCD Agent Review – Identification of Unused/Duplicate Agents and Safe Removal Procedure
+Assistance Required – SSH Access to Linux Servers
 
 
 
 
 
+Dear Team,
 
-As part of the ongoing UCD Agent and JDK security remediation initiative, we are reviewing the registered agents across our environments to identify outdated or potentially unused installations before proceeding with production patching.
+Following the recent Checkmarx certificate update, we identified a number of servers that our team is currently unable to access via SSH and required Linux Administration support to complete the necessary changes.
 
-During this review, we identified two scenarios requiring vendor investigation and guidance:
+While we appreciate the OS team's assistance in applying the renewed certificate, we currently do not have the required access to these servers to carry out any further administration or maintenance activities.
 
-**1. Offline agent registered on the UCD Server itself**
-- Under Resources → Agents, an agent associated with the UCD Server is listed as offline.
-- Its last recorded contact dates back to May 2024.
-- We would like to understand whether this agent is still required, whether any dependencies remain, and the supported procedure for safely removing the agent and its associated JDK, if no longer needed.
+We would appreciate your guidance on the appropriate access request process and the type of tickets required to restore our SSH access. In the meantime, we have raised password reset requests for the respective local user accounts to facilitate access.
 
-**2. Multiple agents installed on the same server**
-- We identified a server where two agents appear to be registered.
-- Based on the resource configuration, only one agent appears to be actively utilized, while the other has no associated resources.
-- We would like to confirm whether the unused agent can be safely uninstalled, including its associated JDK, without affecting the active agent or any existing deployments.
+Your support in clarifying the required process and helping us restore access to these servers would be appreciated.
 
-**Requested Assistance:**
-
-Given that both scenarios involve production servers, we would appreciate arranging a joint working session with IBM support to investigate these cases and walk us through the appropriate checks and removal procedures.
-
-Where possible, we would like to reproduce these scenarios in UAT and validate the required steps before considering any changes in production.
-
-This will help us identify potential dependencies, avoid unintended impact, and ensure that unnecessary agent installations and their associated JDKs can be safely removed as part of the broader security remediation activity.
-
-Please advise on your availability for a working session.
+Best regards,
+DevSecOps Team
