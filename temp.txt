@@ -1,18 +1,31 @@
-Following CAB officer guidance, the UCD Agent and JDK upgrades have been separated into two individual CAB submissions, while maintaining coordination between both activities under the same security remediation initiative.
+JDK and UCD Agent Upgrade – Environment-Wide Server Patching
 
-Both changes are planned in batches across multiple days, outside business hours, with the target servers, corresponding IP addresses, and validation results documented in their respective tickets.
+Coordinate and execute the required JDK and UCD Agent upgrades across the identified server inventory (approximately 100 servers).
 
-The CAB review is scheduled for tomorrow. Approval is appreciated to proceed with the planned activities.
+The activity involves coordinating with OS and relevant application teams to establish execution batches, confirm server readiness, and perform the upgrades with appropriate post-upgrade validation.
+
+This activity is part of the broader JDK and UCD Agent patching initiative and will be coordinated with the related Digital server upgrade requirements to maintain a consistent execution approach.
+
+**Scope:**
+- Validate the target server inventory and current installed versions.
+- Coordinate patching windows and execution batches with OS.
+- Upgrade UCD Agents and JDK versions as applicable.
+- Perform post-upgrade service and version verification.
+- Document completed servers, outstanding dependencies, and any exceptions.
 
 
 
 
-CAB Approval Request – Individual Change Submission
 
-Hi,
+JDK and UCD Agent Upgrade – Digital Production and DR Servers
 
-As requested by the CAB Officer, I have submitted the change as an individual CAB request for tomorrow's CAB meeting.
+Coordinate the required JDK and UCD Agent upgrades on the identified Digital Production and DR servers, which are required to support the planned server cloning and UAT preparation activities.
 
-Your review and approval would be appreciated ahead of the meeting to allow the change to proceed as scheduled.
+The upgrades will be coordinated with the broader server patching initiative to ensure consistent execution, version alignment, and appropriate validation across the environments.
 
-Thank you.
+**Scope:**
+- Confirm the target Production and DR server inventory.
+- Coordinate execution windows and required OS support.
+- Perform the applicable JDK and UCD Agent upgrades.
+- Validate installed versions and service availability following the upgrades.
+- Confirm readiness for the subsequent Production-to-UAT cloning activities.
