@@ -1,18 +1,29 @@
-Assistance Required – SSH Access to Linux Servers
+Hi Team,
 
+Following our discussions regarding the Bitbucket HA/DR architecture, we would like to clarify the supported options for maintaining the Bitbucket repository data between our Production and DR environments.
 
+Our initial design was to have a shared NFS home directory accessible by the Production and DR nodes. However, based on your recommendation, we understand that the shared home directory should only be shared between nodes within the same cluster. Accordingly, Production nodes would share their own NFS storage, while the DR environment would maintain an independent NFS storage location.
 
+We have since consulted our Storage team and confirmed that storage-level replication (e.g. SAN-based replication) is not currently available in our infrastructure. NFS is the available shared-storage solution.
 
+Given this constraint, could you please advise on the supported alternatives for keeping the DR repository data synchronized with Production without sharing the same NFS filesystem across both sites?
 
-Dear Team,
+In particular, we would appreciate your guidance on the following:
 
-Following the recent Checkmarx certificate update, we identified a number of servers that our team is currently unable to access via SSH and required Linux Administration support to complete the necessary changes.
+Supported replication methods: What replication mechanisms does Atlassian recommend or support for transferring Bitbucket shared-home data from Production to an independent DR NFS location?
 
-While we appreciate the OS team's assistance in applying the renewed certificate, we currently do not have the required access to these servers to carry out any further administration or maintenance activities.
+File-level replication: Would scheduled file-level synchronization (e.g. rsync) be a viable approach, provided the replication is performed in a manner that ensures repository consistency? If so, what precautions or application-level procedures would be required?
 
-We would appreciate your guidance on the appropriate access request process and the type of tickets required to restore our SSH access. In the meantime, we have raised password reset requests for the respective local user accounts to facilitate access.
+Backup and recovery: If continuous or near-real-time replication is not feasible, would scheduled backups and restoration to the DR environment be an acceptable alternative? What would you recommend as a suitable approach?
 
-Your support in clarifying the required process and helping us restore access to these servers would be appreciated.
+Database coordination: What is the recommended way to coordinate repository data replication with the Bitbucket database so that both environments can be recovered to a consistent point in time?
 
-Best regards,
-DevSecOps Team
+Recovery expectations: What limitations should we expect in terms of Recovery Point Objective (RPO), Recovery Time Objective (RTO), and DR failover procedures for each supported approach?
+
+For context, the current Bitbucket shared-home data is over 400GB, so the practicality and duration of the initial and subsequent synchronization cycles are also important considerations.
+
+Our objective is to establish a supported and maintainable DR approach using the infrastructure currently available to us, while keeping Production and DR storage independent.
+
+We would appreciate your recommendation on the preferred architecture and any relevant documentation or implementation prerequisites.
+
+Thank you.
