@@ -1,29 +1,17 @@
-Hi Team,
+Bitbucket HA/DR – Assess Supported Production-to-DR Data Replication Options
 
-Following our discussions regarding the Bitbucket HA/DR architecture, we would like to clarify the supported options for maintaining the Bitbucket repository data between our Production and DR environments.
 
-Our initial design was to have a shared NFS home directory accessible by the Production and DR nodes. However, based on your recommendation, we understand that the shared home directory should only be shared between nodes within the same cluster. Accordingly, Production nodes would share their own NFS storage, while the DR environment would maintain an independent NFS storage location.
+As part of the Bitbucket HA/DR implementation, the vendor clarified that the shared NFS home directory should only be shared between nodes within the same cluster. Production and DR must maintain independent storage.
 
-We have since consulted our Storage team and confirmed that storage-level replication (e.g. SAN-based replication) is not currently available in our infrastructure. NFS is the available shared-storage solution.
+Following consultation with the Storage team, it was confirmed that storage-level replication is not currently available within our infrastructure; NFS is the available shared-storage solution.
 
-Given this constraint, could you please advise on the supported alternatives for keeping the DR repository data synchronized with Production without sharing the same NFS filesystem across both sites?
+Further assessment is therefore required, in coordination with the vendor, OS and Storage teams, to establish a supported approach for synchronizing Bitbucket repository data between Production and DR, including any backup, replication, consistency and recovery requirements.
 
-In particular, we would appreciate your guidance on the following:
 
-Supported replication methods: What replication mechanisms does Atlassian recommend or support for transferring Bitbucket shared-home data from Production to an independent DR NFS location?
 
-File-level replication: Would scheduled file-level synchronization (e.g. rsync) be a viable approach, provided the replication is performed in a manner that ensures repository consistency? If so, what precautions or application-level procedures would be required?
+Objective: Confirm the feasible implementation options and associated requirements to establish the Production-to-DR data recovery approach.
 
-Backup and recovery: If continuous or near-real-time replication is not feasible, would scheduled backups and restoration to the DR environment be an acceptable alternative? What would you recommend as a suitable approach?
+Dependency: Vendor guidance and OS/Storage team assessment.
 
-Database coordination: What is the recommended way to coordinate repository data replication with the Bitbucket database so that both environments can be recovered to a consistent point in time?
 
-Recovery expectations: What limitations should we expect in terms of Recovery Point Objective (RPO), Recovery Time Objective (RTO), and DR failover procedures for each supported approach?
 
-For context, the current Bitbucket shared-home data is over 400GB, so the practicality and duration of the initial and subsequent synchronization cycles are also important considerations.
-
-Our objective is to establish a supported and maintainable DR approach using the infrastructure currently available to us, while keeping Production and DR storage independent.
-
-We would appreciate your recommendation on the preferred architecture and any relevant documentation or implementation prerequisites.
-
-Thank you.
