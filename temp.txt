@@ -15,3 +15,10 @@ Dependency: Vendor guidance and OS/Storage team assessment.
 
 
 
+
+
+
+nohup rsync -aAXHzv --info=progress2 --stats --delete-delay \
+/u01/Atlassian/home/stash/shared/ \
+/bitbucket/ \
+> /var/log/rsync_transfer.log 2>&1 &
