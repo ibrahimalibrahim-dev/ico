@@ -1,9 +1,22 @@
 Hi Team,
 
-We are planning to raise a CAB for next week's upgrade of the UCD agents and their associated JDK on the listed Production and DR servers.
+Following the UAT NFS setup, we have completed the initial synchronization of the existing Bitbucket shared-home contents from:
 
-Please note that the activity is strictly limited to the UCD agent directory and its associated components. No changes will be made to application directories or any JDKs potentially used by the applications.
+`/Atlassian/home/stash/shared`
 
-Kindly review the server list and confirm whether we can proceed, particularly considering the planned deployment schedule and the upcoming weekend DR failover.
+to the mounted NFS location:
+
+`/bitbucket`
+
+The current `set-bitbucket-home.sh` configuration continues to point `BITBUCKET_HOME` to `/Atlassian/home/stash/`. We intend to retain this configuration and avoid changing the Bitbucket home directory itself.
+
+Could you please clarify the recommended and supported approach to configure Bitbucket to use `/bitbucket` as its shared-home location while retaining the existing `BITBUCKET_HOME` path?
+
+Specifically, please confirm:
+- Whether the shared-home location can be configured independently through `bitbucket.properties`, a JVM system property, or another configuration mechanism.
+- Whether any additional configuration is required for the shared-home data stores or search components.
+- Whether this configuration requires a service restart and any precautions before bringing Bitbucket back online.
+
+We would appreciate the exact configuration steps applicable to our Bitbucket Data Center 8.16.0 environment so that we can proceed with UAT validation before applying the approach to Production.
 
 Regards,
