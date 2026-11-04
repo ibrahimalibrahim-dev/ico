@@ -1,29 +1,17 @@
+Dear All,
 
-Bitbucket HA – NFS Shared Home Data Synchronization and Validation
+Thank you for your time and support during today's meeting.
 
+Following our discussion, we understand that the Base64-encoded certificate provided by the OS team corresponds to the SAML X.509 certificate currently being reviewed. However, the reported certificate thumbprint expiry remains unresolved.
 
+To help establish the appropriate way forward, could we kindly seek clarification on the following:
 
+- **OS Team:** Please confirm whether the Base64 certificate provided is the complete certificate available from the infrastructure side, and whether any additional certificate details or material can be supplied, if required.
+- **Entra ID Team:** Could you please confirm whether the certificate currently configured for the Acunetix SAML enterprise application is the expected signing certificate, and whether any further action or certificate information is required from the Entra ID side?
+- **Vendor:** Based on the certificate provided and the discussion, could you please clarify the specific certificate format or attribute Acunetix requires to address the reported expiry? In particular, please confirm whether the provided Base64 certificate is sufficient or if a different certificate or configuration change is necessary.
 
-As part of the Bitbucket HA implementation, the shared-home data must be migrated from the existing local filesystem to the provisioned NFS mount. This is a prerequisite for ensuring that the shared data is available through the intended storage location before proceeding with the Bitbucket configuration and subsequent HA activities.
+The intention is to identify the correct point of ownership and the required next steps, so that the certificate expiry can be addressed without unnecessary back-and-forth between the involved teams.
 
-The current transfer attempts have encountered prolonged execution times and Operation not supported errors, requiring OS/Linux Administration support to assess the NFS compatibility and execute the synchronization using an appropriate and reliable method.
+Thank you all for your continued cooperation.
 
-Scope of work
-
-OS/Linux Administration is requested to:
-1. Review the existing NFS mount configuration and investigate the reported transfer errors.
-2. Determine and execute the appropriate synchronization method to transfer the contents of the existing Bitbucket shared directory to the NFS destination.
-3. Ensure the destination reflects the source directory, including the required files, subdirectories, ownership and permissions, to the extent supported by the NFS export.
-4. Perform the final synchronization after coordinating the required Bitbucket service downtime, ensuring that no application changes are missed during the migration.
-5. Validate the synchronized data and confirm that the NFS destination is ready for Bitbucket configuration and testing.
-Completion criteria
-
-This subtask can be considered complete when:
-- The NFS destination contains a complete and consistent copy of the source shared directory.
-- Destination-only files that are not present in the source have been reconciled, where appropriate.
-- Required ownership, permissions and supported metadata have been preserved.
-- Synchronization and validation have completed without outstanding transfer errors or unexplained discrepancies.
-- OS confirms successful completion and provides the final destination mount/path for DevSecOps validation.
-Dependency / coordination
-
-DevSecOps will coordinate the required Bitbucket service downtime and perform application-level validation following completion of the OS activity.
+Best regards,
