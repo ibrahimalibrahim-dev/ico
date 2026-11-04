@@ -1,17 +1,9 @@
-Dear All,
+Hi Team,
 
-Thank you for your time and support during today's meeting.
+We are planning to raise a CAB for next week's upgrade of the UCD agents and their associated JDK on the listed Production and DR servers.
 
-Following our discussion, we understand that the Base64-encoded certificate provided by the OS team corresponds to the SAML X.509 certificate currently being reviewed. However, the reported certificate thumbprint expiry remains unresolved.
+Please note that the activity is strictly limited to the UCD agent directory and its associated components. No changes will be made to application directories or any JDKs potentially used by the applications.
 
-To help establish the appropriate way forward, could we kindly seek clarification on the following:
+Kindly review the server list and confirm whether we can proceed, particularly considering the planned deployment schedule and the upcoming weekend DR failover.
 
-- **OS Team:** Please confirm whether the Base64 certificate provided is the complete certificate available from the infrastructure side, and whether any additional certificate details or material can be supplied, if required.
-- **Entra ID Team:** Could you please confirm whether the certificate currently configured for the Acunetix SAML enterprise application is the expected signing certificate, and whether any further action or certificate information is required from the Entra ID side?
-- **Vendor:** Based on the certificate provided and the discussion, could you please clarify the specific certificate format or attribute Acunetix requires to address the reported expiry? In particular, please confirm whether the provided Base64 certificate is sufficient or if a different certificate or configuration change is necessary.
-
-The intention is to identify the correct point of ownership and the required next steps, so that the certificate expiry can be addressed without unnecessary back-and-forth between the involved teams.
-
-Thank you all for your continued cooperation.
-
-Best regards,
+Regards,
