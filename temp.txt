@@ -1,22 +1,9 @@
-Hi Team,
+**Status: On Hold – External Dependency**
 
-Following the UAT NFS setup, we have completed the initial synchronization of the existing Bitbucket shared-home contents from:
+The planned activity could not be completed as scheduled due to an unresolved dependency involving the Acunetix SAML certificate.
 
-`/Atlassian/home/stash/shared`
+A discussion was held with the OS team, Entra ID team, and vendor to clarify the certificate requirements. OS provided the available Base64-encoded certificate; however, the vendor's reported certificate thumbprint expiry remains unresolved, and further clarification is required regarding the expected certificate format and the corrective action.
 
-to the mounted NFS location:
+The involved parties have been requested to confirm the respective requirements, ownership, and next steps before proceeding.
 
-`/bitbucket`
-
-The current `set-bitbucket-home.sh` configuration continues to point `BITBUCKET_HOME` to `/Atlassian/home/stash/`. We intend to retain this configuration and avoid changing the Bitbucket home directory itself.
-
-Could you please clarify the recommended and supported approach to configure Bitbucket to use `/bitbucket` as its shared-home location while retaining the existing `BITBUCKET_HOME` path?
-
-Specifically, please confirm:
-- Whether the shared-home location can be configured independently through `bitbucket.properties`, a JVM system property, or another configuration mechanism.
-- Whether any additional configuration is required for the shared-home data stores or search components.
-- Whether this configuration requires a service restart and any precautions before bringing Bitbucket back online.
-
-We would appreciate the exact configuration steps applicable to our Bitbucket Data Center 8.16.0 environment so that we can proceed with UAT validation before applying the approach to Production.
-
-Regards,
+**Next Step:** Pending technical clarification and required action from the relevant external/vendor teams. The activity will resume once the dependency is resolved.
