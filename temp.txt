@@ -1,9 +1,99 @@
-**Status: On Hold – External Dependency**
+# CAB Change Request – Acunetix SAML X.509 Certificate Replacement
 
-The planned activity could not be completed as scheduled due to an unresolved dependency involving the Acunetix SAML certificate.
+## 1. Summary
 
-A discussion was held with the OS team, Entra ID team, and vendor to clarify the certificate requirements. OS provided the available Base64-encoded certificate; however, the vendor's reported certificate thumbprint expiry remains unresolved, and further clarification is required regarding the expected certificate format and the corrective action.
+Replacement of the existing SAML X.509 certificate configured in the Production Acunetix application with the renewed certificate provided by the Entra ID team, ahead of the existing certificate's expiry on 14 November 2026.
 
-The involved parties have been requested to confirm the respective requirements, ownership, and next steps before proceeding.
+The activity will be performed through the Acunetix administrative UI, with vendor support available during implementation. No application restart or planned service interruption is expected.
 
-**Next Step:** Pending technical clarification and required action from the relevant external/vendor teams. The activity will resume once the dependency is resolved.
+## 2. Description
+
+The existing SAML X.509 certificate configured for Acunetix is approaching its expiry date of 14 November 2026.
+
+Following coordination with the Entra ID team and Acunetix vendor, a renewed certificate has been provided by the Entra ID team in `.cer` format and confirmed with the vendor as the intended replacement.
+
+The change involves updating the existing SAML X.509 certificate through the Acunetix administrative interface, in accordance with the vendor's recommended procedure.
+
+The activity will be performed by DevSecOps with the Acunetix vendor available for technical guidance and support throughout implementation.
+
+Prior to implementation, the existing certificate will be retained to facilitate rollback if required, and a full virtual machine snapshot will be taken as an additional recovery precaution.
+
+No application restart is planned. Developers will be notified in advance and requested to refrain from using Acunetix during the implementation window as a precaution.
+
+## 3. Business Justification
+
+The currently configured Acunetix SAML certificate expires on 14 November 2026. Failure to replace the certificate before its expiry may result in SAML authentication failures, potentially preventing users from accessing the Acunetix application through the existing Entra ID integration.
+
+This change is required to maintain uninterrupted authentication services and ensure continued availability of Acunetix for application security testing activities.
+
+Completing the replacement ahead of the expiry date will mitigate the risk of authentication disruption and avoid potential operational impact on ongoing security assessment activities.
+
+## 4. Pre-Release Plan
+
+1. Coordinate with the Acunetix vendor to ensure technical support is available during the implementation window.
+2. Confirm the renewed SAML X.509 certificate provided by the Entra ID team is available and ready for deployment.
+3. Verify the certificate's validity and expiry details prior to implementation.
+4. Retain the currently configured SAML certificate in a secure location for rollback purposes.
+5. Notify the relevant development teams of the planned activity and request that they refrain from accessing or using Acunetix during the implementation window.
+6. Coordinate with the OS team to take a full virtual machine snapshot of the Production Acunetix server before commencing the change.
+7. Confirm administrative access to the Acunetix UI and availability of the vendor support contact.
+8. Confirm the implementation window and required CAB approval before proceeding.
+
+## 5. Deployment Plan
+
+1. Confirm that the pre-release activities have been completed and that the Acunetix vendor is available for support.
+2. Access the Production Acunetix administrative interface.
+3. Navigate to the SAML authentication configuration where the existing X.509 certificate is maintained.
+4. Review the currently configured certificate and confirm that the existing certificate has been retained for rollback.
+5. Upload or replace the existing SAML X.509 certificate with the renewed `.cer` certificate provided by the Entra ID team, following the vendor's instructions.
+6. Save the updated configuration.
+7. Confirm that the new certificate has been successfully accepted and saved by Acunetix.
+8. Perform SAML authentication validation using the existing Entra ID integration.
+9. Verify successful authentication and access to the Acunetix application.
+10. Confirm with the Acunetix vendor that the certificate replacement has been completed successfully.
+11. Communicate the outcome to the relevant stakeholders and notify development teams that Acunetix is available for normal use.
+
+**Implementation Note:** The certificate replacement will be performed through the Acunetix UI. As confirmed by the vendor, the activity does not require an application restart and no service interruption is expected.
+
+## 6. Rollback Plan
+
+In the event that the renewed certificate cannot be successfully applied or SAML authentication fails following implementation:
+
+1. Engage the Acunetix vendor to investigate the issue and provide technical guidance.
+2. Access the Acunetix administrative interface and restore the previously configured SAML X.509 certificate using the retained certificate information.
+3. Save the previous certificate configuration and verify whether SAML authentication has been restored.
+4. Perform authentication testing through the existing Entra ID integration to confirm successful access.
+5. If the previous certificate cannot be restored through the application interface, escalate to the OS team and vendor to assess recovery using the pre-change virtual machine snapshot.
+6. Notify the relevant stakeholders of the rollback and provide an update on the issue and subsequent corrective actions.
+
+The original certificate will be retained throughout the activity to facilitate configuration-level rollback without requiring an infrastructure restoration, provided the application remains accessible.
+
+## 7. Post-Implementation Validation / Success Criteria
+
+The change will be considered successful upon confirmation of the following:
+
+- The renewed SAML X.509 certificate is successfully configured in Acunetix.
+- The new certificate is reflected in the Acunetix SAML configuration.
+- Authentication through the existing Entra ID integration is successful.
+- Acunetix remains accessible and operational following the change.
+- The Acunetix vendor confirms successful certificate replacement, where applicable.
+- No unexpected application interruption or service degradation is observed.
+
+## 8. Expected Impact
+
+**Service:** Production Acunetix
+
+**Expected Downtime:** None anticipated.
+
+**Application Restart:** Not required.
+
+**User Impact:** No service interruption is expected. Development teams will be notified in advance and requested to refrain from using Acunetix during the implementation window as a precaution.
+
+**Risk:** Potential SAML authentication failure if the renewed certificate is not accepted or correctly configured. This risk is mitigated through vendor involvement, retention of the existing certificate, and a pre-implementation VM snapshot.
+
+## 9. Dependencies
+
+- Renewed SAML X.509 certificate provided by the Entra ID team.
+- Acunetix vendor availability for implementation guidance and support.
+- OS team support for the pre-implementation virtual machine snapshot.
+- CAB approval and coordination with the relevant development teams.
