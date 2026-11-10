@@ -1,7 +1,23 @@
-We have successfully configured the new Nexus Swift proxy and completed the initial connectivity and registry configuration from the Mac workstation.
+Assessment and Remediation Planning – Newly Identified Server Vulnerabilities
 
-We are currently working through dependency resolution for Wormholy. The initial approach of referencing the Nexus proxy URL directly in `Package.swift` resulted in Git clone failures (HTTP 403), as the Swift Package Manager was attempting to access the registry endpoint as a Git repository.
 
-We have since moved towards using Swift Package Registry identities and a versioned dependency (Wormholy 1.6.5). However, SwiftPM is currently interpreting the dependency as a local path rather than resolving it through the configured registry.
 
-Could you advise whether the project has any existing Swift Package Registry configuration or Tuist-specific dependency settings that we should account for? In particular, we'd appreciate any guidance on how dependencies should be declared and resolved through the Nexus Swift proxy in this project.
+A new set of server vulnerabilities has been highlighted by IT Cyber Security Management following the completion of the previous UCD Agent and JDK patching preparation activities.
+
+This subtask is being raised separately to track the assessment of these newly identified findings and distinguish them from the vulnerabilities covered under the previous remediation plan.
+
+Activities include:
+
+Review the newly reported vulnerabilities and identify the affected servers and components.
+
+Assess the required remediation measures and any dependencies or potential impact.
+
+Engage the relevant technical owners and vendors where further clarification or support is required.
+
+Establish a revised remediation approach, implementation sequence, and target timeline.
+
+Prepare the necessary CAB submissions and coordinate implementation activities accordingly.
+
+Completion Criteria:
+
+The new vulnerability findings have been assessed, remediation actions and dependencies identified, and an updated implementation plan with target timelines established for the affected servers.
