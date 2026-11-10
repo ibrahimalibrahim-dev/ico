@@ -1,7 +1,7 @@
-Hi,
+We have successfully configured the new Nexus Swift proxy and completed the initial connectivity and registry configuration from the Mac workstation.
 
-Regarding the planned UCD/JDK patching activity, additional vulnerabilities have recently been highlighted by IT Cyber Security Management across the affected servers.
+We are currently working through dependency resolution for Wormholy. The initial approach of referencing the Nexus proxy URL directly in `Package.swift` resulted in Git clone failures (HTTP 403), as the Swift Package Manager was attempting to access the registry endpoint as a Git repository.
 
-We are currently reviewing these findings to determine the required remediation actions and ensure they are appropriately addressed before proceeding with the CAB submission and implementation.
+We have since moved towards using Swift Package Registry identities and a versioned dependency (Wormholy 1.6.5). However, SwiftPM is currently interpreting the dependency as a local path rather than resolving it through the configured registry.
 
-We will provide an updated implementation timeline once the assessment is complete and the remediation scope is confirmed.
+Could you advise whether the project has any existing Swift Package Registry configuration or Tuist-specific dependency settings that we should account for? In particular, we'd appreciate any guidance on how dependencies should be declared and resolved through the Nexus Swift proxy in this project.
