@@ -1,11 +1,7 @@
-import ProjectDescription
+Hi,
 
-let tuist = Tuist(
-    project: .tuist(
-        installOptions: .options(
-            passthroughSwiftPackageManagerArguments: [
-                "--replace-scm-with-registry"
-            ]
-        )
-    )
-)
+Regarding the planned UCD/JDK patching activity, additional vulnerabilities have recently been highlighted by IT Cyber Security Management across the affected servers.
+
+We are currently reviewing these findings to determine the required remediation actions and ensure they are appropriately addressed before proceeding with the CAB submission and implementation.
+
+We will provide an updated implementation timeline once the assessment is complete and the remediation scope is confirmed.
