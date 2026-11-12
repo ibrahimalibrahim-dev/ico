@@ -1,23 +1,4 @@
-Assessment and Remediation Planning – Newly Identified Server Vulnerabilities
+Microsoft Teams – Required Proxy and Firewall Allowlisting
 
 
-
-A new set of server vulnerabilities has been highlighted by IT Cyber Security Management following the completion of the previous UCD Agent and JDK patching preparation activities.
-
-This subtask is being raised separately to track the assessment of these newly identified findings and distinguish them from the vulnerabilities covered under the previous remediation plan.
-
-Activities include:
-
-Review the newly reported vulnerabilities and identify the affected servers and components.
-
-Assess the required remediation measures and any dependencies or potential impact.
-
-Engage the relevant technical owners and vendors where further clarification or support is required.
-
-Establish a revised remediation approach, implementation sequence, and target timeline.
-
-Prepare the necessary CAB submissions and coordinate implementation activities accordingly.
-
-Completion Criteria:
-
-The new vulnerability findings have been assessed, remediation actions and dependencies identified, and an updated implementation plan with target timelines established for the affected servers.
+Enable secure and reliable access to Microsoft Teams, including authentication, messaging, meetings, audio/video calls and screen sharing, ensuring uninterrupted corporate communication and collaboration.
