@@ -1,4 +1,26 @@
-Microsoft Teams – Required Proxy and Firewall Allowlisting
+Hi Shreya,
 
+Please find our responses below:
 
-Enable secure and reliable access to Microsoft Teams, including authentication, messaging, meetings, audio/video calls and screen sharing, ensuring uninterrupted corporate communication and collaboration.
+1. **UCD Server version:** 8.1.2.3 (server only).
+2. **Offline agent on UCD Server:** The agent name appears to be an old local agent. It is currently offline and does not appear to be associated with any Resources in UCD.
+3. **Multiple agents on one production server:** Both agents are registered and visible in the UCD UI. One appears to be in use, while the other appears unused.
+4. **UAT validation:** We can request UAT support to reproduce and validate the scenarios before making any production changes.
+5. **Java standardization:** We would like IBM to recommend a supported Java version for our current UCD release and explain the rationale, including compatibility and forward-upgrade considerations.
+6. **Timeline:** We intend to complete this investigation during the upcoming agent patching batches.
+
+Our objective is to identify and safely remove obsolete agent installations and associated Java runtimes where they are confirmed to be unused, while ensuring there is no impact on active agents, deployments, or other applications sharing the same Java installation.
+
+We would therefore like to arrange a working session with your team to:
+
+- Verify whether the offline agent has any remaining references or dependencies.
+- Validate the duplicate-agent scenario and confirm the correct removal procedure.
+- Check whether either agent shares its Java installation with other services or processes.
+- Confirm the recommended Java version and supported upgrade approach.
+
+Due to internal security restrictions, we are unable to share screenshots or configuration snippets externally. However, we can demonstrate the relevant UCD UI and server configurations during a scheduled session. We can also arrange UAT access/support for practical validation.
+
+Please share your available time slots so we can coordinate the session before proceeding with the relevant production patching batches.
+
+Regards,
+DevSecOps
