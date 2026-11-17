@@ -1,22 +1,28 @@
-**Title: UAT Bitbucket – NFS Mount Point Reconfiguration**
+Bitbucket DR – Assessment of Backup and Data Synchronization Approach
 
-**Description:**
 
-As part of the Bitbucket Data Center UAT shared-home configuration, Atlassian has recommended mounting the NFS share directly under the Bitbucket home directory, with the following target structure:
 
-- `BITBUCKET_HOME`: `/bitbucket`
-- NFS shared-home mount: `/bitbucket/shared`
 
-Currently, the NFS export is mounted directly at `/bitbucket`, with the existing shared-home contents residing at the export root.
+Hi Team,
 
-Kindly support with the following:
+Following our consultation with the Bitbucket vendor regarding the Production-to-DR architecture, we have received clarification on the recommended approach.
 
-- Stop Bitbucket prior to the mount-point change.
-- Reconfigure the existing NFS mount from `/bitbucket` to `/bitbucket/shared`.
-- Retain the existing NFS data without performing another full synchronization or data copy.
-- Ensure the required ownership, permissions, and persistent mount configuration.
-- Verify that the NFS share is correctly mounted and accessible at the new location.
+The vendor recommends dedicated filesystem replication technology between independent Production and DR storage. However, as our current infrastructure provides NFS without SAN-based replication capabilities, we would like to assess the feasibility of an alternative backup-and-restore approach.
 
-**Completion Criteria:**
+The vendor has confirmed that taking a Production backup and restoring it to the independent DR environment is a viable alternative.
 
-The existing shared-home data is accessible under `/bitbucket/shared`, the NFS mount persists across server restarts, and the previous mount-point configuration is no longer in use. This will allow DevSecOps to update the Bitbucket home configuration and proceed with UAT application validation.
+We would therefore appreciate your assessment of the following:
+
+- Provisioning and maintaining independent NFS storage for Production and DR.
+- Establishing a scheduled backup and transfer mechanism for the Bitbucket shared-home data from Production to DR.
+- Assessing whether incremental backups or synchronization can be implemented after the initial full backup to reduce transfer duration and infrastructure overhead.
+- Ensuring backup consistency and integrity, including coordination with the Bitbucket database recovery point.
+- Defining the achievable backup frequency, retention, monitoring and restoration procedure.
+
+The existing Bitbucket shared-home data exceeds 400GB, so we would also appreciate an assessment of the initial transfer requirements and the feasibility of maintaining subsequent recovery points.
+
+The objective is to establish a practical DR recovery mechanism without introducing a shared filesystem between the Production and DR sites.
+
+Please advise on the available infrastructure capabilities and recommended implementation approach.
+
+Thank you.
