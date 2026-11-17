@@ -1,28 +1,5 @@
-Bitbucket DR – Assessment of Backup and Data Synchronization Approach
+As part of our ongoing work to establish a Disaster Recovery (DR) setup for Bitbucket, we are assessing how the application's data can be maintained and recovered at the DR site in the event of a Production outage.
 
+Following discussions with the Bitbucket vendor, the recommended approach is to use dedicated filesystem replication technology between the Production and DR storage environments. However, given that our current infrastructure provides NFS storage without SAN-based replication capabilities, the vendor has also confirmed that a backup-and-restore approach is a viable alternative.
 
-
-
-Hi Team,
-
-Following our consultation with the Bitbucket vendor regarding the Production-to-DR architecture, we have received clarification on the recommended approach.
-
-The vendor recommends dedicated filesystem replication technology between independent Production and DR storage. However, as our current infrastructure provides NFS without SAN-based replication capabilities, we would like to assess the feasibility of an alternative backup-and-restore approach.
-
-The vendor has confirmed that taking a Production backup and restoring it to the independent DR environment is a viable alternative.
-
-We would therefore appreciate your assessment of the following:
-
-- Provisioning and maintaining independent NFS storage for Production and DR.
-- Establishing a scheduled backup and transfer mechanism for the Bitbucket shared-home data from Production to DR.
-- Assessing whether incremental backups or synchronization can be implemented after the initial full backup to reduce transfer duration and infrastructure overhead.
-- Ensuring backup consistency and integrity, including coordination with the Bitbucket database recovery point.
-- Defining the achievable backup frequency, retention, monitoring and restoration procedure.
-
-The existing Bitbucket shared-home data exceeds 400GB, so we would also appreciate an assessment of the initial transfer requirements and the feasibility of maintaining subsequent recovery points.
-
-The objective is to establish a practical DR recovery mechanism without introducing a shared filesystem between the Production and DR sites.
-
-Please advise on the available infrastructure capabilities and recommended implementation approach.
-
-Thank you.
+We would therefore like to assess the feasibility of implementing this approach using our existing infrastructure.
