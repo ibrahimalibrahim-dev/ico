@@ -1,169 +1,23 @@
-# Investigation: LiveKit WebRTC Version Resolution and ElevenLabs Local Swift Package in Xcode
+Hi Team,
 
-## 1. Background and environment
+Following the recent disclosure of the Java4Shell vulnerability (CVE-2026-114938), we need to assess potential exposure across our server infrastructure and coordinate the required remediation.
 
-We are investigating a Swift Package Manager (SPM) dependency-resolution issue encountered by developers while building an iOS application in Xcode.
+Could you please provide an inventory of all servers currently running Java/JDK installations, including runtimes bundled with applications or third-party products?
 
-Our DevOps team is migrating Swift Package Manager dependencies to an internal Nexus Repository Manager.
+For each server, please include:
 
-**Nexus environment:**
-- Product: Sonatype Nexus Repository Manager Community Edition
-- Version: 3.95.0-07
-- Repository name: `swift-proxy`
-- Repository URL: `https://mod-fintas-snn03.corp.boubyan.com:8443/repository/swift-proxy/`
-- IP: 10.1.21.81
-- Repository type: Swift proxy
-- Upstream source: GitHub-hosted Swift packages
+Server hostname and IP address.
 
-The developer reported problems resolving LiveKit dependencies, particularly `livekit.webrtc-xcframework`.
+Operating system and version.
 
-The original findings were:
+Installed Java vendor/distribution and full version.
 
-| Package | Version | Observed result |
-|---|---|---|
-| `elevenlabs.elevenlabs-swift-sdk` | 3.0.0 | Successfully resolves |
-| `livekit.client-sdk-swift` | 2.19.0 | Found |
-| `livekit.livekit-ffi-xcframework` | 0.13.0 | Intermittent HTTP 500 errors, followed by HTTP 200 |
-| `livekit.webrtc-xcframework` | 150.7871.4 | Not found |
-| `swift-log` | — | Found |
-| `swift-protobuf` | — | Found |
+Java installation path(s), including application-bundled runtimes.
 
-## 2. Issue 1: ElevenLabs cannot resolve the LiveKit WebRTC version
+CPU architecture and model, where available.
 
-We investigated the Nexus Swift proxy directly using curl.
+Please ensure the inventory covers all environments, including Development, UAT, QA, Pre-Production, Production and DR.
 
-Command executed:
+We will use this information to identify potentially affected systems and coordinate the necessary remediation with the relevant application and infrastructure teams.
 
-```bash
-curl -v \
--H "Accept: application/vnd.swift.registry.v1+json" \
--u "s_banana" \
-"https://mod-fintas-snn03.corp.boubyan.com:8443/repository/swift-proxy/livekit/webrtc-xcframework"
-```
-
-The response successfully returned the available releases, including:
-
-```text
-150.7871.04
-```
-
-However, the response did not contain:
-
-```text
-150.7871.4
-```
-
-This suggests that Nexus can retrieve the WebRTC package's release information, but the exact version requested by the developer is not advertised under the same version string.
-
-### Further investigation
-
-The developer explained that ElevenLabs is requesting WebRTC version `150.7871.4`.
-
-We asked the developer to inspect the local ElevenLabs package manifest:
-
-```text
-[path/to/LocalStorage/ElevenLabs/Package.swift]
-```
-
-The developer confirmed that the reference to `150.7871.4` appears in the package's dependency information.
-
-We also attempted to clear SwiftPM's registry configuration/cache by deleting the following directory:
-
-```text
-~/Library/org.swift.swiftpm/configurations
-```
-
-After retrying, Xcode still did not display the ElevenLabs local package as an expected package dependency.
-
-### Questions requiring investigation
-
-1. Does the exact LiveKit WebRTC version `150.7871.4` actually exist as a published release, or is the intended published version `150.7871.04`?
-2. Why does ElevenLabs reference `150.7871.4` when Nexus advertises `150.7871.04`?
-3. Is this a Semantic Versioning issue, a SwiftPM registry lookup issue, a Nexus implementation limitation, or a problem with the ElevenLabs package manifest?
-4. Does SwiftPM treat `150.7871.4` and `150.7871.04` as equivalent versions, or does it require an exact version-string match during registry resolution?
-5. Is there a legitimate way to resolve this through Nexus without modifying the upstream ElevenLabs package?
-6. Does a newer Nexus Community Edition release address this behaviour?
-
-Please investigate using the official Swift Package Registry specification, SwiftPM documentation/source code, Nexus documentation/source code, and the relevant LiveKit and ElevenLabs package manifests.
-
-## 3. Issue 2: Xcode does not recognise the local ElevenLabs Package.swift
-
-The developer was instructed to navigate to the local ElevenLabs package directory:
-
-```text
-[path/to/ElevenLabs/localpackage/]
-```
-
-The directory contains a `Package.swift` manifest.
-
-The intention was to open this local package directly in Xcode and inspect its dependencies, particularly the reference to LiveKit WebRTC version `150.7871.4`.
-
-However, opening the local `Package.swift` does not result in the package appearing as an expected Swift package in Xcode.
-
-We also attempted to remove the SwiftPM registry configuration directory:
-
-```text
-~/Library/org.swift.swiftpm/configurations
-```
-
-Then retried the operation, but the package still did not appear.
-
-### Questions requiring investigation
-
-1. What is the correct way to open a standalone local Swift package in Xcode?
-2. Should we open the `Package.swift` file directly, or should we open the package's containing directory?
-3. What conditions must be met for Xcode to recognise a local directory as a valid Swift package?
-4. Could the package's `swift-tools-version`, manifest syntax, directory structure, or dependency declarations prevent Xcode from recognising it?
-5. How can we inspect the package's declared dependencies and determine exactly where the WebRTC version requirement originates?
-6. How can we distinguish between a package that is not recognised by Xcode and a package that is recognised but fails dependency resolution?
-
-Please provide the correct diagnostic and opening procedure, rather than assuming the issue is caused by the registry cache.
-
-## 4. Important distinction: Network connectivity
-
-During a separate attempt to build the developer-provided Xcode project, the build failed while fetching the Git submodule:
-
-```text
-https://github.com/livekit/protocol.git
-```
-
-The error was:
-
-```text
-Failed to connect to github.com port 443
-Couldn't connect to server
-```
-
-We tested connectivity from the Mac using curl, and both HTTPS and telnet-style connectivity tests to GitHub failed.
-
-There is no proxy configured on that Mac.
-
-This is a separate network connectivity obstacle. It prevented the Xcode project from completing dependency resolution and is not, by itself, evidence of a Nexus registry issue.
-
-Do not conflate this GitHub connectivity problem with the WebRTC version mismatch.
-
-## 5. What we need from this investigation
-
-Please provide a technically verified explanation covering both issues:
-
-**A. WebRTC version resolution**
-- Establish whether `150.7871.4` exists.
-- Establish why Nexus advertises `150.7871.04`.
-- Determine whether the two version strings can be treated as equivalent by SwiftPM.
-- Identify whether the problem is with Nexus, SwiftPM, or the upstream package manifest.
-- Recommend a solution that does not require speculative changes to production Nexus configuration.
-
-**B. ElevenLabs local package recognition**
-- Explain why Xcode is not displaying the local package.
-- Provide the correct procedure for opening and inspecting it.
-- Identify how to establish the exact dependency chain responsible for requesting WebRTC `150.7871.4`.
-
-### Important requirements
-
-- Do not assume Nexus is a commercial Pro installation. We use Nexus Repository Community Edition 3.95.0-07.
-- Do not suggest migrating this reproduction project to Nexus; the project is being used to investigate the developer's original findings.
-- Do not assume clearing the SwiftPM cache will solve the issue; it has already been attempted.
-- Distinguish confirmed facts from hypotheses.
-- Prefer official documentation, GitHub source code, and reproducible technical evidence.
-- Provide commands and practical steps, explaining what each command establishes.
-- Avoid suggesting changes to production repositories until the root cause is established.
+Given the security implications, your prompt support in providing this inventory would be appreciated.
