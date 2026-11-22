@@ -1,23 +1,25 @@
-Hi Team,
+### Summary
+Nexus Repository – Corporate Netskope Proxy Onboarding
 
-Following the recent disclosure of the Java4Shell vulnerability (CVE-2026-114938), we need to assess potential exposure across our server infrastructure and coordinate the required remediation.
+### Description
+Implement the required certificate and proxy configuration changes on the Nexus server to onboard the new corporate Netskope proxy server and maintain secure connectivity.
 
-Could you please provide an inventory of all servers currently running Java/JDK installations, including runtimes bundled with applications or third-party products?
+### Business Justification
+Required to ensure Nexus Repository maintains connectivity through the newly onboarded corporate Netskope proxy infrastructure, supporting uninterrupted dependency access for Jenkins pipelines and development teams.
 
-For each server, please include:
+### Pre-Release Plan
+- Take a snapshot of the Nexus server before commencing the activity.
+- Confirm the current Nexus service status and configuration.
 
-Server hostname and IP address.
+### Deployment Plan
+1. Stop the Nexus server.
+2. Import the corporate Netskope certificate into the Nexus bundled JDK truststore using `keytool`.
+3. Start the Nexus server and verify that the service is running.
+4. Update the HTTP/proxy configuration through the Nexus UI as required.
+5. Validate connectivity by triggering Jenkins pipelines that consume dependencies from Nexus.
+6. Upon successful validation, notify the development teams that the activity is complete.
 
-Operating system and version.
-
-Installed Java vendor/distribution and full version.
-
-Java installation path(s), including application-bundled runtimes.
-
-CPU architecture and model, where available.
-
-Please ensure the inventory covers all environments, including Development, UAT, QA, Pre-Production, Production and DR.
-
-We will use this information to identify potentially affected systems and coordinate the necessary remediation with the relevant application and infrastructure teams.
-
-Given the security implications, your prompt support in providing this inventory would be appreciated.
+### Rollback Plan
+- If the activity or subsequent validation is unsuccessful, revert the Nexus server to the pre-change snapshot.
+- Restore the previous configuration and verify that the Nexus service is operational.
+- Revalidate Jenkins pipeline dependency access and notify the relevant teams of the rollback.
