@@ -1,25 +1,5 @@
-### Summary
-Nexus Repository – Corporate Netskope Proxy Onboarding
+Hi Team,
 
-### Description
-Implement the required certificate and proxy configuration changes on the Nexus server to onboard the new corporate Netskope proxy server and maintain secure connectivity.
+Following the review of the additional security findings, the affected server list has been finalized.
 
-### Business Justification
-Required to ensure Nexus Repository maintains connectivity through the newly onboarded corporate Netskope proxy infrastructure, supporting uninterrupted dependency access for Jenkins pipelines and development teams.
-
-### Pre-Release Plan
-- Take a snapshot of the Nexus server before commencing the activity.
-- Confirm the current Nexus service status and configuration.
-
-### Deployment Plan
-1. Stop the Nexus server.
-2. Import the corporate Netskope certificate into the Nexus bundled JDK truststore using `keytool`.
-3. Start the Nexus server and verify that the service is running.
-4. Update the HTTP/proxy configuration through the Nexus UI as required.
-5. Validate connectivity by triggering Jenkins pipelines that consume dependencies from Nexus.
-6. Upon successful validation, notify the development teams that the activity is complete.
-
-### Rollback Plan
-- If the activity or subsequent validation is unsuccessful, revert the Nexus server to the pre-change snapshot.
-- Restore the previous configuration and verify that the Nexus service is operational.
-- Revalidate Jenkins pipeline dependency access and notify the relevant teams of the rollback.
+We are planning to proceed with the required UCD/JDK patching activities next week. We will share any relevant updates if there are changes to the schedule.
