@@ -1,5 +1,9 @@
-Hi Team,
+**Clarification on Scope and Status**
 
-Following the review of the additional security findings, the affected server list has been finalized.
+The initial investigation covered the two Enterprise Services modules identified in the original scope. The root cause was subsequently identified and communicated, and the ticket was marked as completed accordingly.
 
-We are planning to proceed with the required UCD/JDK patching activities next week. We will share any relevant updates if there are changes to the schedule.
+Additional modules were later introduced into the requirements, resulting in further clarification of the ticket scope and status.
+
+For clarity, this ticket is intended to track root-cause investigation and findings. Any subsequent remediation or onboarding activities are tracked separately under the relevant implementation ticket.
+
+The investigation is therefore considered complete, with any outstanding implementation activities to be followed up through their respective tickets.
