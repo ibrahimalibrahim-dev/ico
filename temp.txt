@@ -1,9 +1,60 @@
-**Clarification on Scope and Status**
+Hi [Manager],
 
-The initial investigation covered the two Enterprise Services modules identified in the original scope. The root cause was subsequently identified and communicated, and the ticket was marked as completed accordingly.
+I would like to provide some background on the issue encountered during the Jenkins iOS build and explain the underlying cause, as well as the proposed resolution.
 
-Additional modules were later introduced into the requirements, resulting in further clarification of the ticket scope and status.
+**1. Background**
 
-For clarity, this ticket is intended to track root-cause investigation and findings. Any subsequent remediation or onboarding activities are tracked separately under the relevant implementation ticket.
+During the iOS build process, Jenkins uses Xcode to retrieve the required source code and dependencies from their respective repositories. Some of these dependencies are hosted externally on GitHub, while our setup is intended to retrieve applicable dependencies through our internal Nexus infrastructure to avoid direct external repository access.
 
-The investigation is therefore considered complete, with any outstanding implementation activities to be followed up through their respective tickets.
+As part of this arrangement, the Mac Jenkins agent has a Git configuration that redirects specific GitHub repository requests to a local service running on the Mac server itself.
+
+**2. What is happening?**
+
+During the build, Xcode attempted to retrieve the LiveKit Protocol dependency, which is required by the LiveKit Swift SDK.
+
+However, instead of connecting directly to GitHub, the Mac agent's Git configuration automatically redirects the request to:
+
+`git://localhost:9418/livekit/protocol.git`
+
+In simple terms, `localhost` means the Mac server itself, and port `9418` is the local endpoint through which Git is expected to retrieve the repository.
+
+The issue is that the build is unable to establish a connection to this local endpoint, resulting in a connection-refused error. Consequently, Xcode cannot retrieve the required dependency and the build stops during package resolution.
+
+**3. Why is this happening?**
+
+Our investigation of the Mac agent's Git configuration identified specific URL redirection rules for several GitHub repositories, including:
+
+- LiveKit Protocol
+- LiveKit Client SDK
+- LiveKit WebRTC XCFramework
+- LiveKit FFI XCFramework
+- Other Swift dependencies
+
+These rules indicate that a local Git service or proxy mechanism is expected to handle requests for these repositories.
+
+However, the connection failure indicates that the expected service on port `9418` is currently unavailable or not listening. We therefore need to establish how this service is configured, where it retrieves the repository content from, and why it is not currently running.
+
+**4. What have we done so far?**
+
+To address the dependency issue, we have already created the corresponding LiveKit Protocol repository bundle (`livekit-protocol.bundle`) and uploaded it to Nexus.
+
+However, uploading the bundle alone does not make it accessible to the Jenkins build. The existing Git configuration still directs requests to the local endpoint on the Mac server, meaning the local service must be operational and configured to serve the repository content from the appropriate internal source.
+
+**5. Proposed resolution**
+
+We are proceeding with the following:
+
+1. Investigate the existing local Git service configuration on the Mac Jenkins agent, including the scripts and processes responsible for port `9418`.
+2. Verify the location and availability of the locally served Git repositories and establish how they are linked to Nexus.
+3. Restore or configure the required local Git service so that Jenkins can retrieve the LiveKit Protocol repository through the existing redirection mechanism.
+4. Validate connectivity to the local repository and rerun the Jenkins build to confirm successful dependency resolution.
+5. Review the service startup configuration to ensure it remains available for subsequent Jenkins builds and does not require manual intervention.
+
+**6. Impact**
+
+The issue currently prevents the affected iOS build from completing because Xcode cannot retrieve one of its required source dependencies. The investigation is focused on the Mac Jenkins agent's local Git service and its integration with our internal repository setup, rather than an issue with the application source code itself.
+
+We will continue investigating the existing configuration before making changes, to ensure that the resolution does not affect the other dependencies already configured through the same mechanism.
+
+Regards,  
+DevSecOps
