@@ -1,10 +1,13 @@
-Hi Team,
+Acunetix Jenkins Integration – Initial HTTP 404 Response for Certain Modules
 
-Security has confirmed that DAST configuration has been finalized for the onboarded modules, and the Acunetix integration has been implemented.
 
-During validation, some modules are scanning successfully, while others are returning an initial HTTP 404 response. The same affected modules have been reported to scan successfully when initiated directly through the Acunetix UI.
 
-This behaviour has been raised with the Acunetix vendor for further investigation. We will share an update once we receive their feedback.
+We have integrated Acunetix scanning into our Jenkins pipeline for the Enterprise Services modules.
 
-Regards,  
-[Your Name]
+During validation, the integration behaves inconsistently:
+- Scans are initiated and completed successfully for some modules.
+- For other modules, the initial request to the target site returns an HTTP 404 (Not Found) response, causing the scan to be aborted.
+- When the same affected modules are scanned directly through the Acunetix UI, the scans complete successfully.
+DAST configuration for the onboarded modules has been finalized by the Security team. We would appreciate your assistance in investigating why the integration invoked through Jenkins returns HTTP 404 for certain modules while direct scans through the Acunetix UI succeed.
+
+Please advise on the potential cause and the required steps to resolve this behaviour.
