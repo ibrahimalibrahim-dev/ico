@@ -1,62 +1,12 @@
-Hi [Manager],
+Hi Team,
 
-I would like to provide some background on the issue encountered during the Jenkins iOS build, explain why it is occurring, and outline the investigation required to resolve it.
+DAST configuration has been finalized, and scanning has been successfully completed for several Enterprise Services modules.
 
-**1. Expected Setup**
+However, we are observing inconsistent behaviour with the Acunetix integration through the Jenkins pipeline. While some modules complete scanning successfully, others encounter an initial HTTP 404 response and are subsequently aborted.
 
-As part of our dependency management approach, all applicable third-party dependencies should be retrieved through our internal Nexus repository rather than directly from external repositories such as GitHub.
+Interestingly, the same affected modules scan successfully when initiated directly through the Acunetix UI. This has been raised with the Acunetix vendor for further investigation.
 
-This ensures that dependency retrieval is centralised through our internal infrastructure and avoids individual build agents relying on direct external repository access.
-
-**2. What is happening?**
-
-During the iOS build, Xcode attempts to retrieve the LiveKit Protocol dependency, which is required by the LiveKit Swift SDK.
-
-However, the build fails with the following error:
-
-`fatal: unable to connect to localhost:9418 – Connection refused`
-
-Upon investigating the Git configuration on the Mac Jenkins agent, we identified URL redirection rules that automatically redirect certain GitHub repository requests to a local endpoint on the Mac server itself.
-
-For example:
-
-`https://github.com/livekit/protocol.git`
-
-is redirected to:
-
-`git://localhost:9418/livekit/protocol.git`
-
-In simple terms, instead of retrieving the dependency directly through the intended Nexus repository configuration, the Git request is being redirected to a local service running on the Mac server. That service is currently unavailable, resulting in the build failure.
-
-**3. Why is this a concern?**
-
-The presence of these local redirection rules raises a question regarding the existing dependency retrieval implementation on the Mac Jenkins agent.
-
-Our intended approach is for Nexus to act as the central source for all applicable dependencies. However, the current configuration introduces an additional local dependency on the Mac server, which must be running and correctly configured for the build to succeed.
-
-This means that even though the LiveKit Protocol repository bundle has been uploaded to Nexus, the build is not currently retrieving it through that intended route. The existing Git configuration continues to redirect the request to localhost.
-
-We therefore need to establish why this local redirection mechanism was implemented, whether it is required for the existing Nexus integration, and why the dependency is not being retrieved directly through the intended Nexus setup.
-
-**4. Actions and proposed resolution**
-
-We have already created the LiveKit Protocol repository bundle (`livekit-protocol.bundle`) and uploaded it to Nexus.
-
-The next steps are:
-
-1. Investigate the existing Git configuration and local services on the Mac Jenkins agent to understand why GitHub URLs are being redirected to localhost.
-2. Identify how the local Git service is intended to interact with Nexus and whether it is currently configured to retrieve repository content from Nexus.
-3. Validate whether the existing implementation can be corrected to retrieve dependencies through Nexus as intended, without introducing unnecessary dependencies on locally running services.
-4. Review the configuration for the other dependencies currently subject to similar redirection rules to ensure the same issue does not affect subsequent builds.
-5. Rerun the Jenkins build and validate successful dependency retrieval.
-
-**5. Impact**
-
-The affected iOS build is currently blocked because Xcode cannot retrieve the required LiveKit Protocol dependency.
-
-Although the corresponding repository bundle is available in Nexus, the current Mac agent configuration is directing the request elsewhere. We are investigating this configuration and the dependency retrieval mechanism to ensure the build follows the intended internal repository architecture.
-
-We will provide a further update once the configuration has been reviewed and the appropriate corrective action identified.
+We will provide an update once the issue has been investigated and the pipeline behaviour is clarified.
 
 Regards,  
-DevSecOps
+[Your Name]
