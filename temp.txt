@@ -1,12 +1,10 @@
 Hi Team,
 
-DAST configuration has been finalized, and scanning has been successfully completed for several Enterprise Services modules.
+Security has confirmed that DAST configuration has been finalized for the onboarded modules, and the Acunetix integration has been implemented.
 
-However, we are observing inconsistent behaviour with the Acunetix integration through the Jenkins pipeline. While some modules complete scanning successfully, others encounter an initial HTTP 404 response and are subsequently aborted.
+During validation, some modules are scanning successfully, while others are returning an initial HTTP 404 response. The same affected modules have been reported to scan successfully when initiated directly through the Acunetix UI.
 
-Interestingly, the same affected modules scan successfully when initiated directly through the Acunetix UI. This has been raised with the Acunetix vendor for further investigation.
-
-We will provide an update once the issue has been investigated and the pipeline behaviour is clarified.
+This behaviour has been raised with the Acunetix vendor for further investigation. We will share an update once we receive their feedback.
 
 Regards,  
 [Your Name]
