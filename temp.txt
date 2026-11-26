@@ -1,3 +1,11 @@
-The connectivity configuration has been updated following the corporate Netproxy changes, and the Jenkins build is now working as expected.
+UAT – Configure and Validate Jenkins LDAPS Connectivity over Port 636
 
-Please proceed with your build validation and let us know if you encounter any further issues.
+
+Configure LDAPS connectivity on the UAT Jenkins server using port 636 to validate secure LDAP authentication.
+
+The scope includes:
+- Configure Jenkins LDAP integration to use LDAPS over port 636.
+- Validate connectivity to the LDAP server and certificate trust.
+- Test user authentication and LDAP group/permission mapping.
+- Confirm successful login and ensure existing authentication functionality is not impacted.
+Document the test results and any issues identified before proceeding with the production implementation.
