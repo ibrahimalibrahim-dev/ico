@@ -1,12 +1,13 @@
 Approval Required – Firebase Proxy Access for Jenkins Agents
 
 
+Dear Security Team,
 
-Configure LDAPS connectivity on the UAT Jenkins server using port 636 to validate secure LDAP authentication.
+We request your review and approval to whitelist the required Firebase-related domains through the corporate proxy for our Jenkins agents.
 
-The scope includes:
-- Configure Jenkins LDAP integration to use LDAPS over port 636.
-- Validate connectivity to the LDAP server and certificate trust.
-- Test user authentication and LDAP group/permission mapping.
-- Confirm successful login and ensure existing authentication functionality is not impacted.
-Document the test results and any issues identified before proceeding with the production implementation.
+This access is required to enable developers to upload application builds/artifacts to Firebase as part of the CI/CD pipeline.
+
+Kindly review and provide your approval to proceed with the necessary proxy configuration.
+
+Regards,
+DevSecOps Team
