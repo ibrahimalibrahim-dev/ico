@@ -1,4 +1,5 @@
-UAT – Configure and Validate Jenkins LDAPS Connectivity over Port 636
+Approval Required – Firebase Proxy Access for Jenkins Agents
+
 
 
 Configure LDAPS connectivity on the UAT Jenkins server using port 636 to validate secure LDAP authentication.
